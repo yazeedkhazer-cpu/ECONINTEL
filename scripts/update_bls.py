@@ -25,6 +25,8 @@ ROOT = Path(__file__).resolve().parents[1]
 API_V1 = 'https://api.bls.gov/publicAPI/v1/timeseries/data/'
 API_V2 = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
 API = API_V2
+# BLS's seasonally adjusted total-private employment diffusion, 1-month index.
+DIFFUSION_SERIES_ID = 'CES0500000021'
 # Seasonally adjusted BLS IDs. Levels are in thousands unless noted.
 SERIES = {
     'nfp_level': 'CES0000000001',
@@ -49,6 +51,7 @@ SOURCES = {
     'nfp': 'BLS · CES', 'private': 'BLS · CES', 'wage_level': 'BLS · CES',
     'wage_mom': 'BLS · CES · حساب شهري', 'wage': 'BLS · CES · حساب سنوي',
     'temp': 'BLS · CES', 'hours': 'BLS · CES',
+    'diffusion': 'BLS · CES · Total-private employment diffusion (1 month)',
     'unrate': 'BLS · CPS', 'u6': 'BLS · CPS', 'part': 'BLS · CPS',
     'emratio': 'BLS · CPS', 'primeage': 'BLS · CPS',
     'longterm': 'BLS · CPS', 'parttime': 'BLS · CPS',
@@ -75,7 +78,7 @@ def fetch() -> dict:
     # v2 requires free registration; the public unregistered endpoint is v1.
     key = os.environ.get('BLS_API_KEY', '').strip()
     endpoint = API_V2 if key else API_V1
-    body = {'seriesid': list(SERIES.values()), 'startyear': str(now.year - 5), 'endyear': str(now.year)}
+    body = {'seriesid': [*SERIES.values(), DIFFUSION_SERIES_ID], 'startyear': str(now.year - 5), 'endyear': str(now.year)}
     if key:
         body['registrationkey'] = key
     req = urllib.request.Request(endpoint, data=json.dumps(body).encode('utf-8'),
@@ -93,7 +96,7 @@ def parse_payload(payload: dict) -> dict[str, list[list]]:
         raise ValueError(f"BLS returned {payload.get('status')}: {payload.get('message')}")
     series = payload.get('Results', {}).get('series', [])
     by_id = {}
-    allowed = set(SERIES.values())
+    allowed = set(SERIES.values()) | {DIFFUSION_SERIES_ID}
     for item in series:
         sid = item.get('seriesID')
         if sid not in allowed:
@@ -154,6 +157,13 @@ def construct(raw: dict, fetched_at: str) -> dict:
             continue
         else:
             add(rows, sid, key, MULTIPLIERS.get(key, 1.0))
+    # The official diffusion index is a native CES series available through the
+    # same BLS API as NFP. Verify range and matching reference month before use.
+    diffusion_rows = raw.get(DIFFUSION_SERIES_ID, [])
+    if (diffusion_rows and out.get('nfp') and
+            diffusion_rows[-1][0] == out['nfp']['date'] and
+            all(0 <= value <= 100 for _, value in diffusion_rows)):
+        add(diffusion_rows, DIFFUSION_SERIES_ID, 'diffusion')
     # Additional automatically derived metrics: preserve only consecutive windows.
     nfp = out.get('nfp', {}).get('history', [])
     for months in (3, 12):

@@ -29,7 +29,8 @@ def output_payload(bls_payload: dict, fetched_at: str, fred_data: dict | None = 
         if isinstance(old,dict) and (
                 str(old.get('seriesId','')).startswith('derived:ICSA') or
                 old.get('seriesId') in fred.SERIES or
-                (old.get('status')=='api' and old.get('seriesId')=='BLS:CES:SUMMARY_B:DIFFUSION:PRIVATE:1M')):
+                (old.get('status')=='api' and old.get('seriesId') in (
+                    'BLS:CES:SUMMARY_B:DIFFUSION:PRIVATE:1M', bls.DIFFUSION_SERIES_ID))):
             result.setdefault(mid,old)
     if fred_data:
         for item in fred_data.values():
@@ -82,7 +83,8 @@ def main(argv=None):
     if not args.bls_fixture:
         try:
             checked=bls.construct(bls.parse_payload(payload),stamp)
-            diffusion_data=diffusion.fetch(checked['metrics']['nfp']['date'])
+            diffusion_data=(checked['metrics'].get('diffusion') or
+                            diffusion.fetch(checked['metrics']['nfp']['date']))
         except Exception as exc:
             diffusion_error=str(exc)
             print('Diffusion unavailable; retaining previously verified data:',diffusion_error,file=sys.stderr)
