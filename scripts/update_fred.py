@@ -14,7 +14,7 @@ import urllib.request
 from datetime import date, datetime
 
 API = 'https://api.stlouisfed.org/fred/series/observations'
-SERIES = ('ICSA', 'CCSA', 'ECIALLCIV', 'OPHNFB', 'ULCNFB', 'SAHMREALTIME')
+SERIES = ('ICSA', 'CCSA', 'ECIALLCIV', 'OPHNFB', 'ULCNFB', 'SAHMREALTIME', 'ADPMNUSNERSA')
 
 def fetch_series(sid: str, key: str) -> dict:
     args = {'series_id':sid, 'api_key':key, 'file_type':'json',
@@ -92,6 +92,17 @@ def build(observations: dict[str,list[list]]) -> dict:
             hist=quarter_history(observations.get(sid,[]),span,annualized=annual)
             if x:=mentry(sid,hist,'%',source=f'BLS via FRED · {sid} · calculated',period='quarterly'):
                 x['date']=quarter_key(hist[-1][0]); result[id]=x
+    # ADP publishes the monthly level (persons) in FRED. ECONINTEL's ADP card is
+    # monthly CHANGE in thousands, so compute it only for consecutive months.
+    adp_levels=observations.get('ADPMNUSNERSA',[])
+    adp_months={int(d[:4])*12+int(d[5:7]):v for d,v in adp_levels}
+    adp_changes=[]
+    for k in sorted(adp_months):
+        if k-1 in adp_months:
+            year, month=divmod(k-1,12)
+            adp_changes.append([f'{year:04d}-{month+1:02d}',round((adp_months[k]-adp_months[k-1])/1000,4)])
+    if x:=mentry('ADPMNUSNERSA',adp_changes,'K',source='ADP · National Employment Report via FRED · calculated',period='monthly'):
+        result['adp']=x
     if x:=mentry('SAHMREALTIME',observations.get('SAHMREALTIME',[]),'pp',source='FRED · Sahm rule',period='monthly'):
         x['history']=[[d[:7],v] for d,v in x['history']]
         x['date']=x['date'][:7]

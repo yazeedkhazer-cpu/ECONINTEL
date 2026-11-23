@@ -14,31 +14,47 @@ from pathlib import Path
 import sys
 import update_bls as bls
 import update_fred as fred
+import update_diffusion as diffusion
 
 ROOT=Path(__file__).resolve().parents[1]
 
 def output_payload(bls_payload: dict, fetched_at: str, fred_data: dict | None = None,
-                   previous: dict | None = None, fred_error: str | None = None) -> dict:
+                   previous: dict | None = None, fred_error: str | None = None,
+                   diffusion_data: dict | None = None, diffusion_error: str | None = None) -> dict:
     fresh=bls.construct(bls.parse_payload(bls_payload),fetched_at)
-    result=fresh['metrics']
+    result={key:value for key,value in fresh['metrics'].items() if key not in ('isman','isserv')}
     oldmetrics=(previous or {}).get('metrics',{})
     # Keep dated last-known FRED values if optional source unavailable, not the seed as "live".
     for mid, old in oldmetrics.items():
-        if isinstance(old,dict) and (str(old.get('seriesId','')).startswith('derived:ICSA') or old.get('seriesId') in fred.SERIES):
+        if isinstance(old,dict) and (
+                str(old.get('seriesId','')).startswith('derived:ICSA') or
+                old.get('seriesId') in fred.SERIES or
+                (old.get('status')=='api' and old.get('seriesId')=='BLS:CES:SUMMARY_B:DIFFUSION:PRIVATE:1M')):
             result.setdefault(mid,old)
     if fred_data:
         for item in fred_data.values():
             item['observedAt']=fetched_at
         result.update(fred_data)
+    if diffusion_data:
+        diffusion_data['observedAt']=fetched_at
+        # Extend historical window across refreshes; newer official BLS revisions win.
+        older=result.get('diffusion',{}).get('history',[])
+        now=diffusion_data.get('history',[])
+        diffusion_data['history']=[[m,v] for m,v in sorted({**dict(older),**dict(now)}.items())]
+        result['diffusion']=diffusion_data
+    result.pop('isman',None);result.pop('isserv',None)
     fresh['metrics']=result
     fresh['sources']={
+      'BLS_DIFFUSION':{'status':'updated' if diffusion_data else 'unavailable',
+                       'fetchedAt':fetched_at if diffusion_data else None,
+                       'note':diffusion_error or 'BLS Table B: no validated fresh observation'},
       'BLS':{'status':'updated','fetchedAt':fetched_at,'endpoint':fresh['apiUrl']},
       'FRED':{'status':'updated' if fred_data else ('not-configured' if not os.environ.get('FRED_API_KEY') else 'unavailable'),
               'fetchedAt':fetched_at if fred_data else None,
               'note':fred_error or 'Optional provider; set FRED_API_KEY in GitHub secrets'}
     }
     fresh['coverage']={'automatic':len(set(result).intersection({
-     'nfp','private','unrate','u6','part','emratio','wage','wage_mom','wage_level','hours','diffusion','temp','jolts','hire','layoff','claims','longterm','parttime','primeage','quits','claims4wk','continuing','beveridge','sahm','adp','isman','isserv','eci','eciy','productivity','ulc','nfp3','nfp12','longshare'})), 'total':34}
+     'nfp','private','unrate','u6','part','emratio','wage','wage_mom','wage_level','hours','diffusion','temp','jolts','hire','layoff','claims','longterm','parttime','primeage','quits','claims4wk','continuing','beveridge','sahm','adp','eci','eciy','productivity','ulc','nfp3','nfp12','longshare'})), 'total':32}
     return fresh
 
 def main(argv=None):
@@ -61,8 +77,17 @@ def main(argv=None):
         except Exception as exc:
             error=str(exc)
             print('FRED unavailable; retaining last known FRED metrics:',error,file=sys.stderr)
-    result=output_payload(payload,stamp,fred_data,previous,error)
-    print(f"Successfully validated {len(result['metrics'])}/34 automatic indicators; BLS mandatory, FRED optional")
+    diffusion_data=None;diffusion_error=None
+    # Test fixture runs are offline by design; keep external enrichment disabled.
+    if not args.bls_fixture:
+        try:
+            checked=bls.construct(bls.parse_payload(payload),stamp)
+            diffusion_data=diffusion.fetch(checked['metrics']['nfp']['date'])
+        except Exception as exc:
+            diffusion_error=str(exc)
+            print('Diffusion unavailable; retaining previously verified data:',diffusion_error,file=sys.stderr)
+    result=output_payload(payload,stamp,fred_data,previous,error,diffusion_data,diffusion_error)
+    print(f"Validated {len(result['metrics'])}/32 indicators; BLS required, FRED and BLS diffusion optional")
     print('References: '+', '.join(f'{k}={v["date"]}' for k,v in result['metrics'].items()))
     if args.dry_run:
         return
