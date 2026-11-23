@@ -29,3 +29,32 @@
 .weight-group-card small{display:block;color:#869ab0;font-size:10px;margin-top:9px}.weight-group-bar,.weight-inline{display:block;background:#25364a;border-radius:20px;overflow:hidden;height:7px;margin-top:12px;direction:ltr}.weight-group-bar span,.weight-inline i{background:linear-gradient(90deg,#238c74,#75efb7);display:block;height:100%;border-radius:20px}
 .weight-table-wrap{overflow:auto;border:1px solid #2d4155;border-radius:12px;background:#111b2b}.weight-table{border-collapse:collapse;width:100%;min-width:980px}.weight-table th{color:#98aebf;background:#162437;font-size:11px;padding:15px 14px;text-align:right;white-space:nowrap}.weight-table td{border-top:1px solid #22354a;padding:13px 14px;color:#bdcfe0;font-size:11px;vertical-align:middle}.weight-table tr:hover td{background:#15273a}.weight-table td:first-child{min-width:215px}.weight-table td:nth-child(2){min-width:135px}.weight-table td:nth-child(3){min-width:95px}.weight-table td:nth-child(4){min-width:250px;max-width:450px}.weight-indicator{color:#d9fbeb;display:block;background:none;border:0;padding:0;cursor:pointer;text-align:right;font-size:12px;font-weight:700}.weight-indicator:hover{text-decoration:underline}.weight-indicator small{color:#839db1;font-size:9px;font-weight:400;display:block;line-height:1.7}.weight-percent{display:flex;align-items:center;gap:10px;direction:ltr;justify-content:flex-end}.weight-percent strong{color:#c6ffe0;font:700 15px Arial,sans-serif}.weight-percent .weight-inline{width:74px;margin:0}.weight-note{line-height:1.8}.weight-date{display:block;margin-top:4px;color:#8398a8;font-size:9px;text-align:right}.weight-empty{padding:30px!important;text-align:center}.nav-link[data-page="weights"] .nav-mini{font:700 9px Arial,sans-serif;color:#b4f6d2}
 @media(max-width:1050px){.weight-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.weight-intro,.weight-groups{grid-template-columns:1fr}.weight-kpi{padding:16px}}
+
+/* v1.5 — indicator registry and independent drill-down view */
+.indicator-table td,.indicator-table th{white-space:normal;vertical-align:middle}
+.indicator-table td:nth-child(2),.indicator-table td:nth-child(3),.indicator-table td:nth-child(4){min-width:105px;font-variant-numeric:tabular-nums}
+.indicator-table .weight-indicator{max-width:260px;text-align:right}
+.indicator-table .weight-indicator:hover{text-decoration:underline;text-underline-offset:4px}
+.indicator-detail-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.indicator-stat{background:var(--panel);border:1px solid var(--line-soft);border-radius:14px;display:flex;flex-direction:column;gap:10px;padding:20px;min-width:0}
+.indicator-stat small{color:var(--muted);font-size:12px}
+.indicator-stat strong{font-family:Arial,sans-serif;font-size:29px;color:var(--text);word-break:break-word}
+.indicator-stat span{color:var(--muted);font-size:11px}
+.indicator-stat strong.indicator-change{font-size:22px;color:var(--green)}
+@media(max-width:1050px){.indicator-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.indicator-detail-grid{grid-template-columns:1fr}.indicator-table{font-size:12px}}
+
+/* v1.6 — interpretative research, exact historical comparisons; no new weights */
+.econ-analysis{border-color:#2c514a;background:linear-gradient(115deg,#10282c,#101d30)}
+.econ-analysis h3{color:#a4f5ca;font-size:19px;margin:8px 0 14px}
+.econ-analysis h4{color:#cdebe2;font-size:13px;margin:18px 0 6px}
+.econ-analysis p{color:#c5d6df;font-size:13px;line-height:2.05}
+.econ-analysis small{display:block;margin-top:16px;color:#91aaba;font-size:11px;line-height:1.8}
+.research-context{padding:13px 15px;border:1px solid #345161;border-radius:10px;background:#122537;line-height:1.9;color:#bdd4e3;font-size:12px}
+.research-context strong{color:#bbecd2}
+.indicator-window-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.indicator-window{display:flex;flex-direction:column;gap:8px;padding:16px;background:#122237;border:1px solid #2b4258;border-radius:12px;min-width:0}
+.indicator-window small,.indicator-window span{color:#9bb1c3;font-size:11px}
+.indicator-window b{font-size:20px;color:#effff9;direction:ltr;text-align:right;word-break:break-word}
+.indicator-window strong{color:#85e8b7;font-size:13px;text-align:right}
+@media(max-width:730px){.indicator-window-grid{grid-template-columns:1fr}}
