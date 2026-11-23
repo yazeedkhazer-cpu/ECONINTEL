@@ -1,41 +1,43 @@
-name: Update ECONINTEL and publish website
+
+name: Update ECONINTEL official data
+
 on:
   push:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Hourly checks during U.S. economic-release hours on business days.
-    # Weekend check; schedule timing is best effort (not real-time streaming).
     - cron: '45 12-22 * * 1-5'
     - cron: '45 15 * * 0,6'
+
 permissions:
   contents: write
-  pages: write
-  id-token: write
+
 concurrency:
-  group: econintel-publish
+  group: econintel-data
   cancel-in-progress: false
+
 jobs:
-  refresh-and-publish:
+  refresh-data:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Test official data parsing and frequency separation
+
+      - name: Test official data parsing
         run: python -m unittest discover -s tests -v
-      - name: Download official data (keep previous snapshot on provider outage)
+
+      - name: Download official BLS and FRED data
         id: refresh
         continue-on-error: true
         env:
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/update_all.py
-      - name: Save validated data to repository
+
+      - name: Save updated official data
         if: steps.refresh.outcome == 'success'
         run: |
           git config user.name "econintel-data-bot"
@@ -45,16 +47,3 @@ jobs:
             git commit -m "Refresh ECONINTEL official datasets"
             git push
           fi
-      - name: Prepare website files
-        run: |
-          mkdir -p _site
-          cp index.html _site/index.html
-          cp -r assets _site/assets
-          cp -r data _site/data
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - name: Deploy even when the data provider was temporarily offline
-        id: deployment
-        uses: actions/deploy-pages@v4
