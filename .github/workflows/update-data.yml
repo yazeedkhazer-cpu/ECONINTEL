@@ -1,5 +1,4 @@
-
-name: Update ECONINTEL official data
+name: Update ECONINTEL official data and labor research
 
 on:
   push:
@@ -21,29 +20,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Test official data parsing
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate official data parsers
         run: python -m unittest discover -s tests -v
-
-      - name: Download official BLS and FRED data
+      - name: Validate labor research and alert rules
+        run: |
+          node tests_labor_health.test.js
+          node tests_labor_monitor.test.js
+      - name: Refresh official BLS and FRED data
         id: refresh
         continue-on-error: true
         env:
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/update_all.py
-
-      - name: Save updated official data
+      - name: Build dated labor evidence and change alerts
+        if: steps.refresh.outcome == 'success'
+        run: node scripts/build_labor_monitor.cjs
+      - name: Save only validated updates
         if: steps.refresh.outcome == 'success'
         run: |
           git config user.name "econintel-data-bot"
           git config user.email "econintel-bot@users.noreply.github.com"
-          git add assets/official-data.js data/official-latest.json data/snapshots
+          git add assets/official-data.js data/official-latest.json data/snapshots data/labor-monitor.json
           if ! git diff --cached --quiet; then
-            git commit -m "Refresh ECONINTEL official datasets"
-            git push
+            git commit -m "Refresh official datasets and labor research status"
+            for attempt in 1 2 3; do
+              if git push; then exit 0; fi
+              git pull --rebase origin main || exit 1
+              sleep 3
+            done
+            exit 1
           fi

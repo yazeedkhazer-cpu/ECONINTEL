@@ -91,3 +91,33 @@
 .forecast-release-line small{color:#7fc6b3}
 @media (max-width:1120px){.forecast-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.forecast-grid,.forecast-summary,.forecast-topline{grid-template-columns:1fr}.forecast-row{flex-wrap:wrap}}
+
+/* ECONINTEL labor health research engine — v1.8 */
+.labor-health-shortcut{margin:18px 0 22px;padding:19px 24px;background:linear-gradient(105deg,rgba(25,98,83,.24),rgba(23,38,64,.9));border:1px solid #345e58;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.labor-health-shortcut b{font-size:17px}.labor-health-shortcut p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.labor-health-hero{background:linear-gradient(120deg,#10332f,#14243b);border:1px solid #37645c;border-radius:18px;padding:28px;margin:22px 0 28px}
+.labor-health-hero h2{font-size:clamp(21px,2.7vw,32px);margin:8px 0 7px;color:#99f1c4}.labor-health-hero p{color:#b4c7ce;margin:0 0 18px}
+.labor-counts{display:flex;gap:11px;flex-wrap:wrap}.labor-counts span{background:rgba(4,17,26,.4);border:1px solid #446b61;padding:8px 12px;border-radius:10px}
+.labor-pillar-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.labor-pillar{border-radius:14px;background:var(--panel);border:1px solid var(--line);padding:18px;min-height:215px}
+.labor-pillar.support{border-top:3px solid #5ad7a1}.labor-pillar.weak{border-top:3px solid #ea8290}.labor-pillar.neutral{border-top:3px solid #d0a96c}.labor-pillar.missing{border-top:3px solid #7b8798}
+.labor-pillar-header{display:flex;align-items:center;justify-content:space-between;gap:12px}.labor-pillar-header h3{font-size:16px;margin:0}.labor-pillar-header span{font-size:20px;opacity:.8}
+.labor-pillar>strong{font-size:13px;display:block;margin-top:11px}.labor-pillar.support>strong{color:#69e0ac}.labor-pillar.weak>strong{color:#ff9da5}.labor-pillar.neutral>strong{color:#f2c789}.labor-pillar p{font-size:13px;line-height:1.8;color:#c5d2e0;margin:9px 0}
+.labor-pillar small{color:var(--muted);line-height:1.75;display:block}.labor-pill-dates{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.labor-pill-date{font-size:11px;border:1px solid #324a5f;border-radius:7px;background:#112d35;color:#9de8c3;cursor:pointer;padding:5px 8px}
+.labor-pill-date:hover{border-color:#6fe8b2}
+.labor-evidence ul,.labor-evidence-list{padding-right:22px;margin:13px 0 0}.labor-evidence li,.labor-evidence-list li{margin:0 0 12px;line-height:1.85;color:#c6d9e2}
+.labor-evidence-risk h3{color:#f1b5af}
+@media(max-width:1050px){.labor-pillar-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.labor-pillar-grid{grid-template-columns:1fr}.labor-health-shortcut{flex-direction:column;align-items:stretch}.labor-health-hero{padding:19px}}
+
+.labor-table-wrap{overflow-x:auto;margin:16px 0}.labor-trend-table{width:100%;min-width:660px;border-collapse:collapse;text-align:right}.labor-trend-table th,.labor-trend-table td{padding:11px 14px;border-bottom:1px solid var(--line)}.labor-trend-table thead th{font-weight:600;color:var(--muted);font-size:13px}.labor-trend-table tbody th{font-weight:500}.labor-trend-table tbody th small{margin-right:9px;font-size:11px;color:var(--dim)}.labor-trend-table tbody td{font-variant-numeric:tabular-nums;text-align:center;color:#d7eadf}
+
+/* v1.9: Evidence-driven labor change notifications (non-consensus). */
+.labor-alert-row{display:flex;gap:20px;padding:17px 0;border-bottom:1px solid var(--line-soft)}
+.labor-alert-side{flex:0 0 165px;display:flex;flex-direction:column;gap:5px;color:var(--muted)}
+.labor-alert-type{font-size:12px;font-weight:700;color:var(--green)}
+.labor-alert-row.risk .labor-alert-type{color:var(--orange)}
+.labor-alert-side small{font-size:11px}
+.labor-alert-body{flex:1}.labor-alert-body b{font-size:14px}.labor-alert-body p{color:var(--muted);margin:4px 0}.labor-alert-body small{color:var(--dim)}
+@media(max-width:650px){.labor-alert-row{flex-direction:column;gap:5px}.labor-alert-side{flex:0 0 auto;flex-direction:row;justify-content:space-between}}
