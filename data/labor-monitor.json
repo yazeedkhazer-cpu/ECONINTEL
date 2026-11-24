@@ -1,0 +1,649 @@
+{
+  "schemaVersion": 1,
+  "about": "First-observed official data snapshots, not proof of original release vintages. No analyst consensus or price forecast.",
+  "latest": {
+    "capturedAt": "2026-11-24T14:57:37.829Z",
+    "officialFetchedAt": "2026-11-24T14:57:34+00:00",
+    "label": "سوق عمل متماسك وفق الأدلة المتاحة",
+    "kind": "resilient",
+    "coverage": {
+      "analyzed": 6,
+      "total": 6,
+      "supports": 4,
+      "weak": 0,
+      "neutral": 2,
+      "missing": 0,
+      "officialAnchors": 12,
+      "anchorTotal": 12
+    },
+    "pillars": [
+      {
+        "id": "employment",
+        "result": "support",
+        "why": "نمو التوظيف ما زال قائمًا؛ متوسط 3 أشهر 137 ألف",
+        "extra": "المتوسط السنوي 74 ألف، والفارق +63.3 ألف",
+        "periods": [
+          {
+            "id": "nfp3",
+            "date": "2026-10"
+          },
+          {
+            "id": "nfp12",
+            "date": "2026-10"
+          }
+        ]
+      },
+      {
+        "id": "unemployment",
+        "result": "neutral",
+        "why": "البطالة 4.1%؛ تغير 3 أشهر 0 نقطة مئوية",
+        "extra": "تغير U-6 في 3 أشهر 0 نقطة مئوية • تغير 6 أشهر -0.2 نقطة مئوية",
+        "periods": [
+          {
+            "id": "unrate",
+            "date": "2026-10"
+          },
+          {
+            "id": "u6",
+            "date": "2026-10"
+          }
+        ]
+      },
+      {
+        "id": "participation",
+        "result": "support",
+        "why": "تغير العاملين إلى السكان +0.4 نقطة، ومشاركة 25–54 سنة +0.3 نقطة",
+        "extra": "ثلاثة أشهر؛ لا نساوي بين المشاركة والتوظيف الفعلي",
+        "periods": [
+          {
+            "id": "emratio",
+            "date": "2026-10"
+          },
+          {
+            "id": "primeage",
+            "date": "2026-10"
+          }
+        ]
+      },
+      {
+        "id": "demand",
+        "result": "support",
+        "why": "تغير الشواغر خلال 6 أشهر +9.23%، وتغير معدل التعيينات خلال 3 أشهر 0 نقطة",
+        "extra": "الشواغر تقيس الطلب المُعلن، والتعيينات تقيس التوظيف الفعلي",
+        "periods": [
+          {
+            "id": "jolts",
+            "date": "2026-09"
+          },
+          {
+            "id": "hire",
+            "date": "2026-09"
+          }
+        ]
+      },
+      {
+        "id": "layoffs",
+        "result": "neutral",
+        "why": "متوسط الطلبات الجديدة: -3.89%، والطلبات المستمرة: -0.45%",
+        "extra": "مقارنة 12 أسبوعًا، وليست قراءة أسبوع واحد",
+        "periods": [
+          {
+            "id": "claims4wk",
+            "date": "2026-11-14"
+          },
+          {
+            "id": "continuing",
+            "date": "2026-11-07"
+          }
+        ]
+      },
+      {
+        "id": "breadth",
+        "result": "support",
+        "why": "مؤشر الانتشار 57.6 (حد التعادل 50)، وتغير ساعات العمل 3 أشهر +0.1 ساعة",
+        "extra": "اتساع القطاع ومقدار الساعات يدعمان أو يعارضان قراءة NFP",
+        "periods": [
+          {
+            "id": "diffusion",
+            "date": "2026-10"
+          },
+          {
+            "id": "hours",
+            "date": "2026-10"
+          }
+        ]
+      }
+    ],
+    "supportEvidence": [
+      "نمو التوظيف — نمو التوظيف ما زال قائمًا؛ متوسط 3 أشهر 137 ألف",
+      "المشاركة والتشغيل — تغير العاملين إلى السكان +0.4 نقطة، ومشاركة 25–54 سنة +0.3 نقطة",
+      "الطلب على العمالة — تغير الشواغر خلال 6 أشهر +9.23%، وتغير معدل التعيينات خلال 3 أشهر 0 نقطة",
+      "اتساع التوظيف وساعات العمل — مؤشر الانتشار 57.6 (حد التعادل 50)، وتغير ساعات العمل 3 أشهر +0.1 ساعة"
+    ],
+    "riskEvidence": [],
+    "other": [
+      "البطالة ونقص الاستخدام — البطالة 4.1%؛ تغير 3 أشهر 0 نقطة مئوية",
+      "التسريحات والإعانات — متوسط الطلبات الجديدة: -3.89%، والطلبات المستمرة: -0.45%"
+    ],
+    "missing": [],
+    "metrics": {
+      "nfp": {
+        "date": "2026-10",
+        "value": 165,
+        "seriesId": "CES0000000001",
+        "source": "BLS · CES"
+      },
+      "private": {
+        "date": "2026-10",
+        "value": 159,
+        "seriesId": "CES0500000001",
+        "source": "BLS · CES"
+      },
+      "unrate": {
+        "date": "2026-10",
+        "value": 4.1,
+        "seriesId": "LNS14000000",
+        "source": "BLS · CPS"
+      },
+      "u6": {
+        "date": "2026-10",
+        "value": 7.9,
+        "seriesId": "LNS13327709",
+        "source": "BLS · CPS"
+      },
+      "part": {
+        "date": "2026-10",
+        "value": 61.9,
+        "seriesId": "LNS11300000",
+        "source": "BLS · CPS"
+      },
+      "emratio": {
+        "date": "2026-10",
+        "value": 59.3,
+        "seriesId": "LNS12300000",
+        "source": "BLS · CPS"
+      },
+      "primeage": {
+        "date": "2026-10",
+        "value": 83.7,
+        "seriesId": "LNS11300060",
+        "source": "BLS · CPS"
+      },
+      "wage_level": {
+        "date": "2026-10",
+        "value": 38,
+        "seriesId": "CES0500000003",
+        "source": "BLS · CES"
+      },
+      "wage_mom": {
+        "date": "2026-10",
+        "value": 0.3698,
+        "seriesId": "CES0500000003",
+        "source": "BLS · CES · حساب شهري"
+      },
+      "wage": {
+        "date": "2026-10",
+        "value": 3.1208,
+        "seriesId": "CES0500000003",
+        "source": "BLS · CES · حساب سنوي"
+      },
+      "hours": {
+        "date": "2026-10",
+        "value": 34.4,
+        "seriesId": "CES0500000002",
+        "source": "BLS · CES"
+      },
+      "temp": {
+        "date": "2026-10",
+        "value": 18.6,
+        "seriesId": "CES6056132001",
+        "source": "BLS · CES"
+      },
+      "jolts": {
+        "date": "2026-09",
+        "value": 7.523,
+        "seriesId": "JTS000000000000000JOL",
+        "source": "BLS · JOLTS"
+      },
+      "hire": {
+        "date": "2026-09",
+        "value": 3.4,
+        "seriesId": "JTS000000000000000HIR",
+        "source": "BLS · JOLTS"
+      },
+      "quits": {
+        "date": "2026-09",
+        "value": 2.1,
+        "seriesId": "JTS000000000000000QUR",
+        "source": "BLS · JOLTS"
+      },
+      "layoff": {
+        "date": "2026-09",
+        "value": 1,
+        "seriesId": "JTS000000000000000LDR",
+        "source": "BLS · JOLTS"
+      },
+      "longterm": {
+        "date": "2026-10",
+        "value": 1.963,
+        "seriesId": "LNS13008636",
+        "source": "BLS · CPS"
+      },
+      "parttime": {
+        "date": "2026-10",
+        "value": 4.84,
+        "seriesId": "LNS12032194",
+        "source": "BLS · CPS"
+      },
+      "diffusion": {
+        "date": "2026-10",
+        "value": 57.6,
+        "seriesId": "CES0500000021",
+        "source": "BLS · CES · Total-private employment diffusion (1 month)"
+      },
+      "nfp3": {
+        "date": "2026-10",
+        "value": 137,
+        "seriesId": "derived:CES0000000001:3M",
+        "source": "BLS · CES · متوسط 3 أشهر"
+      },
+      "nfp12": {
+        "date": "2026-10",
+        "value": 73.75,
+        "seriesId": "derived:CES0000000001:12M",
+        "source": "BLS · CES · متوسط 12 شهرًا"
+      },
+      "longshare": {
+        "date": "2026-10",
+        "value": 27.7731,
+        "seriesId": "derived:LNS13008636/LNS13000000",
+        "source": "BLS · CPS · نسبة محسوبة"
+      },
+      "beveridge": {
+        "date": "2026-09",
+        "value": 1.0582,
+        "seriesId": "derived:JOLTS+LNS13000000",
+        "source": "BLS · JOLTS/CPS · محسوب"
+      },
+      "claims": {
+        "date": "2026-11-14",
+        "value": 203,
+        "seriesId": "ICSA",
+        "source": "U.S. DOL · FRED (ICSA)"
+      },
+      "claims4wk": {
+        "date": "2026-11-14",
+        "value": 197.75,
+        "seriesId": "derived:ICSA:4wk",
+        "source": "U.S. DOL · FRED · متوسط 4 أسابيع"
+      },
+      "continuing": {
+        "date": "2026-11-07",
+        "value": 1.763,
+        "seriesId": "CCSA",
+        "source": "U.S. DOL · FRED (CCSA)"
+      },
+      "eci": {
+        "date": "2026-Q3",
+        "value": 0.7879,
+        "seriesId": "ECIALLCIV",
+        "source": "BLS via FRED · ECIALLCIV · calculated"
+      },
+      "eciy": {
+        "date": "2026-Q3",
+        "value": 3.3701,
+        "seriesId": "ECIALLCIV",
+        "source": "BLS via FRED · ECIALLCIV · calculated"
+      },
+      "productivity": {
+        "date": "2026-Q3",
+        "value": 3.5546,
+        "seriesId": "OPHNFB",
+        "source": "BLS via FRED · OPHNFB · calculated"
+      },
+      "ulc": {
+        "date": "2026-Q3",
+        "value": -0.6629,
+        "seriesId": "ULCNFB",
+        "source": "BLS via FRED · ULCNFB · calculated"
+      },
+      "sahm": {
+        "date": "2026-10",
+        "value": 0,
+        "seriesId": "SAHMREALTIME",
+        "source": "FRED · Sahm rule"
+      },
+      "adp": {
+        "date": "2026-10",
+        "value": 86,
+        "seriesId": "ADPMNUSNERSA",
+        "source": "ADP · National Employment Report via FRED · calculated"
+      }
+    },
+    "initialBaseline": true
+  },
+  "events": [],
+  "snapshots": [
+    {
+      "capturedAt": "2026-11-24T14:57:37.829Z",
+      "officialFetchedAt": "2026-11-24T14:57:34+00:00",
+      "label": "سوق عمل متماسك وفق الأدلة المتاحة",
+      "kind": "resilient",
+      "coverage": {
+        "analyzed": 6,
+        "total": 6,
+        "supports": 4,
+        "weak": 0,
+        "neutral": 2,
+        "missing": 0,
+        "officialAnchors": 12,
+        "anchorTotal": 12
+      },
+      "pillars": [
+        {
+          "id": "employment",
+          "result": "support",
+          "why": "نمو التوظيف ما زال قائمًا؛ متوسط 3 أشهر 137 ألف",
+          "extra": "المتوسط السنوي 74 ألف، والفارق +63.3 ألف",
+          "periods": [
+            {
+              "id": "nfp3",
+              "date": "2026-10"
+            },
+            {
+              "id": "nfp12",
+              "date": "2026-10"
+            }
+          ]
+        },
+        {
+          "id": "unemployment",
+          "result": "neutral",
+          "why": "البطالة 4.1%؛ تغير 3 أشهر 0 نقطة مئوية",
+          "extra": "تغير U-6 في 3 أشهر 0 نقطة مئوية • تغير 6 أشهر -0.2 نقطة مئوية",
+          "periods": [
+            {
+              "id": "unrate",
+              "date": "2026-10"
+            },
+            {
+              "id": "u6",
+              "date": "2026-10"
+            }
+          ]
+        },
+        {
+          "id": "participation",
+          "result": "support",
+          "why": "تغير العاملين إلى السكان +0.4 نقطة، ومشاركة 25–54 سنة +0.3 نقطة",
+          "extra": "ثلاثة أشهر؛ لا نساوي بين المشاركة والتوظيف الفعلي",
+          "periods": [
+            {
+              "id": "emratio",
+              "date": "2026-10"
+            },
+            {
+              "id": "primeage",
+              "date": "2026-10"
+            }
+          ]
+        },
+        {
+          "id": "demand",
+          "result": "support",
+          "why": "تغير الشواغر خلال 6 أشهر +9.23%، وتغير معدل التعيينات خلال 3 أشهر 0 نقطة",
+          "extra": "الشواغر تقيس الطلب المُعلن، والتعيينات تقيس التوظيف الفعلي",
+          "periods": [
+            {
+              "id": "jolts",
+              "date": "2026-09"
+            },
+            {
+              "id": "hire",
+              "date": "2026-09"
+            }
+          ]
+        },
+        {
+          "id": "layoffs",
+          "result": "neutral",
+          "why": "متوسط الطلبات الجديدة: -3.89%، والطلبات المستمرة: -0.45%",
+          "extra": "مقارنة 12 أسبوعًا، وليست قراءة أسبوع واحد",
+          "periods": [
+            {
+              "id": "claims4wk",
+              "date": "2026-11-14"
+            },
+            {
+              "id": "continuing",
+              "date": "2026-11-07"
+            }
+          ]
+        },
+        {
+          "id": "breadth",
+          "result": "support",
+          "why": "مؤشر الانتشار 57.6 (حد التعادل 50)، وتغير ساعات العمل 3 أشهر +0.1 ساعة",
+          "extra": "اتساع القطاع ومقدار الساعات يدعمان أو يعارضان قراءة NFP",
+          "periods": [
+            {
+              "id": "diffusion",
+              "date": "2026-10"
+            },
+            {
+              "id": "hours",
+              "date": "2026-10"
+            }
+          ]
+        }
+      ],
+      "supportEvidence": [
+        "نمو التوظيف — نمو التوظيف ما زال قائمًا؛ متوسط 3 أشهر 137 ألف",
+        "المشاركة والتشغيل — تغير العاملين إلى السكان +0.4 نقطة، ومشاركة 25–54 سنة +0.3 نقطة",
+        "الطلب على العمالة — تغير الشواغر خلال 6 أشهر +9.23%، وتغير معدل التعيينات خلال 3 أشهر 0 نقطة",
+        "اتساع التوظيف وساعات العمل — مؤشر الانتشار 57.6 (حد التعادل 50)، وتغير ساعات العمل 3 أشهر +0.1 ساعة"
+      ],
+      "riskEvidence": [],
+      "other": [
+        "البطالة ونقص الاستخدام — البطالة 4.1%؛ تغير 3 أشهر 0 نقطة مئوية",
+        "التسريحات والإعانات — متوسط الطلبات الجديدة: -3.89%، والطلبات المستمرة: -0.45%"
+      ],
+      "missing": [],
+      "metrics": {
+        "nfp": {
+          "date": "2026-10",
+          "value": 165,
+          "seriesId": "CES0000000001",
+          "source": "BLS · CES"
+        },
+        "private": {
+          "date": "2026-10",
+          "value": 159,
+          "seriesId": "CES0500000001",
+          "source": "BLS · CES"
+        },
+        "unrate": {
+          "date": "2026-10",
+          "value": 4.1,
+          "seriesId": "LNS14000000",
+          "source": "BLS · CPS"
+        },
+        "u6": {
+          "date": "2026-10",
+          "value": 7.9,
+          "seriesId": "LNS13327709",
+          "source": "BLS · CPS"
+        },
+        "part": {
+          "date": "2026-10",
+          "value": 61.9,
+          "seriesId": "LNS11300000",
+          "source": "BLS · CPS"
+        },
+        "emratio": {
+          "date": "2026-10",
+          "value": 59.3,
+          "seriesId": "LNS12300000",
+          "source": "BLS · CPS"
+        },
+        "primeage": {
+          "date": "2026-10",
+          "value": 83.7,
+          "seriesId": "LNS11300060",
+          "source": "BLS · CPS"
+        },
+        "wage_level": {
+          "date": "2026-10",
+          "value": 38,
+          "seriesId": "CES0500000003",
+          "source": "BLS · CES"
+        },
+        "wage_mom": {
+          "date": "2026-10",
+          "value": 0.3698,
+          "seriesId": "CES0500000003",
+          "source": "BLS · CES · حساب شهري"
+        },
+        "wage": {
+          "date": "2026-10",
+          "value": 3.1208,
+          "seriesId": "CES0500000003",
+          "source": "BLS · CES · حساب سنوي"
+        },
+        "hours": {
+          "date": "2026-10",
+          "value": 34.4,
+          "seriesId": "CES0500000002",
+          "source": "BLS · CES"
+        },
+        "temp": {
+          "date": "2026-10",
+          "value": 18.6,
+          "seriesId": "CES6056132001",
+          "source": "BLS · CES"
+        },
+        "jolts": {
+          "date": "2026-09",
+          "value": 7.523,
+          "seriesId": "JTS000000000000000JOL",
+          "source": "BLS · JOLTS"
+        },
+        "hire": {
+          "date": "2026-09",
+          "value": 3.4,
+          "seriesId": "JTS000000000000000HIR",
+          "source": "BLS · JOLTS"
+        },
+        "quits": {
+          "date": "2026-09",
+          "value": 2.1,
+          "seriesId": "JTS000000000000000QUR",
+          "source": "BLS · JOLTS"
+        },
+        "layoff": {
+          "date": "2026-09",
+          "value": 1,
+          "seriesId": "JTS000000000000000LDR",
+          "source": "BLS · JOLTS"
+        },
+        "longterm": {
+          "date": "2026-10",
+          "value": 1.963,
+          "seriesId": "LNS13008636",
+          "source": "BLS · CPS"
+        },
+        "parttime": {
+          "date": "2026-10",
+          "value": 4.84,
+          "seriesId": "LNS12032194",
+          "source": "BLS · CPS"
+        },
+        "diffusion": {
+          "date": "2026-10",
+          "value": 57.6,
+          "seriesId": "CES0500000021",
+          "source": "BLS · CES · Total-private employment diffusion (1 month)"
+        },
+        "nfp3": {
+          "date": "2026-10",
+          "value": 137,
+          "seriesId": "derived:CES0000000001:3M",
+          "source": "BLS · CES · متوسط 3 أشهر"
+        },
+        "nfp12": {
+          "date": "2026-10",
+          "value": 73.75,
+          "seriesId": "derived:CES0000000001:12M",
+          "source": "BLS · CES · متوسط 12 شهرًا"
+        },
+        "longshare": {
+          "date": "2026-10",
+          "value": 27.7731,
+          "seriesId": "derived:LNS13008636/LNS13000000",
+          "source": "BLS · CPS · نسبة محسوبة"
+        },
+        "beveridge": {
+          "date": "2026-09",
+          "value": 1.0582,
+          "seriesId": "derived:JOLTS+LNS13000000",
+          "source": "BLS · JOLTS/CPS · محسوب"
+        },
+        "claims": {
+          "date": "2026-11-14",
+          "value": 203,
+          "seriesId": "ICSA",
+          "source": "U.S. DOL · FRED (ICSA)"
+        },
+        "claims4wk": {
+          "date": "2026-11-14",
+          "value": 197.75,
+          "seriesId": "derived:ICSA:4wk",
+          "source": "U.S. DOL · FRED · متوسط 4 أسابيع"
+        },
+        "continuing": {
+          "date": "2026-11-07",
+          "value": 1.763,
+          "seriesId": "CCSA",
+          "source": "U.S. DOL · FRED (CCSA)"
+        },
+        "eci": {
+          "date": "2026-Q3",
+          "value": 0.7879,
+          "seriesId": "ECIALLCIV",
+          "source": "BLS via FRED · ECIALLCIV · calculated"
+        },
+        "eciy": {
+          "date": "2026-Q3",
+          "value": 3.3701,
+          "seriesId": "ECIALLCIV",
+          "source": "BLS via FRED · ECIALLCIV · calculated"
+        },
+        "productivity": {
+          "date": "2026-Q3",
+          "value": 3.5546,
+          "seriesId": "OPHNFB",
+          "source": "BLS via FRED · OPHNFB · calculated"
+        },
+        "ulc": {
+          "date": "2026-Q3",
+          "value": -0.6629,
+          "seriesId": "ULCNFB",
+          "source": "BLS via FRED · ULCNFB · calculated"
+        },
+        "sahm": {
+          "date": "2026-10",
+          "value": 0,
+          "seriesId": "SAHMREALTIME",
+          "source": "FRED · Sahm rule"
+        },
+        "adp": {
+          "date": "2026-10",
+          "value": 86,
+          "seriesId": "ADPMNUSNERSA",
+          "source": "ADP · National Employment Report via FRED · calculated"
+        }
+      },
+      "initialBaseline": true
+    }
+  ]
+}
