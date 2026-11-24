@@ -1,0 +1,46 @@
+name: ECONINTEL - Track 11 economic consensus forecasts
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every 15 min around major 8:30 and 10:00 AM US releases.
+    - cron: '7,22,37,52 12-16 * * 1-5'
+    # Hourly in the later US session, keeping run costs low.
+    - cron: '45 17-21 * * 1-5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: econintel-consensus
+  cancel-in-progress: false
+
+jobs:
+  forecast-tracker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test consensus matching and date calculations
+        run: python -m unittest discover -s tests -p 'test_forecast_tracker.py' -v
+      - name: Refresh official dates and licensed consensus
+        env:
+          TE_API_KEY: ${{ secrets.TE_API_KEY }}
+          ECON_CONSENSUS_REPUBLICATION_OK: ${{ secrets.ECON_CONSENSUS_REPUBLICATION_OK }}
+        run: python scripts/update_forecast_tracker.py
+      - name: Commit only if schedules or consensus snapshots changed
+        run: |
+          git config user.name "econintel-forecast-bot"
+          git config user.email "econintel-forecast-bot@users.noreply.github.com"
+          git add data/forecast-tracker.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh ECONINTEL 11-indicator consensus watch"
+            for attempt in 1 2 3; do
+              if git push; then exit 0; fi
+              git pull --rebase origin main || exit 1
+              sleep 3
+            done
+            exit 1
+          fi

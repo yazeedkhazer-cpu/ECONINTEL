@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "about": "Forecast snapshots are first-seen by ECONINTEL, not the original time a consensus was formed. No forecast is fabricated.",
+  "catalog": {
+    "nfp": "nfp",
+    "private": "nfp",
+    "unrate": "nfp",
+    "wage_mom": "nfp",
+    "wage": "nfp",
+    "jolts": "jolts",
+    "claims": "claims",
+    "adp": "adp",
+    "eci": "eci",
+    "productivity": "productivity",
+    "ulc": "productivity"
+  },
+  "calendarVerifiedOn": "2026-11-23",
+  "calendar": [
+    {
+      "group": "claims",
+      "releaseAt": "2026-11-25T13:30:00Z",
+      "reference": "",
+      "status": "official_exception",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "jolts",
+      "releaseAt": "2026-12-01T15:00:00Z",
+      "reference": "2026-10",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/jolts.htm"
+    },
+    {
+      "group": "adp",
+      "releaseAt": "2026-12-02T13:15:00Z",
+      "reference": "2026-11",
+      "status": "official_verified",
+      "source": "https://adpemploymentreport.com/"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2026-12-03T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "nfp",
+      "releaseAt": "2026-12-04T13:30:00Z",
+      "reference": "2026-11",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/empsit.htm"
+    },
+    {
+      "group": "productivity",
+      "releaseAt": "2026-12-08T13:30:00Z",
+      "reference": "2026-Q3 (R)",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/prod2.htm"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2026-12-10T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2026-12-17T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2026-12-24T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2026-12-31T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-01-07T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "nfp",
+      "releaseAt": "2027-01-08T13:30:00Z",
+      "reference": "2026-12",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/empsit.htm"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-01-14T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-01-21T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-01-28T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "eci",
+      "releaseAt": "2027-01-29T13:30:00Z",
+      "reference": "2026-Q4",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/eci.htm"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-02-04T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "nfp",
+      "releaseAt": "2027-02-05T13:30:00Z",
+      "reference": "2027-01",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/empsit.htm"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-02-11T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-02-18T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "claims",
+      "releaseAt": "2027-02-25T13:30:00Z",
+      "reference": "",
+      "status": "official_weekly_rule",
+      "source": "https://oui.doleta.gov/unemploy/archive.asp"
+    },
+    {
+      "group": "eci",
+      "releaseAt": "2027-04-30T12:30:00Z",
+      "reference": "2027-Q1",
+      "status": "official_verified",
+      "source": "https://www.bls.gov/schedule/news_release/eci.htm"
+    }
+  ],
+  "snapshots": [],
+  "lastRun": null,
+  "provider": {
+    "name": "Trading Economics (consensus Forecast only)",
+    "status": "not_configured",
+    "lastSuccessfulFetch": null,
+    "note": "No TE_API_KEY. Values must remain unavailable until a licensed provider is connected."
+  }
+}

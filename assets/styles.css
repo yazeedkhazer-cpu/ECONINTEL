@@ -58,3 +58,36 @@
 .indicator-window b{font-size:20px;color:#effff9;direction:ltr;text-align:right;word-break:break-word}
 .indicator-window strong{color:#85e8b7;font-size:13px;text-align:right}
 @media(max-width:730px){.indicator-window-grid{grid-template-columns:1fr}}
+
+/* ECONINTEL v1.7 — release calendar and sourced-consensus ledger */
+.forecast-summary {display:grid;grid-template-columns:1fr 1fr 2fr;gap:12px;margin-top:24px}
+.forecast-summary>div,.forecast-card,.forecast-topline>div {background:#102038;border:1px solid #283d55;border-radius:12px;padding:16px}
+.forecast-summary small,.forecast-topline small,.forecast-card-date small{display:block;color:#91a9bf;font-size:12px;margin-bottom:8px}
+.forecast-summary b {display:block;color:#f1f7fe;font-size:23px}
+.forecast-summary .forecast-status{font-size:13px;line-height:1.8;color:#a6d8c4}
+.forecast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.forecast-card{text-align:right;color:#f1f7fe;cursor:pointer;display:block;transition:border-color .2s, transform .2s}
+.forecast-card:hover{border-color:#55c69f;transform:translateY(-2px)}
+.forecast-card-label{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;min-height:44px}
+.forecast-card-label b{font-size:14px}
+.forecast-card-label span,.forecast-card-date span{font-size:11px;color:#8ba9bd}
+.forecast-card-date{margin:14px 0}
+.forecast-card-date strong{display:block;line-height:1.7;font-size:16px}
+.forecast-card-bottom{display:flex;justify-content:space-between;gap:10px;color:#9ecbb9;border-top:1px solid #2a4056;padding-top:12px;font-size:12px}
+.forecast-card-bottom b{color:#f2f8ff;font-size:18px}
+.forecast-card-foot{margin-top:12px;color:#a6b4c4;font-size:11px}
+.forecast-topline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.forecast-topline strong{display:block;color:#e8f6fc;font-size:19px;line-height:1.65}
+.forecast-topline span{display:block;color:#97aec1;font-size:11px;line-height:1.7}
+.forecast-topline .forecast-small{font-size:13px}
+.forecast-note{padding:14px;border:1px solid #28516d;border-radius:10px;background:#142b3a;color:#b6d7dc;line-height:1.9;font-size:12px}
+.forecast-note a{color:#7aefc4;margin-inline:8px}
+.forecast-history{margin-top:20px}
+.forecast-history h4{margin-bottom:12px}
+.forecast-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid #2c4256;padding:11px 0;color:#aebed0;font-size:12px}
+.forecast-row strong{color:#d8fff2;font-size:16px}
+.forecast-row small{font-size:10px}
+.forecast-release-line{text-align:left;display:flex;flex-direction:column;gap:4px}
+.forecast-release-line small{color:#7fc6b3}
+@media (max-width:1120px){.forecast-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.forecast-grid,.forecast-summary,.forecast-topline{grid-template-columns:1fr}.forecast-row{flex-wrap:wrap}}
