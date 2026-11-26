@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const r=require('./report_full_pit.cjs');
+const csv='"asOfMonth","kind","label"\n"2024-08","weak","سوق ضعيف"\n';
+const old=r.parseCSV(csv);
+assert.equal(old.length,1);
+assert.equal(old[0].kind,'weak');
+const example={frames:[{asOf:'2024-08-31',month:'2024-08',completeMonth:true,metrics:{},unavailable:{CES0500000021:'missing'}}]};
+const result=r.analyze(example,old);
+assert.equal(result.summary.fullHistoricalMonths,1);
+assert.equal(result.rows[0].validAnchors,0);
+assert.equal(result.rows[0].quality,'insufficient');
+assert.equal(result.rows[0].missingSourceIds[0],'CES0500000021');
+assert.equal(result.summary.validAsPrediction,false);
+console.log('PASS: full report parses revised baseline, reports missing anchor and blocks prediction claim');

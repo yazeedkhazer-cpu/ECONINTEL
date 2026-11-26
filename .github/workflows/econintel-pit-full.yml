@@ -1,0 +1,38 @@
+name: ECONINTEL - Full ALFRED 2022-present historical research (read-only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  historical-pit-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run offline no-look-ahead and reporting tests
+        run: |
+          python -m unittest discover -s research/pit -p 'test_*.py' -v
+          node research/pit/test_full_report.cjs
+      - name: Fetch every monthly ALFRED as-of vintage, 2022-present
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python research/pit/fetch_full_pit.py
+      - name: Replay original six-pillar rules and compare old revised backtest
+        run: node research/pit/report_full_pit.cjs
+      - name: Save separate research artifact - NEVER publish to website
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ECONINTEL_Full_PIT_2022_present_Results
+          path: pit_full_output/
+          if-no-files-found: warn
+          retention-days: 30
