@@ -1,0 +1,629 @@
+{
+  "schemaVersion": 1,
+  "status": "evaluated_holdout",
+  "generatedAt": "2026-11-28T17:26:37.059220+00:00",
+  "study": "pre-registered 3 same-sign months of lodging index => elevated Shelter CPI nowcast error",
+  "discoveryRange": "2023-01 through 2024-02, excluded",
+  "heldoutReleaseRange": [
+    "2024-04-01",
+    "2026-11-28"
+  ],
+  "leadCalendarDays": 7,
+  "forecast": "Simple three-month average of shelter MoM, not the v2 shelter composite; model-specific generalization not proven",
+  "riskDefinition": "Three strictly positive or strictly negative as-of historical lodging MoM values",
+  "largeMissThresholdPp": 0.15,
+  "releaseCandidates": 31,
+  "validCases": 27,
+  "groups": {
+    "flag": {
+      "n": 8,
+      "mae_pp": 0.11386,
+      "large_miss_count": 2,
+      "large_miss_rate": 0.25
+    },
+    "no_flag": {
+      "n": 19,
+      "mae_pp": 0.10094,
+      "large_miss_count": 5,
+      "large_miss_rate": 0.26316
+    }
+  },
+  "flaggedMinusUnflaggedMaePp": 0.01292,
+  "hypothesisDirectionSupported": true,
+  "cases": [
+    {
+      "release": "2024-04-10",
+      "cutoff": "2024-04-03",
+      "target": "2024-03",
+      "shelter_last_published": "2024-02",
+      "shelter_mom_prev_three": [
+        0.4265489792382171,
+        0.6341367099254036,
+        0.4070566789736274
+      ],
+      "lodging_mom_prev_three": [
+        0.14727307278141755,
+        1.7755548273064692,
+        0.15172955551849832
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.4892474560457494,
+      "first_released_actual_shelter_mom": 0.417632939719792,
+      "shelter_absolute_error_pp": 0.07161451632595739,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-05-15",
+      "cutoff": "2024-05-08",
+      "target": "2024-04",
+      "shelter_last_published": "2024-03",
+      "shelter_mom_prev_three": [
+        0.417632939719792,
+        0.4265489792382171,
+        0.6341367099254036
+      ],
+      "lodging_mom_prev_three": [
+        0.084860559868849,
+        0.14727307278141755,
+        1.7755548273064692
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.4927728762944709,
+      "first_released_actual_shelter_mom": 0.3779954114995432,
+      "shelter_absolute_error_pp": 0.11477746479492773,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-06-12",
+      "cutoff": "2024-06-05",
+      "target": "2024-05",
+      "shelter_last_published": "2024-04",
+      "shelter_mom_prev_three": [
+        0.3779954114995432,
+        0.417632939719792,
+        0.4265489792382171
+      ],
+      "lodging_mom_prev_three": [
+        -0.16009774388572318,
+        0.084860559868849,
+        0.14727307278141755
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.40739244348585074,
+      "first_released_actual_shelter_mom": 0.40249906863880636,
+      "shelter_absolute_error_pp": 0.004893374847044385,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-07-11",
+      "cutoff": "2024-07-04",
+      "target": "2024-06",
+      "shelter_last_published": "2024-05",
+      "shelter_mom_prev_three": [
+        0.40249906863880636,
+        0.3779954114995432,
+        0.417632939719792
+      ],
+      "lodging_mom_prev_three": [
+        -0.10496887857369686,
+        -0.16009774388572318,
+        0.084860559868849
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.3993758066193805,
+      "first_released_actual_shelter_mom": 0.1702321826573705,
+      "shelter_absolute_error_pp": 0.22914362396201,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2024-08-14",
+      "cutoff": "2024-08-07",
+      "target": "2024-07",
+      "shelter_last_published": "2024-06",
+      "shelter_mom_prev_three": [
+        0.1702321826573705,
+        0.40249906863880636,
+        0.3779954114995432
+      ],
+      "lodging_mom_prev_three": [
+        -2.0234342410273443,
+        -0.10496887857369686,
+        -0.16009774388572318
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.31690888759857333,
+      "first_released_actual_shelter_mom": 0.3789300856472222,
+      "shelter_absolute_error_pp": 0.06202119804864886,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-09-11",
+      "cutoff": "2024-09-04",
+      "target": "2024-08",
+      "shelter_last_published": "2024-07",
+      "shelter_mom_prev_three": [
+        0.3789300856472222,
+        0.1702321826573705,
+        0.40249906863880636
+      ],
+      "lodging_mom_prev_three": [
+        0.21827118443107363,
+        -2.0234342410273443,
+        -0.10496887857369686
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.31722044564779966,
+      "first_released_actual_shelter_mom": 0.5203710168054654,
+      "shelter_absolute_error_pp": 0.20315057115766572,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2024-10-10",
+      "cutoff": "2024-10-03",
+      "target": "2024-09",
+      "shelter_last_published": "2024-08",
+      "shelter_mom_prev_three": [
+        0.5203710168054654,
+        0.3789300856472222,
+        0.1702321826573705
+      ],
+      "lodging_mom_prev_three": [
+        1.75043290276089,
+        0.21827118443107363,
+        -2.0234342410273443
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.35651109503668604,
+      "first_released_actual_shelter_mom": 0.2227475337780005,
+      "shelter_absolute_error_pp": 0.13376356125868555,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-11-13",
+      "cutoff": "2024-11-06",
+      "target": "2024-10",
+      "shelter_last_published": "2024-09",
+      "shelter_mom_prev_three": [
+        0.2227475337780005,
+        0.5203710168054654,
+        0.3789300856472222
+      ],
+      "lodging_mom_prev_three": [
+        -1.925912615150449,
+        1.75043290276089,
+        0.21827118443107363
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.374016212076896,
+      "first_released_actual_shelter_mom": 0.38238315039165194,
+      "shelter_absolute_error_pp": 0.008366938314755934,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2024-12-11",
+      "cutoff": "2024-12-04",
+      "target": "2024-11",
+      "shelter_last_published": "2024-10",
+      "shelter_mom_prev_three": [
+        0.38238315039165194,
+        0.2227475337780005,
+        0.5203710168054654
+      ],
+      "lodging_mom_prev_three": [
+        0.4009376768248307,
+        -1.925912615150449,
+        1.75043290276089
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.3751672336583726,
+      "first_released_actual_shelter_mom": 0.33630020464017196,
+      "shelter_absolute_error_pp": 0.03886702901820066,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-01-15",
+      "cutoff": "2025-01-08",
+      "target": "2024-12",
+      "shelter_last_published": "2024-11",
+      "shelter_mom_prev_three": [
+        0.33630020464017196,
+        0.38238315039165194,
+        0.2227475337780005
+      ],
+      "lodging_mom_prev_three": [
+        3.160341153674806,
+        0.4009376768248307,
+        -1.925912615150449
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.31381029626994145,
+      "first_released_actual_shelter_mom": 0.25801441932011837,
+      "shelter_absolute_error_pp": 0.055795876949823076,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-02-12",
+      "cutoff": "2025-02-05",
+      "target": "2025-01",
+      "shelter_last_published": "2024-12",
+      "shelter_mom_prev_three": [
+        0.25801441932011837,
+        0.33630020464017196,
+        0.38238315039165194
+      ],
+      "lodging_mom_prev_three": [
+        -0.952148056421287,
+        3.160341153674806,
+        0.4009376768248307
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.3255659247839808,
+      "first_released_actual_shelter_mom": 0.37414915981830443,
+      "shelter_absolute_error_pp": 0.04858323503432366,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-03-12",
+      "cutoff": "2025-03-05",
+      "target": "2025-02",
+      "shelter_last_published": "2025-01",
+      "shelter_mom_prev_three": [
+        0.37414915981830443,
+        0.2729629129147648,
+        0.33847579885710743
+      ],
+      "lodging_mom_prev_three": [
+        1.428631366954769,
+        -0.5077095671684684,
+        2.5958799974303615
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.3285292905300589,
+      "first_released_actual_shelter_mom": 0.28267826672816465,
+      "shelter_absolute_error_pp": 0.045851023801894264,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-04-10",
+      "cutoff": "2025-04-03",
+      "target": "2025-03",
+      "shelter_last_published": "2025-02",
+      "shelter_mom_prev_three": [
+        0.28267826672816465,
+        0.37414915981830443,
+        0.2729629129147648
+      ],
+      "lodging_mom_prev_three": [
+        0.18097582163023596,
+        1.428631366954769,
+        -0.5077095671684684
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.30993011315374464,
+      "first_released_actual_shelter_mom": 0.22224331870372982,
+      "shelter_absolute_error_pp": 0.08768679445001482,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-05-13",
+      "cutoff": "2025-05-06",
+      "target": "2025-04",
+      "shelter_last_published": "2025-03",
+      "shelter_mom_prev_three": [
+        0.22224331870372982,
+        0.28267826672816465,
+        0.37414915981830443
+      ],
+      "lodging_mom_prev_three": [
+        -3.537621421861614,
+        0.18097582163023596,
+        1.428631366954769
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.2930235817500663,
+      "first_released_actual_shelter_mom": 0.33493311053036656,
+      "shelter_absolute_error_pp": 0.04190952878030024,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-06-11",
+      "cutoff": "2025-06-04",
+      "target": "2025-05",
+      "shelter_last_published": "2025-04",
+      "shelter_mom_prev_three": [
+        0.33493311053036656,
+        0.22224331870372982,
+        0.28267826672816465
+      ],
+      "lodging_mom_prev_three": [
+        -0.10166299253044908,
+        -3.537621421861614,
+        0.18097582163023596
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.27995156532075366,
+      "first_released_actual_shelter_mom": 0.25465803927833264,
+      "shelter_absolute_error_pp": 0.025293526042421022,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-07-15",
+      "cutoff": "2025-07-08",
+      "target": "2025-06",
+      "shelter_last_published": "2025-05",
+      "shelter_mom_prev_three": [
+        0.25465803927833264,
+        0.33493311053036656,
+        0.22224331870372982
+      ],
+      "lodging_mom_prev_three": [
+        -0.07498580625809881,
+        -0.10166299253044908,
+        -3.537621421861614
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.270611489504143,
+      "first_released_actual_shelter_mom": 0.17577959942534083,
+      "shelter_absolute_error_pp": 0.09483189007880216,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-08-12",
+      "cutoff": "2025-08-05",
+      "target": "2025-07",
+      "shelter_last_published": "2025-06",
+      "shelter_mom_prev_three": [
+        0.17577959942534083,
+        0.25465803927833264,
+        0.33493311053036656
+      ],
+      "lodging_mom_prev_three": [
+        -2.886975911493239,
+        -0.07498580625809881,
+        -0.10166299253044908
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.25512358307801336,
+      "first_released_actual_shelter_mom": 0.23331879108086095,
+      "shelter_absolute_error_pp": 0.021804791997152406,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2025-09-11",
+      "cutoff": "2025-09-04",
+      "target": "2025-08",
+      "shelter_last_published": "2025-07",
+      "shelter_mom_prev_three": [
+        0.23331879108086095,
+        0.17577959942534083,
+        0.25465803927833264
+      ],
+      "lodging_mom_prev_three": [
+        -1.020002649357521,
+        -2.886975911493239,
+        -0.07498580625809881
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.22125214326151146,
+      "first_released_actual_shelter_mom": 0.43717581537616734,
+      "shelter_absolute_error_pp": 0.21592367211465588,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2025-10-24",
+      "cutoff": "2025-10-17",
+      "target": "2025-09",
+      "shelter_last_published": "2025-08",
+      "shelter_mom_prev_three": [
+        0.43717581537616734,
+        0.23331879108086095,
+        0.17577959942534083
+      ],
+      "lodging_mom_prev_three": [
+        2.29021680942183,
+        -1.020002649357521,
+        -2.886975911493239
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.2820914019607897,
+      "first_released_actual_shelter_mom": 0.2056652516705837,
+      "shelter_absolute_error_pp": 0.076426150290206,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2026-04-10",
+      "cutoff": "2026-04-03",
+      "target": "2026-03",
+      "shelter_last_published": "2026-02",
+      "shelter_mom_prev_three": [
+        0.2315357908831306,
+        0.21993212030240183,
+        0.3833765267707845
+      ],
+      "lodging_mom_prev_three": [
+        0.9616100586113951,
+        -0.09829811427023438,
+        2.1842762514931113
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.2782814793187723,
+      "first_released_actual_shelter_mom": 0.2664667968657719,
+      "shelter_absolute_error_pp": 0.01181468245300038,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2026-05-12",
+      "cutoff": "2026-05-05",
+      "target": "2026-04",
+      "shelter_last_published": "2026-03",
+      "shelter_mom_prev_three": [
+        0.2664667968657719,
+        0.2315357908831306,
+        0.21993212030240183
+      ],
+      "lodging_mom_prev_three": [
+        0.2428539820678033,
+        0.9616100586113951,
+        -0.09829811427023438
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.23931156935043477,
+      "first_released_actual_shelter_mom": 0.60674088414856,
+      "shelter_absolute_error_pp": 0.36742931479812524,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2026-06-10",
+      "cutoff": "2026-06-03",
+      "target": "2026-05",
+      "shelter_last_published": "2026-04",
+      "shelter_mom_prev_three": [
+        0.60674088414856,
+        0.2664667968657719,
+        0.2315357908831306
+      ],
+      "lodging_mom_prev_three": [
+        2.4421006164372816,
+        0.2428539820678033,
+        0.9616100586113951
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.36824782396582084,
+      "first_released_actual_shelter_mom": 0.31783087459744674,
+      "shelter_absolute_error_pp": 0.0504169493683741,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2026-07-14",
+      "cutoff": "2026-07-07",
+      "target": "2026-06",
+      "shelter_last_published": "2026-05",
+      "shelter_mom_prev_three": [
+        0.31783087459744674,
+        0.60674088414856,
+        0.2664667968657719
+      ],
+      "lodging_mom_prev_three": [
+        0.4180902254096175,
+        2.4421006164372816,
+        0.2428539820678033
+      ],
+      "lodging_streak_flag": true,
+      "predicted_shelter_mom_3m_baseline": 0.3970128518705929,
+      "first_released_actual_shelter_mom": 0.1175239136631534,
+      "shelter_absolute_error_pp": 0.2794889382074395,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2026-08-12",
+      "cutoff": "2026-08-05",
+      "target": "2026-07",
+      "shelter_last_published": "2026-06",
+      "shelter_mom_prev_three": [
+        0.1175239136631534,
+        0.31783087459744674,
+        0.60674088414856
+      ],
+      "lodging_mom_prev_three": [
+        -2.3233835166463157,
+        0.4180902254096175,
+        2.4421006164372816
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.3473652241363867,
+      "first_released_actual_shelter_mom": 0.138622780343578,
+      "shelter_absolute_error_pp": 0.2087424437928087,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2026-09-11",
+      "cutoff": "2026-09-04",
+      "target": "2026-08",
+      "shelter_last_published": "2026-07",
+      "shelter_mom_prev_three": [
+        0.138622780343578,
+        0.1175239136631534,
+        0.31783087459744674
+      ],
+      "lodging_mom_prev_three": [
+        -2.7546927055820847,
+        -2.3233835166463157,
+        0.4180902254096175
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.19132585620139272,
+      "first_released_actual_shelter_mom": 0.26381104417434464,
+      "shelter_absolute_error_pp": 0.07248518797295192,
+      "large_miss_0_15pp": false
+    },
+    {
+      "release": "2026-10-14",
+      "cutoff": "2026-10-07",
+      "target": "2026-09",
+      "shelter_last_published": "2026-08",
+      "shelter_mom_prev_three": [
+        0.26381104417434464,
+        0.138622780343578,
+        0.1175239136631534
+      ],
+      "lodging_mom_prev_three": [
+        2.3567502447104927,
+        -2.7546927055820847,
+        -2.3233835166463157
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.17331924606035867,
+      "first_released_actual_shelter_mom": 0.39072396665016385,
+      "shelter_absolute_error_pp": 0.21740472058980517,
+      "large_miss_0_15pp": true
+    },
+    {
+      "release": "2026-11-10",
+      "cutoff": "2026-11-03",
+      "target": "2026-10",
+      "shelter_last_published": "2026-09",
+      "shelter_mom_prev_three": [
+        0.39072396665016385,
+        0.26381104417434464,
+        0.138622780343578
+      ],
+      "lodging_mom_prev_three": [
+        2.035036465667628,
+        2.3567502447104927,
+        -2.7546927055820847
+      ],
+      "lodging_streak_flag": false,
+      "predicted_shelter_mom_3m_baseline": 0.26438593038936214,
+      "first_released_actual_shelter_mom": 0.30469451827703775,
+      "shelter_absolute_error_pp": 0.040308587887675607,
+      "large_miss_0_15pp": false
+    }
+  ],
+  "skipped": [
+    {
+      "release": "2025-12-18",
+      "reason": "No same-day ALFRED first shelter target"
+    },
+    {
+      "release": "2026-01-13",
+      "reason": "Missing consecutive published months"
+    },
+    {
+      "release": "2026-02-13",
+      "reason": "Missing consecutive published months"
+    },
+    {
+      "release": "2026-03-11",
+      "reason": "Missing consecutive published months"
+    }
+  ],
+  "limitations": [
+    "Discovery years were inspected before setting this rule; only holdout window is a valid independent check",
+    "Risk flag predicts the magnitude of a 3m shelter BASELINE error; it is not a numerical CPI release nowcast",
+    "Threshold 0.15 pp was selected after inspecting discovery years and must not be retuned on holdout",
+    "Only ALFRED first-vintage index-derived seasonally adjusted monthly changes, not published rounded BLS text",
+    "Does not prove causal influence of hotel prices or forecast the sign of upcoming hotel changes",
+    "Small number of flagged events or episodes means very wide uncertainty on risk differences",
+    "Even a positive sample would need another independent period before deployment"
+  ]
+}
