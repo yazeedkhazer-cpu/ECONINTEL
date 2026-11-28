@@ -49,6 +49,12 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 <p id="v2ShelterInterpretation" class="hint">يتم تحميل نتائج اختبار السكن…</p>
 <p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46167403971" target="_blank" rel="noopener noreferrer">سجل الاختبار التاريخي للسكن V2</a></p>
 </section>
+<section class="panel"><h2>كم مرة توقع المحرك نفس القراءة الشهرية حتى منزلة عشرية واحدة؟</h2>
+<p>اختبار V1 الرقمي على إصدارات 2023–2024: هل توقع المحرك يطابق القراءة إلى العُشر بعد التقريب، وليس فقط هل متوسط الخطأ صغير؟</p>
+<div class="table-wrap"><table><thead><tr><th>المؤشر</th><th>مطابقات V1</th><th>نسبة المطابقة</th><th>مطابقات المتوسط البسيط</th></tr></thead>
+<tbody id="exactHitRows"><tr><td colspan="4">جاري تحميل نتائج المطابقة…</td></tr></tbody></table></div>
+<p id="exactHitNote" class="hint">هذه مقارنة مع التغير المستخرج من أول مؤشر ALFRED المعدل موسميًا، وليست بعد مقارنة مباشرة مع الرقم المطبوع حرفيًا في بيان BLS/BEA.</p>
+</section>
 <section class="panel"><h2>كيف نقرأ النتيجة؟</h2>
 <div class="method"><p><b>Headline CPI:</b> تجميع مساهمات الغذاء والطاقة والسلع الأساسية والسكن والخدمات الأخرى باستخدام أوزان BLS السنوية المتاحة وقت التوقع.</p>
 <p><b>Core CPI:</b> استبعاد الغذاء والطاقة وإعادة موازنة الأوزان؛ لا يجوز تفسير انخفاض البنزين أنه يخفض Core CPI مباشرة.</p>
@@ -64,6 +70,22 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 </main><script>
 "use strict";
 const $=id=>document.getElementById(id);
+fetch("data/inflation-exact-hit-summary.json?t="+Date.now(),{cache:"no-store"})
+ .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
+ .then(d=>{
+  if(d.schemaVersion!==1||!Array.isArray(d.tests))throw Error("Invalid release-level audit");
+  const body=$("exactHitRows");body.replaceChildren();
+  for(const x of d.tests){
+   const tr=document.createElement("tr");
+   const vals=[x.name,x.structuralExact+" / "+x.n,
+               (100*x.structuralExact/x.n).toFixed(1)+"%",
+               x.baselineExact+" / "+x.n];
+   for(const val of vals){const td=document.createElement("td");td.textContent=val;tr.appendChild(td);}
+   body.appendChild(tr);
+  }
+  $("exactHitNote").textContent="ملاحظة: هذه أرقام نموذج V1 فقط، وليست نموذج CPI V2. المعايير مستخرجة من أول نسخ ALFRED وليست مراجعة كاملة للأرقام المدوّرة المنشورة رسميًا. التحسن في MAE لا يضمن مطابقة خانة العُشر.";
+ }).catch(e=>$("exactHitNote").textContent="تعذر تحميل فحص دقة المطابقة: "+e.message);
+
 const fmt=(x,n=4)=>typeof x==="number"&&Number.isFinite(x)?x.toFixed(n):"—";
 fetch("data/cpi-shelter-v2-pit-summary.json?t="+Date.now(),{cache:"no-store"})
  .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
