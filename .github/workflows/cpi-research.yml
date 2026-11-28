@@ -79,6 +79,8 @@ jobs:
           node tests/test_inflation_structural.js
           node --check assets/cpi-components-v2.js
           node tests/test_cpi_components_v2.js
+          node --check research/freeze_next_inflation_nowcast.cjs
+          node tests/test_freeze_inflation_nowcast.cjs
           python -m py_compile scripts/update_inflation.py
           python -m unittest discover -s tests -p "test_inflation_bls_components.py" -v
 
