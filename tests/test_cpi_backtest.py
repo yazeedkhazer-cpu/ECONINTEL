@@ -24,7 +24,7 @@ class FakeFred:
         self.old_core = series(2022, 1, [105 * 1.003**i for i in range(25)])
 
     def release_days(self, start, end):
-        return ["2024-02-13"]
+        return ["2024-03-12"]
 
     def observations(self, series_id, as_of, start):
         self.calls.append((series_id, as_of))
@@ -34,7 +34,7 @@ class FakeFred:
             observations = self.old_core.copy()
         else:
             return {}
-        if as_of >= "2024-02-13":
+        if as_of >= "2024-03-12":
             prior = observations["2024-01-01"]
             observations["2024-02-01"] = prior * (
                 1.004 if series_id == "CPIAUCSL" else 1.005
@@ -60,21 +60,21 @@ class TestPointInTime(unittest.TestCase):
 
     def test_first_release_kept_separate_from_history(self):
         fake = FakeFred()
-        before = c.snapshot(fake, "2024-02-06")
+        before = c.snapshot(fake, "2024-03-05")
         self.assertEqual(max(before["headline"]), "2024-01-01")
-        actual, vintage = c.first_outcome(fake, "2024-02-13", "2024-02-01")
-        self.assertEqual(vintage, "2024-02-13")
+        actual, vintage = c.first_outcome(fake, "2024-03-12", "2024-02-01")
+        self.assertEqual(vintage, "2024-03-12")
         self.assertAlmostEqual(actual["headline"], 0.4)
         self.assertAlmostEqual(actual["core"], 0.5)
         self.assertEqual(max(before["headline"]), "2024-01-01")
 
     def test_walk_forward_never_sees_future_release(self):
         fake = FakeFred()
-        output = c.backtest(fake, "2024-02-01", "2024-02-28", 7, 6)
+        output = c.backtest(fake, "2024-03-01", "2024-03-31", 7, 6)
         self.assertEqual(output["warmupCases"], 1)
         self.assertEqual(output["evaluatedCases"], 0)  # Do NOT claim measured accuracy.
         row = output["results"][0]
-        self.assertEqual(row["as_of"], "2024-02-06")
+        self.assertEqual(row["as_of"], "2024-03-05")
         self.assertEqual(row["target_period"], "2024-02")
         self.assertAlmostEqual(row["actual"]["headline"], 0.4)
         self.assertAlmostEqual(row["predictions"]["headline"]["baseline"], 0.2)
