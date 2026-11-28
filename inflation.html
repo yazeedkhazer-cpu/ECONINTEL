@@ -2,7 +2,12 @@
 <body><div class="wrap"><header class="header"><div class="brand"><span class="mark">⌁</span><div><b>ECON<span>INTEL</span></b><small>INFLATION RESEARCH LAB</small></div></div><a href="index.html#overview" class="back">↗ العودة إلى سوق العمل</a></header>
 <div class="hero"><div class="tag">ECONINTEL · INFLATION INTELLIGENCE</div><h1>مختبر التضخم الأمريكي</h1><p>قياس الحالة الحالية، تتبّع الضغوط القيادية، دراسة مصادر ارتفاع الأسعار، وتجهيز طبقة تنبؤ قابلة للاختبار. البيانات الرسمية منفصلة عن استنتاجات المحرك التجريبية.</p><div class="meta"><span id="synced">لم يتم تحميل البيانات بعد</span><span id="coverage">—</span><button id="refresh" class="secondary">↻ تحديث العرض</button></div></div>
 <div id="warning" class="notice" hidden></div>
-<div class="stats" id="stats"></div>
+<section class="inflation-rates-section" aria-labelledby="inflationRatesHeading">
+ <div class="inflation-rates-heading"><h2 id="inflationRatesHeading">CPI وPCE — أربعة مقاييس مختلفة لكل مؤشر</h2>
+ <p>الرقم الكبير هو <b>YoY</b> (التغير الفعلي خلال آخر 12 شهرًا). تحته التغير الشهري <b>MoM</b> وزخم 3 و6 أشهر المحوّل سنويًا <b>SAAR</b>.</p></div>
+ <div class="stats" id="stats"></div>
+ <p class="inflation-rates-note"><b>مهم:</b> قراءة 3M SAAR أو 6M SAAR ليست تضخم الـ12 شهرًا الفعلي. وتُحسب هنا من مؤشرات FRED المعدّلة موسميًا؛ خصوصًا YoY لـCPI قد يختلف قليلًا عن الرقم الرسمي المنشور من السلسلة غير المعدّلة موسميًا. الفترة المعروضة هي فترة القياس وليست تاريخ صدور الخبر.</p>
+</section>
 <section class="panel"><div class="section-head"><div><div class="eyebrow">RESEARCH SYNTHESIS</div><h2>حالة التضخم ومصادر الضغط</h2></div><span class="qual">تقييم بحثي — ليس حكمًا رسميًا</span></div><div class="diagnostics" id="diagnostics"></div><div class="explain" id="explanation"></div></section>
 <section class="panel"><div class="section-head"><div><div class="eyebrow">FORECAST WORKBENCH</div><h2>مختبر التوقعات</h2></div><span class="qual">الآن: خط أساس غير مُعاير</span></div><div id="forecast"></div><div class="note">أي رقم هنا هو <b>خط أساس ميكانيكي تجريبي</b> وليس نموذجًا تنبؤيًا مُثبتًا. لا يُعرض ادعاء دقة أو احتمال تحقق قبل اختبار بيانات كانت منشورة فعلًا بتاريخ القرار ومقارنتها بمرجع مستقل.</div></section>
 <section class="panel"><div class="section-head"><div><div class="eyebrow">EVIDENCE</div><h2>المؤشرات الاقتصادية المتصلة</h2></div><input id="search" placeholder="ابحث في المؤشرات..." aria-label="بحث" /></div><div class="filters" id="filters"></div><div class="data-grid" id="indicators"></div></section>
