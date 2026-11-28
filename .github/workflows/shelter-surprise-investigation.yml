@@ -1,0 +1,51 @@
+name: Shelter CPI surprise error investigation
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/shelter-surprise-investigation.yml"
+      - "research/shelter_error_forensics.py"
+      - "tests/test_shelter_error_forensics.py"
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  diagnose-shelter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify ex-post attribution is separated from before-release data
+        run: |
+          python -m py_compile research/shelter_error_forensics.py
+          python -m unittest discover -s tests -p "test_shelter_error_forensics.py" -v
+      - name: Check credentials and fetch preserved source forecasts
+        run: |
+          test -n "$FRED_API_KEY" || exit 1
+          mkdir -p .forensics
+          gh run download 46167403971 \
+            --repo "$GITHUB_REPOSITORY" \
+            --name cpi-v2-shelter-history --dir .forensics
+          test -s .forensics/shelter-v2-pit.json
+      - uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-shelter-forensics-asof-2023
+      - name: Retrieve only first release-day Rent OER and Lodging; compare as-of hotel prior volatility
+        run: |
+          python research/shelter_error_forensics.py \
+            --pilot .forensics/shelter-v2-pit.json \
+            --output data/shelter-v2-error-forensics.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shelter-surprise-forensics-14-months
+          path: data/shelter-v2-error-forensics.json
+          retention-days: 30
+          if-no-files-found: warn
