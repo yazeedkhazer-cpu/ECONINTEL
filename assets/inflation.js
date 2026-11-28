@@ -71,9 +71,20 @@ function indicators(){const cat=DATA?.catalog||[];const groups=['الكل',...ne
  document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{GROUP=b.dataset.group;indicators()});}
 function unconnected(){$('unconnected').innerHTML=(DATA?.unconnected||[]).map(x=>`<article class="indicator"><h3>${esc(x.label)}</h3><div class="muted">◌ غير متصل · ${esc(x.provider)}</div><div class="source"><span>خارج التقييم حتى توثيق الإصدار</span><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">المصدر ↗</a></div></article>`).join('');}
 function snapshotRate(s,n,annualized=false){
- if(!valid(s)||s.frequency!=='monthly'||s.kind!=='price'||!periodContinuity(s,n))return null;
- const h=s.history,x=h.at(-1),y=h.at(-(n+1));
- if(s.period!==x[0]||!Number.isFinite(x[1])||!Number.isFinite(y[1])||x[1]<=0||y[1]<=0)return null;
+ if(!valid(s)||s.frequency!=='monthly'||s.kind!=='price')return null;
+ const h=s.history,x=h.at(-1);
+ if(s.period!==x[0]||!Number.isFinite(x[1])||x[1]<=0)return null;
+ // YoY must compare the SAME calendar month, never the 12th previous row:
+ // October 2025 CPI is unavailable, so October 2026 CPI YoY is unavailable.
+ let y;
+ if(n===12){
+  const prevYear=String(Number(x[0].slice(0,4))-1)+x[0].slice(4);
+  y=h.find(p=>p[0]===prevYear);
+ }else{
+  if(!periodContinuity(s,n))return null;
+  y=h.at(-(n+1));
+ }
+ if(!y||!Number.isFinite(y[1])||y[1]<=0)return null;
  const ratio=x[1]/y[1];
  return (annualized?Math.pow(ratio,12/n)-1:ratio-1)*100;
 }
@@ -82,10 +93,20 @@ function snapshot(){
  $('stats').innerHTML=ids.map(([id,label])=>{
   const s=byid(id);
   const yoy=snapshotRate(s,12),mom=snapshotRate(s,1),saar3=snapshotRate(s,3,true),saar6=snapshotRate(s,6,true);
+  const missingOct2025=(id==='cpi'||id==='corecpi')&&s?.period==='2026-10'&&yoy===null;
+  // The BLS published no Oct-2026 12-month CPI comparison because Oct-2025 was missing.
+  // These September figures are ARCHIVAL official NSA YoY, not a substitute Oct estimate.
+  const lastOfficial=missingOct2025?(id==='cpi'?'3.7%':'2.6%'):null;
+  const note=missingOct2025?`<div class="inflation-missing-note">
+    <strong>أكتوبر 2026: السنوي غير منشور رسميًا</strong> بسبب غياب أكتوبر 2025 أثناء الإغلاق الحكومي.<br>
+    <span>آخر قراءة سنوية رسمية: سبتمبر 2026 — <b dir="ltr">${lastOfficial}</b></span>
+    <a href="https://www.bls.gov/cpi/notices/2026/12m-changes-202610.htm" target="_blank" rel="noopener noreferrer">توضيح BLS ↗</a>
+  </div>`:(yoy===null?'<div class="inflation-missing-note">لا تتوفر بيانات لنفس الشهر قبل سنة؛ لن يُعرض تقدير بديل.</div>':'');
   return `<article class="stat inflation-stat">
     <div class="inflation-stat-name">${esc(label)}</div>
     <div class="inflation-yoy"><span class="inflation-yoy-title">آخر 12 شهر · YoY</span>
        <strong dir="ltr">${pct(yoy)}</strong></div>
+    ${note}
     <div class="inflation-measures">
        <div><span>شهري · MoM</span><b dir="ltr">${pct(mom)}</b></div>
        <div><span>زخم 3 أشهر · SAAR</span><b dir="ltr">${pct(saar3)}</b></div>
