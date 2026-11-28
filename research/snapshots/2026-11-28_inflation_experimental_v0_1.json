@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "status": "experimental_unvalidated",
+  "experiment": "ECONINTEL Inflation Structural Proxy Nowcast v0.1",
+  "forecastCreatedAtUtc": "2026-11-28T15:59:18Z",
+  "frozenInputGeneratedAtUtc": "2026-11-28T14:29:17.165217+00:00",
+  "targetPeriod": "2026-11",
+  "source": "CI diagnostic preview, values rounded to three decimals as printed in GitHub Actions log",
+  "officialDataSource": "BLS CPI October 2026 release; FRED latest observations captured on Nov 28",
+  "model": {
+    "cpi": "BLS Sep 2026 expenditure relative-importance weights across food, energy, core goods, shelter and core services. EIA gasoline trend for energy CPI",
+    "ppi": "Experimental 50/50 PPI 3-month momentum vs Brent-price historical proxy",
+    "pce": "Historical ridge relationship using estimated CPI and PPI November and previous PCE observations",
+    "noPointInTimeTrainingValidation": true,
+    "noConfidenceIntervals": true
+  },
+  "weightsPercent": {
+    "food": 13.447,
+    "energy": 7.648,
+    "coreGoods": 18.807,
+    "shelter": 35.238,
+    "coreServicesExcludingShelter": 24.86
+  },
+  "forecast": {
+    "headlineCPI": {
+      "momPercent": 0.01,
+      "saIndexDerivedYoyPercent": 3.829
+    },
+    "coreCPI": {
+      "momPercent": 0.304,
+      "saIndexDerivedYoyPercent": 2.988
+    },
+    "headlinePPI": {
+      "momPercent": 0.244,
+      "saIndexDerivedYoyPercent": 6.349
+    },
+    "headlinePCE": {
+      "momPercent": 0.163,
+      "saIndexDerivedYoyPercent": 3.807
+    },
+    "corePCE": {
+      "momPercent": 0.26,
+      "saIndexDerivedYoyPercent": 3.368
+    }
+  },
+  "marketConsensus": null,
+  "caveats": [
+    "This is a research trial output, NOT verified predictive accuracy and not a trading signal.",
+    "2026-11 gasoline/Brent monthly observations are partial; final monthly means may differ.",
+    "CPI category weighted contributions are first-order approximations and not exact BLS aggregation.",
+    "YoY estimates use seasonally adjusted index levels and can differ from official non-seasonally adjusted BLS figures.",
+    "PPI uses no official PPI expenditure weights and PCE is not reconstructed from BEA component expenditure shares.",
+    "Each estimate requires retrospective point-in-time backtesting and dated market consensus to establish predictive value."
+  ],
+  "evidence": {
+    "run": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46162704360",
+    "weights": "https://www.bls.gov/news.release/cpi.htm"
+  }
+}
