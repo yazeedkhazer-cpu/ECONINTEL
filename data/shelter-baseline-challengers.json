@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "source": "data/shelter-hotel-streak-holdout.json",
+  "cutoff": "7 calendar days prior to historical BLS CPI release",
+  "period": "2024-03 to 2026-10",
+  "n": 27,
+  "study": "Exploratory fixed-weight baseline comparison. This is NOT an independent selection holdout because compared variants were inspected using these 27 outcomes; do not label winner validated.",
+  "models": [
+    {
+      "name": "3m_equal_weight_baseline",
+      "weights": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "n": 27,
+      "MAEpp": 0.10477,
+      "exactOneDecimalHits": 8
+    },
+    {
+      "name": "previous_month_only",
+      "weights": [
+        1,
+        0,
+        0
+      ],
+      "n": 27,
+      "MAEpp": 0.12939,
+      "exactOneDecimalHits": 7
+    },
+    {
+      "name": "last_2_month_mean",
+      "weights": [
+        0.5,
+        0.5,
+        0
+      ],
+      "n": 27,
+      "MAEpp": 0.11894,
+      "exactOneDecimalHits": 9
+    },
+    {
+      "name": "momentum_60_30_10",
+      "weights": [
+        0.6,
+        0.3,
+        0.1
+      ],
+      "n": 27,
+      "MAEpp": 0.1146,
+      "exactOneDecimalHits": 9
+    },
+    {
+      "name": "momentum_50_25_25",
+      "weights": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "n": 27,
+      "MAEpp": 0.10696,
+      "exactOneDecimalHits": 8
+    },
+    {
+      "name": "momentum_70_15_15",
+      "weights": [
+        0.7,
+        0.15,
+        0.15
+      ],
+      "n": 27,
+      "MAEpp": 0.11482,
+      "exactOneDecimalHits": 7
+    }
+  ],
+  "conclusion": "Unweighted previous-3-month shelter mean lowest MAE among simple variants. No variant achieves more than 9/27 one-decimal matches. Keep current baseline; new signals require fresh independent data."
+}
