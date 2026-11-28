@@ -11,7 +11,7 @@ on:
       - "tests/test_shelter_hotel_streak_holdout.py"
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   shelter-holdout:
     runs-on: ubuntu-latest
@@ -40,6 +40,17 @@ jobs:
             --start 2024-04-01 --end 2026-11-28 \
             --horizon 7 --max-events 0 \
             --output data/shelter-hotel-streak-holdout.json
+      - name: Archive untouched holdout results on the research branch only
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "econintel-research-bot"
+          git config user.email "econintel-research-bot@users.noreply.github.com"
+          git add data/shelter-hotel-streak-holdout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive 2024-2026 CPI shelter hotel-streak independent holdout"
+            git pull --rebase origin feature/cpi-point-in-time-backtest
+            git push origin HEAD:refs/heads/feature/cpi-point-in-time-backtest
+          fi
       - name: Preserve per-event audit of warning and realized errors
         if: always()
         uses: actions/upload-artifact@v4
