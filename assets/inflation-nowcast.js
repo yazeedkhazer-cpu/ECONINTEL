@@ -68,7 +68,8 @@ function sources(d){
 function evaluate(d){
  if(d?.schemaVersion!==1||!d.series||!Array.isArray(d.catalog))throw Error("Unexpected inflation data schema");
  const structural=root.ECON_INFLATION_STRUCTURAL?.compute(d)||{status:"unavailable",reason:"الطبقة الاقتصادية غير متصلة",forecasts:{}};
- return {generatedAt:d.generatedAt??null,structural,
+ const detailed=root.ECON_CPI_COMPONENTS_V2?.assess(d)||{status:"not_loaded",missing:[],reason:"طبقة CPI التفصيلية غير متصلة"};
+ return {generatedAt:d.generatedAt??null,structural,detailed,
   forecasts:TARGETS.map(x=>({...x,baseline:forecastBase(d.series[x.id]),
     econintel:structural.forecasts?.[x.id]??null,marketConsensus:null,
     state:structural.forecasts?.[x.id]?.status??"missing"})),
@@ -101,6 +102,27 @@ function draw(view){
   const value=inp.value.trim()===""?null:Number(inp.value);
   parent.querySelector(".diff").textContent=difference(t.econintel?.mom,value);
  }));
+ const detailedBox=document.getElementById("cpiDetailed");
+ if(detailedBox){
+  const m=view.detailed;
+  const fmtRate=(x)=>N(x)?(x>=0?"+":"")+x.toFixed(3)+"%":"—";
+  const line=p=>'<div class="driverline"><span>'+e(p.name)+' · '+p.weight.toFixed(3)+'% سلة CPI</span><span class="mono">'+fmtRate(p.rate)+'</span></div>';
+  let html='<p class="small">مرجع الأوزان: سبتمبر 2026، منشور 10 نوفمبر 2026. النموذج تفصيلي بحثي وغير مُعاير تاريخيًا.</p>';
+  if(m.status==="experimental_unvalidated"){
+   html+='<div class="grid3"><div class="metric"><small>V2 Headline CPI MoM</small><strong>'+fmtRate(m.cpi)+'</strong><span>تقدير تجريبي</span></div>'+
+         '<div class="metric"><small>V2 Core CPI MoM</small><strong>'+fmtRate(m.core)+'</strong><span>تقدير تجريبي</span></div>'+
+         '<div class="metric"><small>مقارنة V1 Core</small><strong>'+fmtRate(m.baseline?.corecpi?.mom)+'</strong><span>للمقارنة، وليس إثبات تحسن</span></div></div>';
+  }else{
+   html+='<p class="small">حالة المحرك التفصيلي: '+e(m.reason||m.status)+'</p>';
+  }
+  if(m.shelterPreview)html+='<h3>السكن · Rent + OER</h3>'+m.shelterPreview.children.map(line).join('');
+  if(m.groups?.goods)html+='<h3>السلع الأساسية</h3>'+m.groups.goods.children.map(line).join('');
+  if(m.groups?.transport)html+='<h3>النقل والتأمين والطيران</h3>'+m.groups.transport.children.map(line).join('');
+  if(m.groups?.services)html+='<h3>الخدمات الأخرى</h3>'+m.groups.services.children.map(line).join('');
+  if(m.missing?.length)html+='<p class="small">مصادر لم تصل بياناتها بعد: '+e(m.missing.join(" · "))+'</p>';
+  html+='<p class="small">لا نعتمد أرقام V2 ولا نقارنها بالسوق قبل اختبارها تاريخيًا وبناء نطاق خطأ معاير.</p>';
+  detailedBox.innerHTML=html;
+ }
  const component=document.getElementById("componentBreakdown");
  if(component){
   const s=view.structural;
