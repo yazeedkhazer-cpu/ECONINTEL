@@ -24,7 +24,8 @@ class FakeFred:
         self.old_core = series(2022, 1, [105 * 1.003**i for i in range(25)])
 
     def release_days(self, start, end):
-        return ["2024-03-12"]
+        # Two extra FRED calendar dates must NOT duplicate CPI releases.
+        return ["2024-03-08", "2024-03-12", "2024-03-13"]
 
     def observations(self, series_id, as_of, start):
         self.calls.append((series_id, as_of))
@@ -80,6 +81,11 @@ class TestPointInTime(unittest.TestCase):
         self.assertAlmostEqual(row["predictions"]["headline"]["baseline"], 0.2)
         self.assertIsNone(row["predictions"]["headline"]["ridge"])
         self.assertEqual(output["status"], "insufficient")
+        self.assertEqual(len(output["results"]), 1)
+        self.assertEqual(len(output["skipped"]), 2)
+        self.assertEqual(output["results"][0]["release_date"], "2024-03-12")
+        self.assertTrue(any("predates" in item["why"] for item in output["skipped"]))
+        self.assertTrue(any("Duplicate" in item["why"] for item in output["skipped"]))
 
     def test_train_only_ridge(self):
         # Constant features are safe; intercept handles the training mean.
