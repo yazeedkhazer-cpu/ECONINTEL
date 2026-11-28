@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "project": "ECONINTEL CPI pre-news forecasting: measurement mechanics first, observable causes second",
+  "researchState": "UNVALIDATED__NOT_PRODUCTION",
+  "officialAgency": "U.S. Bureau of Labor Statistics",
+  "forecastTargets": [
+    {
+      "id": "headlineCpiMom",
+      "display": "All items CPI-U, seasonally adjusted monthly change",
+      "officialSeries": "CPIAUCSL",
+      "evaluation": "One-decimal first CPI news print PLUS index-derived first-vintage numerical error"
+    },
+    {
+      "id": "coreCpiMom",
+      "display": "All items less food and energy, seasonally adjusted monthly change",
+      "officialSeries": "CPILFESL",
+      "evaluation": "One-decimal first CPI news print PLUS index-derived first-vintage numerical error"
+    },
+    {
+      "id": "headlineCpiYoy",
+      "display": "All items CPI-U, not-seasonally adjusted 12-month change",
+      "officialSeries": "CPIAUCNS",
+      "evaluation": "Official NSA first CPI news print only; never derive from SA index"
+    }
+  ],
+  "officialCalculationStages": [
+    {
+      "step": 1,
+      "name": "Price collection and corrections",
+      "description": "Sampled item-area quotes adjusted for quality and missing quotes; rents are contracted 6-month comparisons with special pure/economic rents",
+      "upstream": "Item/service prices, rent panels, quote adjustment methodology",
+      "availability": "Individual BLS survey microquotes/panels are not public for exact external reconstruction"
+    },
+    {
+      "step": 2,
+      "name": "Basic index",
+      "description": "Mostly expenditure weighted geometric means of price relatives; some modified Laspeyres calculation",
+      "calculation": "weighted_geometric_relative() or weighted_laspeyres_relative()",
+      "accuracy": "Exact only with exact area-item quote and weight data"
+    },
+    {
+      "step": 3,
+      "name": "National aggregation",
+      "description": "Update category cost weights from weight reference period by component index relatives; sum non-overlapping categories",
+      "calculation": "aggregate_cost_weight_change()",
+      "accuracy": "BLS special aggregate worked example reproduced; complete national CPI requires finer published/private item-area data"
+    },
+    {
+      "step": 4,
+      "name": "Seasonal adjustment",
+      "description": "BLS X-13ARIMA-SEATS applies seasonal adjustments to elementary series and aggregates 81 components, with evolving relative importance",
+      "calculation": "NOT independently reconstructed; require first-vintage BLS SA and seasonal adjustment factors",
+      "accuracy": "No claim that sum of five SA baskets matches official headline exactly"
+    },
+    {
+      "step": 5,
+      "name": "News reading",
+      "description": "SA MoM CPI headline and core published to 0.1 percentage point; annual headline CPI from NSA index",
+      "calculation": "round published first-release seasonally adjusted MoM; NSA YoY from original official news",
+      "accuracy": "Backtest should compare exact BLS announcement plus vintage index error"
+    }
+  ],
+  "upstreamResearchCandidates": [
+    {
+      "group": "Energy retail",
+      "officialIndex": "CPI Gasoline, energy commodities; energy services",
+      "candidateSources": [
+        {
+          "id": "EIA_GASREGW",
+          "type": "weekly",
+          "asOfSeries": "GASREGW",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Latest pump price swing",
+            "Partial-month weighting",
+            "Gasoline regional variation"
+          ]
+        },
+        {
+          "id": "BRENT",
+          "type": "daily",
+          "asOfSeries": "DCOILBRENTEU",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Refinery and retail passthrough lag",
+            "Oil shock state",
+            "USD and demand interactions"
+          ]
+        },
+        {
+          "id": "NATGAS",
+          "type": "daily",
+          "asOfSeries": "DHHNGSP",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Heating utility pass-through; regional and seasonality important"
+          ]
+        }
+      ],
+      "research": "https://www.clevelandfed.org/publications/working-paper/2024/wp-2406-nowcasting-inflation",
+      "warning": "Daily/weekly data only known as of the cutoff; no full-target-month average can be assumed before month-end"
+    },
+    {
+      "group": "Shelter Rent and OER",
+      "officialIndex": "Rent of primary residence and Owner's equivalent rent",
+      "candidateSources": [
+        {
+          "id": "BLS_NEW_TENANT_RENT",
+          "type": "quarterly",
+          "status": "NOT_LIVE",
+          "hypotheses": [
+            "New-tenant rent gap predicts later continuing-rent response",
+            "Separate lease renewals and tenant mobility"
+          ],
+          "releaseCaveat": "BLS paused R-CPI-NTR publication in April 2026; use only dated historical releases"
+        },
+        {
+          "id": "ZORI",
+          "type": "monthly",
+          "status": "NOT_CONNECTED",
+          "hypotheses": [
+            "Market asking rents, distributed lags and vintage publication status"
+          ]
+        },
+        {
+          "id": "BLS_CPI_RENT_OER",
+          "type": "monthly",
+          "asOfSeries": [
+            "CUSR0000SEHA",
+            "CUSR0000SEHC"
+          ],
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Six rental panels; 6-month geometric root; utility adjusted pure rent",
+            "January annual structure-weight update"
+          ]
+        }
+      ],
+      "research": "https://www.clevelandfed.org/publications/economic-commentary/2024/ec-202417-new-tenant-rent-passthrough-and-future-of-rent-inflation",
+      "warning": "Do not copy rents posted today into historical past months. Correct arrival-time data vital; quoted Zillow vintages not yet archived."
+    },
+    {
+      "group": "Food",
+      "officialIndex": "Food at home and food away from home",
+      "candidateSources": [
+        {
+          "id": "PPI_FOOD",
+          "type": "monthly",
+          "status": "PENDING_SERIES_VALIDATION",
+          "hypotheses": [
+            "Agricultural input costs and processing pass-through to food retail"
+          ]
+        },
+        {
+          "id": "FOOD_WAGES",
+          "type": "monthly",
+          "asOfSeries": "CES0500000003",
+          "status": "CONNECTED_INDIRECT",
+          "hypotheses": [
+            "Restaurant labor cost with variable consumer pass-through"
+          ]
+        }
+      ],
+      "research": "https://www.bls.gov/opub/hom/cpi/calculation.htm",
+      "warning": "Food at home differs from restaurants; must split and validate import and supply chains"
+    },
+    {
+      "group": "Goods excluding food/energy",
+      "officialIndex": "Vehicles, apparel, household goods",
+      "candidateSources": [
+        {
+          "id": "PPIFIS",
+          "type": "monthly",
+          "asOfSeries": "PPIFIS",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Upstream producer cost pass-through changes in high vs low demand regime"
+          ]
+        },
+        {
+          "id": "PPIACO",
+          "type": "monthly",
+          "asOfSeries": "PPIACO",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Commodity shocks, tariff and supply regime conditioning"
+          ]
+        },
+        {
+          "id": "DTWEXBGS",
+          "type": "daily",
+          "status": "RESEARCH_ALFRED_CONNECTED",
+          "hypotheses": [
+            "Exchange-rate pass-through with distributed lag"
+          ]
+        },
+        {
+          "id": "CPI_USED_CARS",
+          "type": "monthly",
+          "asOfSeries": "CUSR0000SETA02",
+          "status": "CONNECTED_OUTCOME_NOT_UPSTREAM",
+          "hypotheses": [
+            "Used car wholesale auction prices require independent source"
+          ]
+        }
+      ],
+      "research": "https://www.bls.gov/opub/hom/cpi/calculation.htm",
+      "warning": "Avoid using published current month's CPI goods as a predictor of the same unreleased CPI month"
+    },
+    {
+      "group": "Services excluding shelter",
+      "officialIndex": "Medical, transport, insurance, airfare, personal services",
+      "candidateSources": [
+        {
+          "id": "CES_AHE",
+          "type": "monthly",
+          "asOfSeries": "CES0500000003",
+          "status": "CONNECTED",
+          "hypotheses": [
+            "Unit labor costs and wage pass-through with regime variation"
+          ]
+        },
+        {
+          "id": "INITIAL_CLAIMS",
+          "type": "weekly",
+          "asOfSeries": "ICSA",
+          "status": "RESEARCH_ALFRED_CONNECTED",
+          "hypotheses": [
+            "Weakening labor demand affects services price-setting"
+          ]
+        },
+        {
+          "id": "AIRFARE_CPI",
+          "type": "monthly",
+          "asOfSeries": "CUSR0000SETG01",
+          "status": "CONNECTED_OUTCOME_NOT_UPSTREAM",
+          "hypotheses": [
+            "Actual ticket fares require independent advance quote feed"
+          ]
+        },
+        {
+          "id": "AUTO_INSURANCE_CPI",
+          "type": "monthly",
+          "asOfSeries": "CUSR0000SETE",
+          "status": "CONNECTED_VIA_BLS",
+          "hypotheses": [
+            "Insurance rate filings, repairs, claims experience lag"
+          ]
+        }
+      ],
+      "research": "https://www.bls.gov/cpi/quality-adjustment/",
+      "warning": "Service subcomponents have different shock processes; blanket wages coefficient is insufficient"
+    }
+  ],
+  "historicalTesting": {
+    "strictForecastCutoff": "7 calendar days BEFORE each BLS CPI release",
+    "realTimeSourceRule": "ALFRED/BLS initial publications and time stamped original online datasets only",
+    "modelSelection": "Train/test split by release_date; adjust coefficients using earlier releases only",
+    "targetMonths": "Full monthly original BLS SA headline/core first-release quote; NSA YoY separate",
+    "safeguards": [
+      "Skip missing series instead of backfill",
+      "Compare to rolling 3m CPI benchmark and contemporaneous Cleveland nowcast if archived",
+      "Report mean absolute error, exact tenth printed release hit rate, directional bias, intervals",
+      "Keep 2026 untouched from initial 2024-2025 fitting; new follow-up periods remain truly unseen"
+    ],
+    "operationalPromotionRule": "Only promote after multiple independent windows show better headline and core CPI forecasts, not merely better individual categories"
+  }
+}
