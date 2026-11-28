@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check assets/inflation.js
           node tests/test_inflation_ui.cjs
+          node tests/test_inflation_missing_cpi_yoy.cjs
           node tests/test_inflation_intelligence.cjs
           node --check assets/inflation-forward.js
           node tests/test_inflation_forward.cjs
