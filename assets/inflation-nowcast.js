@@ -67,10 +67,11 @@ function sources(d){
 }
 function evaluate(d){
  if(d?.schemaVersion!==1||!d.series||!Array.isArray(d.catalog))throw Error("Unexpected inflation data schema");
- return {generatedAt:d.generatedAt??null,
+ const structural=root.ECON_INFLATION_STRUCTURAL?.compute(d)||{status:"unavailable",reason:"الطبقة الاقتصادية غير متصلة",forecasts:{}};
+ return {generatedAt:d.generatedAt??null,structural,
   forecasts:TARGETS.map(x=>({...x,baseline:forecastBase(d.series[x.id]),
-    econintel:null,marketConsensus:null,
-    state:"ECONINTEL forecast uncalibrated — number intentionally withheld"})),
+    econintel:structural.forecasts?.[x.id]??null,marketConsensus:null,
+    state:structural.forecasts?.[x.id]?.status??"missing"})),
   inputs:sources(d),seriesCount:Object.values(d.series).filter(s=>s.status==="connected").length,
   catalogCount:d.catalog.length};
 }
@@ -81,24 +82,32 @@ function draw(view){
  const node=document.getElementById("nowcastTargets");
  if(!node)return;
  node.innerHTML=view.forecasts.map(t=>{
- const b=t.baseline;
+ const b=t.baseline,model=t.econintel,ready=N(model?.mom);
  return '<article class="target"><div class="top"><div><div class="eyebrow">'+e(t.name)+'</div><h3>'+e(t.ar)+'</h3></div><span>'+e(t.agency)+'</span></div>'+
  '<div class="small">الفترة المستهدفة: '+e(b.period||"غير متاحة")+
  ' · تاريخ الإصدار المخطط: '+e(t.release)+'</div>'+
- '<div class="grid3"><div class="metric"><small>ECONINTEL Nowcast</small><strong>—</strong><span>غير معاير بعد</span></div>'+
- '<div class="metric"><small>خط أساس تجريبي MoM</small><strong>'+fmt(b.mom,3)+'</strong><span>'+e(b.status==="baseline"?"متوسط 3 أشهر":b.why)+'</span></div>'+
- '<div class="metric"><small>خط أساس YoY تقريبي</small><strong>'+fmt(b.yoy,2)+'</strong><span>مشتق من مؤشر SA وليس القراءة الرسمية NSA</span></div></div>'+
- '<div class="comparison"><label>توقع السوق MoM (%) <input type="number" class="consensus" step="0.01" data-id="'+e(t.id)+'" placeholder="أدخل إجماعًا موثقًا"></label>'+
- '<span>فارق الخط الأساسي: <b class="diff" data-id="'+e(t.id)+'">—</b></span></div>'+
- '<p class="small">لا نعرض ECONINTEL = خط الأساس؛ المحرك الرقمي متعدد المكونات قيد المعايرة التاريخية.</p></article>';
+ '<div class="grid3"><div class="metric"><small>ECONINTEL بحثي MoM</small><strong>'+fmt(model?.mom,3)+'</strong><span>'+e(ready?"نموذج أولي غير مختبر تاريخيًا":view.structural.reason||"غير متاح")+'</span></div>'+
+ '<div class="metric"><small>ECONINTEL بحثي YoY</small><strong>'+fmt(model?.yoy,2)+'</strong><span>محسوب من سلسلة SA، وليس الرقم الرسمي NSA</span></div>'+
+ '<div class="metric"><small>خط الأساس MoM</small><strong>'+fmt(b.mom,3)+'</strong><span>'+e(b.status==="baseline"?"متوسط آخر 3 أشهر":b.why)+'</span></div></div>'+
+ '<div class="small">'+e(model?.source||"لا توجد منهجية مكتملة")+'</div>'+
+ '<div class="comparison"><label>إجماع السوق الشهري (%) <input type="number" class="consensus" step="0.01" data-id="'+e(t.id)+'" placeholder="أدخل قراءة موثقة"></label>'+
+ '<span>فارق ECONINTEL عن السوق: <b class="diff" data-id="'+e(t.id)+'">—</b></span></div>'+
+ '<p class="small">توقع بحثي أولي: لا يُعامل على أنه مُثبت الدقة، ولا يساوي إجماع السوق. يلزم تاريخ ومصدر مستقل لرقم إجماع السوق قبل المقارنة الرسمية.</p></article>';
  }).join("");
  node.querySelectorAll(".consensus").forEach(inp=>inp.addEventListener("input",()=>{
   const parent=inp.closest(".target");
   const id=inp.dataset.id;
   const t=view.forecasts.find(x=>x.id===id);
   const value=inp.value.trim()===""?null:Number(inp.value);
-  parent.querySelector(".diff").textContent=difference(t.baseline.mom,value);
+  parent.querySelector(".diff").textContent=difference(t.econintel?.mom,value);
  }));
+ const component=document.getElementById("componentBreakdown");
+ if(component){
+  const s=view.structural;
+  if(!Array.isArray(s.parts)) component.textContent=s.reason||"بيانات المكونات غير كافية";
+  else component.innerHTML=s.parts.map(p=>'<div class="driverline"><span>'+e(p.name)+' · '+p.weight.toFixed(3)+'% من السلة</span><b class="mono">'+fmt(p.rate,2)+' · '+p.contribution.toFixed(3)+' pp</b></div>').join("")+
+   '<p class="small" style="margin-top:12px">نموذج خطي تقريبي بأوزان BLS لشهر سبتمبر 2026. الطاقة مبنية على متوسط أسعار البنزين الجزئي لشهر نوفمبر وارتباطه التاريخي بـCPI الطاقة، ولا تمثل الرقم الرسمي.</p>';
+ }
  const groups=[...new Set(view.inputs.map(x=>x.groupLabel))];
  const drivers=document.getElementById("drivers");
  drivers.innerHTML=groups.map(label=>{
@@ -116,7 +125,9 @@ function mount(){
  const status=document.getElementById("status");
  fetch("data/inflation-latest.json?t="+Date.now(),{cache:"no-store"})
   .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()})
-  .then(data=>{const v=evaluate(data);draw(v);status.textContent="البيانات متاحة. الأرقام الحالية خطوط أساس تجريبية وليست توقعات ECONINTEL المعتمدة.";})
+  .then(data=>{const v=evaluate(data);draw(v);status.textContent=v.structural?.status==="experimental"?
+   "القراءة الاستشرافية البحثية الأولية ظاهرة. نتائجها غير مُعايرة تاريخيًا بعد؛ لا تُقدَّم كاحتمال مؤكد أو إشارة تداول.":
+   "بيانات متصلة، لكن نموذج المكونات غير مكتمل: "+(v.structural?.reason||"تعذر حساب الأرقام");})
   .catch(err=>status.textContent="تعذر جلب البيانات: "+err.message);
 }
 if(typeof document!=="undefined"){if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount,{once:true});else mount();}
