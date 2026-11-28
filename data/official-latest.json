@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-28T03:33:59+00:00",
+  "generatedAt": "2026-11-28T14:19:21+00:00",
   "provider": "U.S. Bureau of Labor Statistics · Public Data API v2",
   "apiUrl": "https://api.bls.gov/publicAPI/v1/timeseries/data/",
   "metrics": {
@@ -287,7 +287,7 @@
       "source": "BLS · CES",
       "seriesId": "CES0000000001",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "private": {
       "value": 159.0,
@@ -573,7 +573,7 @@
       "source": "BLS · CES",
       "seriesId": "CES0500000001",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "unrate": {
       "value": 4.1,
@@ -859,7 +859,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS14000000",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "u6": {
       "value": 7.9,
@@ -1145,7 +1145,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS13327709",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "part": {
       "value": 61.9,
@@ -1431,7 +1431,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS11300000",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "emratio": {
       "value": 59.3,
@@ -1717,7 +1717,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS12300000",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "primeage": {
       "value": 83.7,
@@ -2003,7 +2003,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS11300060",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "wage_level": {
       "value": 38.0,
@@ -2293,7 +2293,7 @@
       "source": "BLS · CES",
       "seriesId": "CES0500000003",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "wage_mom": {
       "value": 0.3698,
@@ -2579,7 +2579,7 @@
       "source": "BLS · CES · حساب شهري",
       "seriesId": "CES0500000003",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "wage": {
       "value": 3.1208,
@@ -2821,7 +2821,7 @@
       "source": "BLS · CES · حساب سنوي",
       "seriesId": "CES0500000003",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "hours": {
       "value": 34.4,
@@ -3111,7 +3111,7 @@
       "source": "BLS · CES",
       "seriesId": "CES0500000002",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "temp": {
       "value": 18.6,
@@ -3397,7 +3397,7 @@
       "source": "BLS · CES",
       "seriesId": "CES6056132001",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "jolts": {
       "value": 7.523,
@@ -3683,7 +3683,7 @@
       "source": "BLS · JOLTS",
       "seriesId": "JTS000000000000000JOL",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "hire": {
       "value": 3.4,
@@ -3969,7 +3969,7 @@
       "source": "BLS · JOLTS",
       "seriesId": "JTS000000000000000HIR",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "quits": {
       "value": 2.1,
@@ -4255,7 +4255,7 @@
       "source": "BLS · JOLTS",
       "seriesId": "JTS000000000000000QUR",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "layoff": {
       "value": 1.0,
@@ -4541,7 +4541,7 @@
       "source": "BLS · JOLTS",
       "seriesId": "JTS000000000000000LDR",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "longterm": {
       "value": 1.963,
@@ -4827,7 +4827,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS13008636",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "parttime": {
       "value": 4.84,
@@ -5113,7 +5113,7 @@
       "source": "BLS · CPS",
       "seriesId": "LNS12032194",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "diffusion": {
       "value": 57.6,
@@ -5403,7 +5403,7 @@
       "source": "BLS · CES · Total-private employment diffusion (1 month)",
       "seriesId": "CES0500000021",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "nfp3": {
       "value": 137.0,
@@ -5681,7 +5681,7 @@
       "source": "BLS · CES · متوسط 3 أشهر",
       "seriesId": "derived:CES0000000001:3M",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "nfp12": {
       "value": 73.75,
@@ -5923,7 +5923,7 @@
       "source": "BLS · CES · متوسط 12 شهرًا",
       "seriesId": "derived:CES0000000001:12M",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "longshare": {
       "value": 27.7731,
@@ -6209,7 +6209,7 @@
       "source": "BLS · CPS · نسبة محسوبة",
       "seriesId": "derived:LNS13008636/LNS13000000",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "beveridge": {
       "value": 1.0582,
@@ -6491,7 +6491,7 @@
       "source": "BLS · JOLTS/CPS · محسوب",
       "seriesId": "derived:JOLTS+LNS13000000",
       "status": "api",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "claims": {
       "date": "2026-11-21",
@@ -8151,7 +8151,7 @@
       "status": "api",
       "frequency": "weekly",
       "unit": "K",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "claims4wk": {
       "date": "2026-11-21",
@@ -9799,7 +9799,7 @@
       "status": "api",
       "frequency": "weekly",
       "unit": "K",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "continuing": {
       "date": "2026-11-14",
@@ -11455,7 +11455,7 @@
       "status": "api",
       "frequency": "weekly",
       "unit": "M",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "eci": {
       "date": "2026-Q3",
@@ -11587,7 +11587,7 @@
       "status": "api",
       "frequency": "quarterly",
       "unit": "%",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "eciy": {
       "date": "2026-Q3",
@@ -11707,7 +11707,7 @@
       "status": "api",
       "frequency": "quarterly",
       "unit": "%",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "productivity": {
       "date": "2026-Q3",
@@ -11839,7 +11839,7 @@
       "status": "api",
       "frequency": "quarterly",
       "unit": "%",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "ulc": {
       "date": "2026-Q3",
@@ -11971,7 +11971,7 @@
       "status": "api",
       "frequency": "quarterly",
       "unit": "%",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "sahm": {
       "date": "2026-10",
@@ -12355,7 +12355,7 @@
       "status": "api",
       "frequency": "monthly",
       "unit": "pp",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     },
     "adp": {
       "date": "2026-10",
@@ -12739,23 +12739,23 @@
       "status": "api",
       "frequency": "monthly",
       "unit": "K",
-      "observedAt": "2026-11-28T03:33:59+00:00"
+      "observedAt": "2026-11-28T14:19:21+00:00"
     }
   },
   "sources": {
     "BLS_DIFFUSION": {
       "status": "updated",
-      "fetchedAt": "2026-11-28T03:33:59+00:00",
+      "fetchedAt": "2026-11-28T14:19:21+00:00",
       "note": "BLS Table B: no validated fresh observation"
     },
     "BLS": {
       "status": "updated",
-      "fetchedAt": "2026-11-28T03:33:59+00:00",
+      "fetchedAt": "2026-11-28T14:19:21+00:00",
       "endpoint": "https://api.bls.gov/publicAPI/v1/timeseries/data/"
     },
     "FRED": {
       "status": "updated",
-      "fetchedAt": "2026-11-28T03:33:59+00:00",
+      "fetchedAt": "2026-11-28T14:19:21+00:00",
       "note": "Optional provider; set FRED_API_KEY in GitHub secrets"
     }
   },
