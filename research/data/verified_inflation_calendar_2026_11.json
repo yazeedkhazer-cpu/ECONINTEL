@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "verifiedAtDate": "2026-11-28",
+  "targetPeriod": "2026-11",
+  "agencyTimezone": "America/New_York",
+  "entries": {
+    "cpi": {
+      "releaseAtUtc": "2026-12-10T13:30:00Z",
+      "agency": "BLS",
+      "original": "https://www.bls.gov/schedule/2026/12_sched_list.htm"
+    },
+    "corecpi": {
+      "releaseAtUtc": "2026-12-10T13:30:00Z",
+      "agency": "BLS",
+      "original": "https://www.bls.gov/schedule/2026/12_sched_list.htm"
+    },
+    "ppi": {
+      "releaseAtUtc": "2026-12-15T13:30:00Z",
+      "agency": "BLS",
+      "original": "https://www.bls.gov/schedule/news_release/ppi.htm"
+    },
+    "pce": {
+      "releaseAtUtc": "2026-12-23T13:30:00Z",
+      "agency": "BEA",
+      "original": "https://www.bea.gov/news/schedule/"
+    },
+    "corepce": {
+      "releaseAtUtc": "2026-12-23T13:30:00Z",
+      "agency": "BEA",
+      "original": "https://www.bea.gov/news/schedule/"
+    }
+  }
+}
