@@ -1,0 +1,46 @@
+name: Inflation numeric accuracy audit
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/inflation-numeric-accuracy.yml"
+      - "research/inflation_numeric_accuracy.py"
+      - "tests/test_inflation_numeric_accuracy.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit-actual-release-hits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate no future results influence model selection
+        run: |
+          python -m py_compile research/inflation_numeric_accuracy.py
+          python -m unittest discover -s tests -p "test_inflation_numeric_accuracy.py" -v
+      - name: Retrieve frozen real historical forecast and outcome pairs
+        run: |
+          mkdir -p .history
+          gh run download 46163855962 \
+            --repo "$GITHUB_REPOSITORY" \
+            --dir .history
+          find .history -type f -name '*-structural-pit.json' | sort
+      - name: Evaluate exact 0.1pp hits, continuous error, and no-peek online blending
+        run: |
+          python research/inflation_numeric_accuracy.py \
+            --input-dir .history \
+            --output data/inflation-numeric-accuracy-audit.json
+      - name: Preserve reviewable per-release results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inflation-numeric-accuracy-pit-audit
+          path: data/inflation-numeric-accuracy-audit.json
+          retention-days: 30
+          if-no-files-found: warn
