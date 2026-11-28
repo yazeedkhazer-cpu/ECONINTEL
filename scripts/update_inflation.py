@@ -26,7 +26,7 @@ RAW=[
  ('cpifood','CPIUFDSL','CPI الغذاء','الغذاء','price','monthly','BLS/FRED','food'),
  ('cpigoods','CUSR0000SACL1E','CPI السلع باستثناء الغذاء والطاقة','السلع والخدمات','price','monthly','BLS/FRED','goods'),
  ('cpiservices','CUSR0000SASLE','CPI الخدمات باستثناء الطاقة','السلع والخدمات','price','monthly','BLS/FRED','services'),
- ('ppi','WPSFD4','PPI الطلب النهائي','أسعار المنتجين','price','monthly','BLS/FRED','ppi'),
+ ('ppi','PPIFIS','PPI الطلب النهائي','أسعار المنتجين','price','monthly','BLS/FRED','ppi'),
  ('ppicomm','PPIACO','PPI السلع الأساسية للمنتجين','أسعار المنتجين','price','monthly','BLS/FRED','ppi'),
  ('import','IR','أسعار الواردات الأمريكية','الاستيراد والتوريد','price','monthly','BLS/FRED','import_nsa'),
  ('gdpdef','GDPDEF','مُعامل انكماش GDP','الأسعار الأوسع','price','quarterly','BEA/FRED','gdp'),
