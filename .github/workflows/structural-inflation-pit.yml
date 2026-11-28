@@ -1,0 +1,70 @@
+name: Structural inflation point-in-time pilot
+
+on:
+  pull_request:
+    paths:
+      - "research/structural_pit.py"
+      - "research/data/cpi_annual_weights_pit.json"
+      - "tests/test_structural_pit.py"
+      - ".github/workflows/structural-inflation-pit.yml"
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "Earliest release date"
+        required: true
+        default: "2023-01-01"
+      end:
+        description: "Last release date"
+        required: true
+        default: "2024-12-31"
+      max_events:
+        description: "Calendar candidates per indicator family (0 = all)"
+        required: true
+        default: "16"
+permissions:
+  contents: read
+jobs:
+  structural-pilot:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.number == 1)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        family: [cpi, pce, ppi]
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test vintage and weight isolation offline
+        run: |
+          python -m py_compile research/structural_pit.py
+          python -m unittest discover -s tests -p "test_structural_pit.py" -v
+      - name: Validate FRED credentials are configured
+        run: |
+          if [ -z "$FRED_API_KEY" ]; then echo "Missing FRED_API_KEY in repository secrets"; exit 1; fi
+      - name: Cache as-of-vintage ALFRED responses without API keys
+        uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-econintel-structural-v1-${{ matrix.family }}
+      - name: Replay structural forecasts against original vintages
+        run: |
+          python research/structural_pit.py \
+            --family ${{ matrix.family }} \
+            --start "${{ inputs.start || '2023-01-01' }}" \
+            --end "${{ inputs.end || '2024-12-31' }}" \
+            --max-events "${{ inputs.max_events || '16' }}" \
+            --horizon 7 \
+            --output "data/${{ matrix.family }}-structural-pit.json"
+      - name: Upload auditable predictions and skipped dates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: structural-pit-${{ matrix.family }}
+          path: data/${{ matrix.family }}-structural-pit.json
+          if-no-files-found: warn
+          retention-days: 30
