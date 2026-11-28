@@ -55,6 +55,18 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 <tbody id="exactHitRows"><tr><td colspan="4">جاري تحميل نتائج المطابقة…</td></tr></tbody></table></div>
 <p id="exactHitNote" class="hint">هذه مقارنة مع التغير المستخرج من أول مؤشر ALFRED المعدل موسميًا، وليست بعد مقارنة مباشرة مع الرقم المطبوع حرفيًا في بيان BLS/BEA.</p>
 </section>
+
+<section class="panel">
+  <h2>اختبار إشارة الفنادق خارج العينة — النتيجة النهائية</h2>
+  <p>بعد اكتشاف فرضية «ثلاثة أشهر فنادق بنفس الاتجاه» في عينة 2023–2024، اختبرناها دون تغيير على بيانات 2024–2026 التي لم نستخدمها عند اكتشافها.</p>
+  <div class="grid">
+    <div class="card"><small>أشهر الإشارة: أخطاء كبيرة</small><strong id="riskFlagged">—</strong><small>نسبة خطأ السكن فوق 0.15 نقطة مئوية</small></div>
+    <div class="card"><small>أشهر بدون إشارة: أخطاء كبيرة</small><strong id="riskUnflagged">—</strong><small>نسبة خطأ السكن فوق 0.15 نقطة مئوية</small></div>
+    <div class="card"><small>نتيجة اختبار القاعدة</small><strong id="riskVerdict" style="font-size:21px">—</strong><small>قرار مبني على عينة اختبار مستقلة</small></div>
+  </div>
+  <p id="riskReason" class="hint">جاري تحميل حكم الاختبار المستقل…</p>
+  <p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46169865199" target="_blank" rel="noopener noreferrer">سجل الاختبار والـ27 شهرًا على GitHub</a></p>
+</section>
 <section class="panel"><h2>كيف نقرأ النتيجة؟</h2>
 <div class="method"><p><b>Headline CPI:</b> تجميع مساهمات الغذاء والطاقة والسلع الأساسية والسكن والخدمات الأخرى باستخدام أوزان BLS السنوية المتاحة وقت التوقع.</p>
 <p><b>Core CPI:</b> استبعاد الغذاء والطاقة وإعادة موازنة الأوزان؛ لا يجوز تفسير انخفاض البنزين أنه يخفض Core CPI مباشرة.</p>
@@ -70,6 +82,16 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 </main><script>
 "use strict";
 const $=id=>document.getElementById(id);
+fetch("data/shelter-hotel-streak-decision.json?t="+Date.now(),{cache:"no-store"})
+ .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
+ .then(d=>{
+   if(d.schemaVersion!==1||!d.sample?.flag||!d.sample?.noFlag)throw Error("Invalid holdout decision");
+   $("riskFlagged").textContent=(100*d.sample.flag.largeMissRate).toFixed(1)+"% ("+d.sample.flag.largeMisses+"/"+d.sample.flag.n+")";
+   $("riskUnflagged").textContent=(100*d.sample.noFlag.largeMissRate).toFixed(1)+"% ("+d.sample.noFlag.largeMisses+"/"+d.sample.noFlag.n+")";
+   $("riskVerdict").textContent=d.result==="REJECT_FOR_OPERATIONAL_USE"?"غير صالح للاعتماد":"تحتاج مراجعة";
+   $("riskReason").textContent="على "+d.eligibleReleases+" شهرًا مستقلًا: 25% أخطاء كبيرة مع الإشارة مقابل 26.3% بدونها. الإشارة لم تتفوق، ولن تدخل محرك التوقع. هذه دراسة لخطر خطأ السكن، لا لتوقع اتجاه CPI.";
+ }).catch(e=>$("riskReason").textContent="تعذر تحميل النتيجة: "+e.message);
+
 fetch("data/inflation-exact-hit-summary.json?t="+Date.now(),{cache:"no-store"})
  .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
  .then(d=>{
