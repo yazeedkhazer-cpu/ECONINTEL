@@ -13,7 +13,7 @@ from pathlib import Path
 import statistics
 import sys
 
-from cpi_backtest import Fred, change, day, monthly_changes, next_month, solve, score
+from cpi_backtest import Fred, change, day, market_change, monthly_changes, next_month, solve, score
 
 SPECS = {
     "cpi": {"release_id": 10, "targets": {"headline": "CPIAUCSL", "core": "CPILFESL"}},
@@ -30,7 +30,7 @@ PREDICTORS = {
 }
 COLUMNS = (
     "lag1", "lag3", "lag12", "cpi_same", "corecpi_same", "ppi_same",
-    "rent_last", "oer_last", "wages_last",
+    "rent_last", "oer_last", "wages_last", "brent_latest", "gasoline_latest",
 )
 
 
@@ -58,7 +58,7 @@ def month_growth(snapshot, name, month=None):
     return change(rows[month], rows[prior])
 
 
-def x_features(snapshot, target, target_period):
+def x_features(snapshot, target, target_period, cutoff=None):
     history = snapshot[target]
     lag3 = monthly_changes(history, 3)
     if lag3 is None:
@@ -75,6 +75,8 @@ def x_features(snapshot, target, target_period):
         "rent_last": month_growth(snapshot, "rent"),
         "oer_last": month_growth(snapshot, "oer"),
         "wages_last": month_growth(snapshot, "wages"),
+        "brent_latest": market_change(snapshot.get("brent", {}), 20, cutoff) if cutoff else None,
+        "gasoline_latest": market_change(snapshot.get("gasoline", {}), 4, cutoff) if cutoff else None,
     }
 
 
@@ -168,7 +170,7 @@ def replay(client, family, start, end, horizon=7, min_train=18, max_events=0):
         if vintage != released:
             rejected.append({"date": released, "reason": "calendar precedes initial ALFRED publication"})
             continue
-        feats = {name: x_features(snap, key, period)
+        feats = {name: x_features(snap, key, period, asof)
                  for name, key in source_keys.items()}
         if any(x is None for x in feats.values()):
             rejected.append({"date": released, "reason": "feature history incomplete"})
