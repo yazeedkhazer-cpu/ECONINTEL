@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "researchQuestion": "Does three consecutive same-sign published lodging CPI MoM readings warn that next Shelter CPI 3-month-average forecast error exceeds 0.15 percentage points?",
+  "result": "REJECT_FOR_OPERATIONAL_USE",
+  "decision": "The held-out experiment did not show a higher large-miss frequency for flagged cases; never use this rule to boost confidence or trade.",
+  "target": "Shelter CPI MoM",
+  "leadDays": 7,
+  "discoveryPeriod": "2023-01 to 2024-02",
+  "strictHoldout": "2024-03 to 2026-10",
+  "largeMissThresholdPp": 0.15,
+  "sourceReport": "data/shelter-hotel-streak-holdout.json",
+  "sourceRun": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46169865199",
+  "sourceStudySha256": null,
+  "eligibleReleases": 27,
+  "sample": {
+    "flag": {
+      "n": 8,
+      "largeMisses": 2,
+      "largeMissRate": 0.25,
+      "MAEpp": 0.11386
+    },
+    "noFlag": {
+      "n": 19,
+      "largeMisses": 5,
+      "largeMissRate": 0.26316,
+      "MAEpp": 0.10094
+    }
+  },
+  "observedDifference": {
+    "largeMissRatePercentagePoints": -1.32,
+    "maePp": 0.01292
+  },
+  "reliability": {
+    "status": "NO_DISCRIMINATIVE_EVIDENCE",
+    "reason": "2 of 8 flagged >0.15pp misses versus 5 of 19 nonflagged, 25.0% versus 26.3%. Difference small and opposite sign for large-miss frequency; n=27."
+  },
+  "limitations": [
+    "Historical ALFRED first-vintage monthly shelter index and ex-ante lodging readings, not rounded published BLS values",
+    "27 eligible cases, 4 skipped release candidates; inadequate power to prove small effects",
+    "This study predicts risk of 3-month average Shelter forecast error, not direction of hotel change nor all-items CPI",
+    "No out-of-sample evidence for improving full CPI/Core CPI V2 forecast"
+  ],
+  "nextResearch": "Model disaggregated Rent/OER/Lodging using only historically published features and compare numeric forecasts to baselines on disjoint holdouts."
+}
