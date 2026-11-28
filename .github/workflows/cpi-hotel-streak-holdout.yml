@@ -1,4 +1,4 @@
-name: Hotel-streak risk hypothesis: held-out CPI shelter test
+name: "Hotel-streak risk hypothesis: held-out CPI shelter test"
 on:
   push:
     branches: [feature/cpi-point-in-time-backtest]
