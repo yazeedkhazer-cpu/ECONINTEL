@@ -36,8 +36,8 @@ class TestBlsMethodology(unittest.TestCase):
             b.aggregate_cost_weight_change([base,base],
               "2024-12","2025-05","2025-06",as_of="2025-07-01")
         with self.assertRaisesRegex(ValueError,"Future dated"):
-            b.aggregate_cost_weight_change([base],
-              "2024-12","2025-05","2025-06",as_of="2024-12-31")
+            b.aggregate_cost_weight_change([{**base,"weightPublishedOn":"2025-07-01"}],
+              "2024-12","2025-05","2025-06",as_of="2025-06-30")
 
     def test_forecast_uses_only_pre_cutoff_market_sources(self):
         c={"id":"energy","weightPublishedOn":"2025-01-12",
