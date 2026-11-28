@@ -30,16 +30,17 @@ input:focus{outline:2px solid var(--accent)}
 <nav><a href="inflation.html">مختبر التضخم</a><a href="cpi-backtest.html">الدراسة التاريخية</a><a href="index.html">سوق العمل</a></nav></header>
 <div class="tag" style="margin-top:30px">INFLATION INTELLIGENCE · NUMERIC NOWCAST LAB</div>
 <h1>التوقع الرقمي للتضخم قبل صدور البيانات</h1>
-<p>المستهدف النهائي: توقعات مستقلة لـCPI وCore CPI وPCE وCore PCE وPPI، ثم مقارنتها بإجماع السوق وقراءة الإصدار الأول الرسمية، مع تبرير مكونات التوقع.</p>
+<p>المستهدف النهائي: توقعات بحثية رقمية مستقلة لـCPI وCore CPI وPCE وCore PCE وPPI، مع شرح مكونات CPI ثم مقارنتها بإجماع السوق بعد توثيق مصدره. هذه المرحلة تجريبية ولا تثبت دقة التوقعات.</p>
 <div class="meta"><span>آخر تحديث: <b id="updated">—</b> بتوقيت عمّان</span><span>المصادر المتصلة: <b id="coverage">—</b></span></div>
 <div class="note" id="status" role="status">جاري جلب البيانات…</div>
 <section aria-labelledby="target-heading"><h2 id="target-heading">قراءات الأخبار الخمسة</h2><div class="targets" id="nowcastTargets"></div></section>
+<section aria-labelledby="components"><h2 id="components">كيف بنينا التوقع الرقمي للـ CPI؟</h2><p>مساهمات أوزان الغذاء والطاقة والسلع والسكن والخدمات في المحرك البحثي الأولي. المجموع يقارب توقع التضخم العام الشهري، لكن الحساب ليس معادلة BLS الرسمية الدقيقة.</p><div class="panel" id="componentBreakdown">لم تتوفر تفاصيل المكونات بعد.</div></section>
 <section aria-labelledby="driver-heading"><h2 id="driver-heading">المؤشرات التي يجب أن تفسّر توقعاتنا</h2>
 <p>هذه قياسات داعمة، وليست مساهمات موزونة في CPI أو PCE بعد. نُظهر الفترة التي تعود إليها كل قراءة منعًا لخلط بيانات شهرين مختلفين.</p>
 <div class="drivers" id="drivers"></div></section>
 <section class="panel" style="margin-top:24px"><h2>معايير اعتماد توقع ECONINTEL</h2>
-<p>التوقع الرقمي المستقل يجب أن ينتج عن نموذج مكونات مدعوم بأوزان BLS وBEA المتاحة وقت التوقع، وليس من اجتهاد أو نسخ إجماع السوق. لذلك نعرض الآن خط الأساس حسابيًا مع فصل واضح عن خانة توقع ECONINTEL التي تبقى غير معتمدة إلى حين المعايرة.</p>
-<p>سنضيف تاريخ تجميد التوقع قبل الإعلان، وإجماع السوق المؤرّخ، والتوقع الشهري والسنوي، والتفسير، ثم نتيجة الإصدار الأول وخطأ المحرك. يُختبر CPI وPCE وPPI كلٌّ على حدة، لأن مكوناتهم ومواعيد نشرهم تختلف.</p>
+<p>بدأنا بنموذج CPI أولي بأوزان BLS المنشورة لشهر سبتمبر 2026، وبأسعار وقود جزئية لشهر نوفمبر، مع نماذج تجريبية لـPCE وPPI. الأرقام بحثية غير مُعايرة تاريخيًا ولا نعرف بعد هل تتفوق على خط الأساس أو إجماع السوق. الأوزان التاريخية يجب تغييرها عند إعادة الاختبار.</p>
+<p>الخطوة اللازمة للاعتماد: أرشفة تاريخ تجميد التوقع قبل الإعلان، وإجماع السوق المؤرّخ، وتقييم أخطاء كل إصدار من أول بيان رسمي. يُختبر CPI وPCE وPPI كلٌّ على حدة، لأن مكوناتهم ومواعيد نشرهم تختلف.</p>
 <div class="sources small">الجداول الرسمية: <a href="https://www.bls.gov/schedule/2026/12_sched_list.htm" target="_blank" rel="noopener noreferrer">BLS · CPI/PPI</a> و<a href="https://www.bea.gov/news/schedule/" target="_blank" rel="noopener noreferrer">BEA · PCE</a>. المواعيد المعروضة في البطاقات تخص ديسمبر 2026 ولا تُحدّث آليًا بعد.</div></section>
 <footer class="small" style="margin-top:30px;border-top:1px solid var(--line);padding-top:18px">ECONINTEL Inflation Research · أرقام خط الأساس تجريبية وغير مُعايرة، وقد لا تطابق القراءة الرسمية بسبب تعديل موسمي ومراجعات البيانات. لا تُستعمل لاتخاذ قرار تداول.</footer>
-</main><script defer src="assets/inflation-nowcast.js"></script></body></html>
+</main><script defer src="assets/inflation-structural.js"></script><script defer src="assets/inflation-nowcast.js"></script></body></html>
