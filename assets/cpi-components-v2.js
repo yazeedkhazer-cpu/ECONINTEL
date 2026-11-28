@@ -44,7 +44,7 @@ function smooth(d,id,last,volatile=false){
  if(!r.every(ok))return null;
  const avg=(r[0]+r[1]+r[2])/3;
  // Fixed, unoptimised research weights. Monthly latest is deliberately damped.
- return volatile?.25*r[0]+.75*avg:.4*r[0]+.6*avg;
+ return volatile ? 0.25*r[0]+0.75*avg : 0.4*r[0]+0.6*avg;
 }
 function historicalResidual(d,last,weight,series){
  const j=monthNumber(last);if(j===null)return null;
