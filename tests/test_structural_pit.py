@@ -78,6 +78,13 @@ class TestStructural(unittest.TestCase):
 
     def test_five_components_sum_and_energy_exclusion(self):
         data=fixture()
+        # Give historical gasoline and energy indices genuine co-movement;
+        # constant 0.2%/0.4% toy growth has zero regression variance.
+        import math
+        for i,period in enumerate(sorted(data["gasoline"])):
+            data["gasoline"][period] = 3+i*.025+.5*math.sin(i*.45)
+        for i,period in enumerate(sorted(data["cpienergy"])):
+            data["cpienergy"][period] = 90+i*.13+8*math.sin(i*.45)
         w=WEIGHTS[1]
         a=m.components(data,w,"2024-11-01")
         self.assertIsNotNone(a)
@@ -85,7 +92,8 @@ class TestStructural(unittest.TestCase):
         self.assertAlmostEqual(sum(a["contributions"].values()),a["headline"])
         other=m.monthly_aggregate({"2024-11-05":10,"2024-11-12":20})
         self.assertEqual(other["2024-11-01"],15)
-        changed=fixture()
+        import copy
+        changed=copy.deepcopy(data)
         changed["gasoline"]["2024-11-01"]*=0.8
         b=m.components(changed,w,"2024-11-01")
         self.assertNotAlmostEqual(a["headline"],b["headline"],places=4)
