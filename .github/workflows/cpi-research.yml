@@ -9,6 +9,9 @@ on:
       - "research/cpi_backtest.py"
       - "tests/test_cpi_backtest.py"
       - ".github/workflows/cpi-research.yml"
+      - "inflation-nowcast.html"
+      - "assets/inflation-nowcast.js"
+      - "tests/test_inflation_nowcast.js"
   workflow_dispatch:
     inputs:
       start:
@@ -39,6 +42,10 @@ jobs:
         run: |
           python -m py_compile research/cpi_backtest.py tests/test_cpi_backtest.py
           python -m unittest discover -s tests -p "test_cpi_backtest.py" -v
+      - name: Test inflation-family nowcast calculations
+        run: |
+          node --check assets/inflation-nowcast.js
+          node tests/test_inflation_nowcast.js
 
   historical-replay:
     if: github.event_name == 'workflow_dispatch'
