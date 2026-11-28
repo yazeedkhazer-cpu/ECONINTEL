@@ -179,10 +179,16 @@ def main():
     output=Path(args.output)
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf8")
-    print(json.dumps({family:{key:{name:res["targets"][key][name]
-             if name in ("structural","baseline") else res["targets"][key]["online"]["testScores"]}
-         for name in ("structural","baseline","online")}
-         for key in res["targets"]} for family,res in scored.items()},ensure_ascii=False,indent=2))
+    preview={}
+    for family,report in scored.items():
+        preview[family]={}
+        for target,results in report["targets"].items():
+            preview[family][target]={
+                "structural":results["structural"],
+                "baseline":results["baseline"],
+                "online":results["online"]["testScores"]
+            }
+    print(json.dumps(preview,ensure_ascii=False,indent=2))
 
 if __name__=="__main__":
     main()
