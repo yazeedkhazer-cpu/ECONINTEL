@@ -1,0 +1,545 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": null,
+  "source": "Await first FRED research refresh",
+  "methodology": "No synthetic inflation readings",
+  "catalog": [
+    {
+      "id": "cpi",
+      "fredId": "CPIAUCSL",
+      "label": "CPI العام",
+      "group": "أسعار المستهلك",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "headline",
+      "url": "https://fred.stlouisfed.org/series/CPIAUCSL"
+    },
+    {
+      "id": "corecpi",
+      "fredId": "CPILFESL",
+      "label": "Core CPI",
+      "group": "أسعار المستهلك",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "core",
+      "url": "https://fred.stlouisfed.org/series/CPILFESL"
+    },
+    {
+      "id": "pce",
+      "fredId": "PCEPI",
+      "label": "PCE العام",
+      "group": "نفقات الاستهلاك",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BEA/FRED",
+      "role": "headline",
+      "url": "https://fred.stlouisfed.org/series/PCEPI"
+    },
+    {
+      "id": "corepce",
+      "fredId": "PCEPILFE",
+      "label": "Core PCE",
+      "group": "نفقات الاستهلاك",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BEA/FRED",
+      "role": "core",
+      "url": "https://fred.stlouisfed.org/series/PCEPILFE"
+    },
+    {
+      "id": "cpishelter",
+      "fredId": "CUSR0000SAH1",
+      "label": "CPI السكن",
+      "group": "السكن والإيجارات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "shelter",
+      "url": "https://fred.stlouisfed.org/series/CUSR0000SAH1"
+    },
+    {
+      "id": "cpirent",
+      "fredId": "CUSR0000SEHA",
+      "label": "الإيجار الفعلي CPI",
+      "group": "السكن والإيجارات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "shelter",
+      "url": "https://fred.stlouisfed.org/series/CUSR0000SEHA"
+    },
+    {
+      "id": "cpioer",
+      "fredId": "CUSR0000SEHC",
+      "label": "الإيجار المكافئ للمالكين OER",
+      "group": "السكن والإيجارات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "shelter",
+      "url": "https://fred.stlouisfed.org/series/CUSR0000SEHC"
+    },
+    {
+      "id": "cpienergy",
+      "fredId": "CPIENGSL",
+      "label": "CPI الطاقة",
+      "group": "الطاقة والمواد الأولية",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "energy",
+      "url": "https://fred.stlouisfed.org/series/CPIENGSL"
+    },
+    {
+      "id": "cpifood",
+      "fredId": "CPIUFDSL",
+      "label": "CPI الغذاء",
+      "group": "الغذاء",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "food",
+      "url": "https://fred.stlouisfed.org/series/CPIUFDSL"
+    },
+    {
+      "id": "cpigoods",
+      "fredId": "CUSR0000SACL1E",
+      "label": "CPI السلع باستثناء الغذاء والطاقة",
+      "group": "السلع والخدمات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "goods",
+      "url": "https://fred.stlouisfed.org/series/CUSR0000SACL1E"
+    },
+    {
+      "id": "cpiservices",
+      "fredId": "CUSR0000SASLE",
+      "label": "CPI الخدمات باستثناء الطاقة",
+      "group": "السلع والخدمات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "services",
+      "url": "https://fred.stlouisfed.org/series/CUSR0000SASLE"
+    },
+    {
+      "id": "ppi",
+      "fredId": "WPSFD4",
+      "label": "PPI الطلب النهائي",
+      "group": "أسعار المنتجين",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "ppi",
+      "url": "https://fred.stlouisfed.org/series/WPSFD4"
+    },
+    {
+      "id": "ppicomm",
+      "fredId": "PPIACO",
+      "label": "PPI السلع الأساسية للمنتجين",
+      "group": "أسعار المنتجين",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "ppi",
+      "url": "https://fred.stlouisfed.org/series/PPIACO"
+    },
+    {
+      "id": "import",
+      "fredId": "IR",
+      "label": "أسعار الواردات الأمريكية",
+      "group": "الاستيراد والتوريد",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "import_nsa",
+      "url": "https://fred.stlouisfed.org/series/IR"
+    },
+    {
+      "id": "gdpdef",
+      "fredId": "GDPDEF",
+      "label": "مُعامل انكماش GDP",
+      "group": "الأسعار الأوسع",
+      "kind": "price",
+      "frequency": "quarterly",
+      "provider": "BEA/FRED",
+      "role": "gdp",
+      "url": "https://fred.stlouisfed.org/series/GDPDEF"
+    },
+    {
+      "id": "sticky",
+      "fredId": "STICKCPIM159SFRBATL",
+      "label": "Sticky CPI 12m",
+      "group": "التضخم الأساسي المستمر",
+      "kind": "yoyrate",
+      "frequency": "monthly",
+      "provider": "Atlanta Fed/FRED",
+      "role": "persistence",
+      "url": "https://fred.stlouisfed.org/series/STICKCPIM159SFRBATL"
+    },
+    {
+      "id": "median",
+      "fredId": "MEDCPIM158SFRBCLE",
+      "label": "Median CPI الشهري السنوي",
+      "group": "التضخم الأساسي المستمر",
+      "kind": "annualizedrate",
+      "frequency": "monthly",
+      "provider": "Cleveland Fed/FRED",
+      "role": "persistence",
+      "url": "https://fred.stlouisfed.org/series/MEDCPIM158SFRBCLE"
+    },
+    {
+      "id": "trimcpi",
+      "fredId": "TRMMEANCPIM158SFRBCLE",
+      "label": "Trimmed Mean CPI الشهري السنوي",
+      "group": "التضخم الأساسي المستمر",
+      "kind": "annualizedrate",
+      "frequency": "monthly",
+      "provider": "Cleveland Fed/FRED",
+      "role": "persistence",
+      "url": "https://fred.stlouisfed.org/series/TRMMEANCPIM158SFRBCLE"
+    },
+    {
+      "id": "trimpce",
+      "fredId": "PCETRIM12M159SFRBDAL",
+      "label": "Trimmed Mean PCE 12m",
+      "group": "التضخم الأساسي المستمر",
+      "kind": "yoyrate",
+      "frequency": "monthly",
+      "provider": "Dallas Fed/FRED",
+      "role": "persistence",
+      "url": "https://fred.stlouisfed.org/series/PCETRIM12M159SFRBDAL"
+    },
+    {
+      "id": "wti",
+      "fredId": "DCOILWTICO",
+      "label": "نفط WTI",
+      "group": "الطاقة والمواد الأولية",
+      "kind": "commodity",
+      "frequency": "daily",
+      "provider": "EIA/FRED",
+      "role": "energy",
+      "url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+    },
+    {
+      "id": "brent",
+      "fredId": "DCOILBRENTEU",
+      "label": "نفط Brent",
+      "group": "الطاقة والمواد الأولية",
+      "kind": "commodity",
+      "frequency": "daily",
+      "provider": "EIA/FRED",
+      "role": "energy",
+      "url": "https://fred.stlouisfed.org/series/DCOILBRENTEU"
+    },
+    {
+      "id": "gasoline",
+      "fredId": "GASREGW",
+      "label": "سعر البنزين التجزئة",
+      "group": "الطاقة والمواد الأولية",
+      "kind": "commodity",
+      "frequency": "weekly",
+      "provider": "EIA/FRED",
+      "role": "energy",
+      "url": "https://fred.stlouisfed.org/series/GASREGW"
+    },
+    {
+      "id": "natgas",
+      "fredId": "DHHNGSP",
+      "label": "الغاز الطبيعي",
+      "group": "الطاقة والمواد الأولية",
+      "kind": "commodity",
+      "frequency": "daily",
+      "provider": "EIA/FRED",
+      "role": "energy",
+      "url": "https://fred.stlouisfed.org/series/DHHNGSP"
+    },
+    {
+      "id": "wages",
+      "fredId": "CES0500000003",
+      "label": "متوسط الأجر في القطاع الخاص",
+      "group": "الطلب والأجور",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "BLS/FRED",
+      "role": "wage",
+      "url": "https://fred.stlouisfed.org/series/CES0500000003"
+    },
+    {
+      "id": "eci",
+      "fredId": "ECIALLCIV",
+      "label": "مؤشر تكلفة التوظيف ECI",
+      "group": "الطلب والأجور",
+      "kind": "price",
+      "frequency": "quarterly",
+      "provider": "BLS/FRED",
+      "role": "wage",
+      "url": "https://fred.stlouisfed.org/series/ECIALLCIV"
+    },
+    {
+      "id": "ulc",
+      "fredId": "ULCNFB",
+      "label": "تكلفة العمل لوحدة الإنتاج",
+      "group": "الطلب والأجور",
+      "kind": "price",
+      "frequency": "quarterly",
+      "provider": "BLS/FRED",
+      "role": "wage",
+      "url": "https://fred.stlouisfed.org/series/ULCNFB"
+    },
+    {
+      "id": "retail",
+      "fredId": "RSAFS",
+      "label": "مبيعات التجزئة",
+      "group": "الطلب والأجور",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Census/FRED",
+      "role": "demand",
+      "url": "https://fred.stlouisfed.org/series/RSAFS"
+    },
+    {
+      "id": "realpce",
+      "fredId": "PCEC96",
+      "label": "الاستهلاك الحقيقي",
+      "group": "الطلب والأجور",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "BEA/FRED",
+      "role": "demand",
+      "url": "https://fred.stlouisfed.org/series/PCEC96"
+    },
+    {
+      "id": "savings",
+      "fredId": "PSAVERT",
+      "label": "معدل الادخار الشخصي",
+      "group": "ائتمان وثقة المستهلك",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "BEA/FRED",
+      "role": "demand",
+      "url": "https://fred.stlouisfed.org/series/PSAVERT"
+    },
+    {
+      "id": "credit",
+      "fredId": "TOTALSL",
+      "label": "ائتمان المستهلك القائم",
+      "group": "ائتمان وثقة المستهلك",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Fed/FRED",
+      "role": "credit",
+      "url": "https://fred.stlouisfed.org/series/TOTALSL"
+    },
+    {
+      "id": "debtservice",
+      "fredId": "TDSP",
+      "label": "عبء خدمة ديون الأسر",
+      "group": "ائتمان وثقة المستهلك",
+      "kind": "level",
+      "frequency": "quarterly",
+      "provider": "Fed/FRED",
+      "role": "credit",
+      "url": "https://fred.stlouisfed.org/series/TDSP"
+    },
+    {
+      "id": "delinq",
+      "fredId": "DRCCLACBS",
+      "label": "تأخر سداد البطاقات الائتمانية",
+      "group": "ائتمان وثقة المستهلك",
+      "kind": "level",
+      "frequency": "quarterly",
+      "provider": "Fed/FRED",
+      "role": "credit",
+      "url": "https://fred.stlouisfed.org/series/DRCCLACBS"
+    },
+    {
+      "id": "sentiment",
+      "fredId": "UMCSENT",
+      "label": "ثقة المستهلك — ميشيغان",
+      "group": "ائتمان وثقة المستهلك",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Michigan/FRED",
+      "role": "confidence",
+      "url": "https://fred.stlouisfed.org/series/UMCSENT"
+    },
+    {
+      "id": "mich",
+      "fredId": "MICH",
+      "label": "توقع التضخم سنة — ميشيغان",
+      "group": "التوقعات والتسعير",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Michigan/FRED",
+      "role": "expectations",
+      "url": "https://fred.stlouisfed.org/series/MICH"
+    },
+    {
+      "id": "breakeven5",
+      "fredId": "T5YIE",
+      "label": "تعادل تضخم TIPS خمس سنوات",
+      "group": "التوقعات والتسعير",
+      "kind": "level",
+      "frequency": "daily",
+      "provider": "Fed/FRED",
+      "role": "market",
+      "url": "https://fred.stlouisfed.org/series/T5YIE"
+    },
+    {
+      "id": "breakeven10",
+      "fredId": "T10YIE",
+      "label": "تعادل تضخم TIPS عشر سنوات",
+      "group": "التوقعات والتسعير",
+      "kind": "level",
+      "frequency": "daily",
+      "provider": "Fed/FRED",
+      "role": "market",
+      "url": "https://fred.stlouisfed.org/series/T10YIE"
+    },
+    {
+      "id": "forwardinfl",
+      "fredId": "T5YIFR",
+      "label": "تعادل تضخم 5y5y",
+      "group": "التوقعات والتسعير",
+      "kind": "level",
+      "frequency": "daily",
+      "provider": "Fed/FRED",
+      "role": "market",
+      "url": "https://fred.stlouisfed.org/series/T5YIFR"
+    },
+    {
+      "id": "case",
+      "fredId": "CSUSHPINSA",
+      "label": "Case-Shiller أسعار المنازل",
+      "group": "السكن والإيجارات",
+      "kind": "price",
+      "frequency": "monthly",
+      "provider": "S&P/FRED",
+      "role": "houseprice",
+      "url": "https://fred.stlouisfed.org/series/CSUSHPINSA"
+    },
+    {
+      "id": "starts",
+      "fredId": "HOUST",
+      "label": "بدء إنشاء المساكن",
+      "group": "السكن والإيجارات",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Census/FRED",
+      "role": "housing_supply",
+      "url": "https://fred.stlouisfed.org/series/HOUST"
+    },
+    {
+      "id": "permits",
+      "fredId": "PERMIT",
+      "label": "تصاريح البناء",
+      "group": "السكن والإيجارات",
+      "kind": "level",
+      "frequency": "monthly",
+      "provider": "Census/FRED",
+      "role": "housing_supply",
+      "url": "https://fred.stlouisfed.org/series/PERMIT"
+    },
+    {
+      "id": "mortgage",
+      "fredId": "MORTGAGE30US",
+      "label": "فائدة الرهن العقاري 30 سنة",
+      "group": "السكن والإيجارات",
+      "kind": "level",
+      "frequency": "weekly",
+      "provider": "Freddie Mac/FRED",
+      "role": "housing_supply",
+      "url": "https://fred.stlouisfed.org/series/MORTGAGE30US"
+    },
+    {
+      "id": "vacancy",
+      "fredId": "RRVRUSQ156N",
+      "label": "معدل شغور المساكن المؤجرة",
+      "group": "السكن والإيجارات",
+      "kind": "level",
+      "frequency": "quarterly",
+      "provider": "Census/FRED",
+      "role": "housing_supply",
+      "url": "https://fred.stlouisfed.org/series/RRVRUSQ156N"
+    }
+  ],
+  "series": {},
+  "unconnected": [
+    {
+      "id": "ism_man_prices",
+      "label": "ISM Manufacturing Prices Paid",
+      "group": "PMI / ضغوط الأسعار",
+      "provider": "ISM",
+      "status": "not_connected",
+      "url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-pmi-reports/"
+    },
+    {
+      "id": "ism_services_prices",
+      "label": "ISM Services Prices Paid",
+      "group": "PMI / ضغوط الأسعار",
+      "provider": "ISM",
+      "status": "not_connected",
+      "url": "https://www.ismworld.org/"
+    },
+    {
+      "id": "sp_flash_input",
+      "label": "S&P Flash PMI Input Prices",
+      "group": "PMI / ضغوط الأسعار",
+      "provider": "S&P Global",
+      "status": "not_connected",
+      "url": "https://www.spglobal.com/marketintelligence/"
+    },
+    {
+      "id": "sp_flash_charged",
+      "label": "S&P Flash PMI Prices Charged",
+      "group": "PMI / ضغوط الأسعار",
+      "provider": "S&P Global",
+      "status": "not_connected",
+      "url": "https://www.spglobal.com/marketintelligence/"
+    },
+    {
+      "id": "zori",
+      "label": "Zillow Observed Rent Index — USA",
+      "group": "السكن والإيجارات",
+      "provider": "Zillow",
+      "status": "not_connected",
+      "url": "https://www.zillow.com/research/data/"
+    },
+    {
+      "id": "gscpi",
+      "label": "Global Supply Chain Pressure Index",
+      "group": "الاستيراد والتوريد",
+      "provider": "NY Fed",
+      "status": "not_connected",
+      "url": "https://www.newyorkfed.org/research/policy/gscpi"
+    },
+    {
+      "id": "sce_1y",
+      "label": "NY Fed Survey of Consumer Expectations 1y",
+      "group": "التوقعات والتسعير",
+      "provider": "NY Fed",
+      "status": "not_connected",
+      "url": "https://www.newyorkfed.org/microeconomics/databank.html"
+    },
+    {
+      "id": "cleveland_nowcast",
+      "label": "Cleveland Fed Inflation Nowcast",
+      "group": "التنبؤ والمتابعة",
+      "provider": "Cleveland Fed",
+      "status": "not_connected",
+      "url": "https://www.clevelandfed.org/our-research/indicators-and-data/inflation-nowcasting"
+    },
+    {
+      "id": "freight",
+      "label": "Freight / shipping cost index",
+      "group": "الاستيراد والتوريد",
+      "provider": "provider needed",
+      "status": "not_connected",
+      "url": "https://www.newyorkfed.org/research/policy/gscpi"
+    }
+  ]
+}
