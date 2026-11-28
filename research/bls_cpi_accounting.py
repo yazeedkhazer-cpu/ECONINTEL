@@ -145,6 +145,10 @@ def projection_from_price_relatives(components,base_month,prior_month,target_mon
     for c in components:
         if c["inputDataPublishedAt"]>frozen_at:
             raise ValueError("Future source used for CPI category "+str(c["id"]))
+        if c["weightPublishedOn"]>frozen_at[:10]:
+            raise ValueError("Future cost weight used for CPI category "+str(c["id"]))
+        if c.get("sourceName","").strip()=="ASSUMED_OBSERVATION":
+            raise ValueError("Unverified market quote cannot masquerade as CPI source")
         ratio=positive(c["forecastPriceRelative"],"future price relative")
         prior=positive(c["priorIndex"],"previous index")
         ready.append({
