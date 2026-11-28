@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "study": "ECONINTEL structural inflation PIT pilot",
+  "status": "complete_unvalidated_as_official_print",
+  "generatedAt": "2026-11-28T16:25:36Z",
+  "historicalWindow": "2023-01-01/2024-12-31",
+  "checkedHorizonDays": 7,
+  "realData": true,
+  "model": "Structural proxy v0.1, same formulas as research/structural_pit.py; annually dated BLS CPI weights",
+  "sources": [
+    "ALFRED as-of vintages",
+    "BLS CPI-U annual relative importance (dated)"
+  ],
+  "githubActionsRun": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46163855962",
+  "warning": "Early pilot, not audited against rounded original BLS/BEA news-release prints; model not yet calibrated against professional consensus; annual weights approximate monthly relative importance.",
+  "metrics": [
+    {
+      "label": "Headline CPI",
+      "family": "cpi",
+      "target": "headline",
+      "cases": 14,
+      "candidates": 16,
+      "baselineMAE": 0.201,
+      "structuralMAE": 0.1451,
+      "baselineDirection": 0.6429,
+      "structuralDirection": 0.7143,
+      "individualWins": 7,
+      "modelMeanSignedError": 0.0309
+    },
+    {
+      "label": "Core CPI",
+      "family": "cpi",
+      "target": "core",
+      "cases": 14,
+      "candidates": 16,
+      "baselineMAE": 0.079,
+      "structuralMAE": 0.0792,
+      "baselineDirection": 0.6429,
+      "structuralDirection": 0.6429,
+      "individualWins": 7,
+      "modelMeanSignedError": -0.0023
+    },
+    {
+      "label": "Headline PPI",
+      "family": "ppi",
+      "target": "headline",
+      "cases": 14,
+      "candidates": 16,
+      "baselineMAE": 0.4584,
+      "structuralMAE": 0.3622,
+      "baselineDirection": 0.6429,
+      "structuralDirection": 0.7857,
+      "individualWins": 10,
+      "modelMeanSignedError": 0.1693
+    },
+    {
+      "label": "Headline PCE",
+      "family": "pce",
+      "target": "headline",
+      "cases": 16,
+      "candidates": 16,
+      "baselineMAE": 0.169,
+      "structuralMAE": 0.0606,
+      "baselineDirection": 0.6875,
+      "structuralDirection": 0.875,
+      "individualWins": 13,
+      "modelMeanSignedError": -0.0222
+    },
+    {
+      "label": "Core PCE",
+      "family": "pce",
+      "target": "core",
+      "cases": 16,
+      "candidates": 16,
+      "baselineMAE": 0.0993,
+      "structuralMAE": 0.0821,
+      "baselineDirection": 0.625,
+      "structuralDirection": 0.8125,
+      "individualWins": 9,
+      "modelMeanSignedError": -0.0345
+    }
+  ],
+  "pceSameMonthPublishedInputs": {
+    "cpi": 16,
+    "ppi": 16,
+    "eligiblePceCases": 16
+  },
+  "testingHygiene": [
+    "One target month per release",
+    "Inputs from ALFRED real-time cutoff only",
+    "First ALFRED indexed outcome within the release date",
+    "No 2026 CPI weights retroactively applied to 2023",
+    "Baseline/model scored on matching eligible months"
+  ],
+  "nextSteps": [
+    "Compare first-vintage index changes to original BLS/BEA printed release values",
+    "Collect archived dated consensus estimates",
+    "Expand beyond this 14-16 case pilot with fixed model specifications",
+    "Improve Core CPI and PPI category forecast models"
+  ]
+}
