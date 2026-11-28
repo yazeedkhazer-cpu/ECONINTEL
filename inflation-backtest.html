@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#0b1222"/><title>مختبر دقة توقع التضخم | ECONINTEL</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1222;--card:#121f33;--panel:#0d1929;--line:#31465d;--muted:#a8bace;--accent:#77d1ff;--text:#e8f2fe;--positive:#7edbb7;--caution:#f4c98e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}
+.wrap{max-width:1130px;margin:auto;padding:25px 20px 55px}header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-bottom:23px;border-bottom:1px solid var(--line)}
+.brand{font-size:21px;font-weight:800;letter-spacing:1px}.brand b{color:var(--accent)}nav{display:flex;gap:17px;flex-wrap:wrap}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.eyebrow{margin-top:28px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px}
+h1{font-size:clamp(28px,4vw,40px);margin:5px 0 10px;line-height:1.25}h2{margin:0 0 13px;font-size:21px}
+p,.muted{color:var(--muted)}p{margin:0 0 10px}.notice{border:1px solid #7b6442;border-radius:12px;background:#2b271f;color:#f4d9a4;padding:17px;margin-top:25px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px;margin:22px 0}
+.card,.panel{border:1px solid var(--line);border-radius:13px;background:var(--card);padding:20px}
+.card small{display:block;color:var(--muted);font-size:12px}.card strong{display:block;font-size:27px;margin:7px 0;font-variant-numeric:tabular-nums}
+.panel{margin-top:20px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;white-space:nowrap}
+th,td{border-bottom:1px solid var(--line);padding:13px 14px;text-align:right}th{color:var(--muted);font-weight:600;font-size:13px}
+.v{font-weight:700}.positive{color:var(--positive)}.negative{color:var(--caution)}.hint{font-size:13px;color:var(--muted)}
+small{font-size:13px}.method{padding:8px 0}.method p{margin:10px 0}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+</style></head>
+<body><main class="wrap">
+<header><div class="brand">ECON<b>INTEL</b></div><nav>
+<a href="inflation.html">مختبر التضخم</a>
+<a href="inflation-nowcast.html">التوقع الرقمي القادم</a>
+<a href="cpi-backtest.html">الاختبار القديم للنموذج الإحصائي</a></nav></header>
+<div class="eyebrow">INFLATION RESEARCH · REAL-TIME VINTAGE BACKTEST</div>
+<h1>هل يستطيع ECONINTEL التنبؤ قبل صدور التضخم؟</h1>
+<p>دراسة تاريخية مبدئية للمحرك المركب الذي يقيس مكونات CPI وعلاقة CPI/PPI بمؤشرات PCE. نقارن أرقام المحرك بخط أساس بسيط على الإصدارات نفسها.</p>
+<div id="notice" class="notice" role="status">جاري تحميل النتائج الرسمية للبحث...</div>
+<div class="grid">
+<div class="card"><small>فترة التوقع قبل الخبر</small><strong id="horizon">—</strong><small>أيام تقويمية قبل كل إصدار</small></div>
+<div class="card"><small>عدد القراءات المستهدفة</small><strong id="families">—</strong><small>CPI · Core CPI · PPI · PCE · Core PCE</small></div>
+<div class="card"><small>فترة الدراسة</small><strong id="window" style="font-size:21px">—</strong><small>اختبار أولي، وليس اعتمادًا تاريخيًا واسعًا</small></div>
+</div>
+<section class="panel"><h2>مقارنة دقة التوقعات</h2>
+<p class="hint">المقياس MAE = متوسط الخطأ المطلق، بوحدة **نقطة مئوية** في التغير الشهري MoM. القيمة الأقل أفضل.</p>
+<div class="table-wrap"><table><thead><tr>
+<th>المؤشر</th><th>الأشهر الصالحة</th><th>MAE محرك ECONINTEL</th><th>MAE متوسط 3 أشهر</th><th>التحسن النسبي</th><th>دقة اتجاه التسارع</th>
+</tr></thead><tbody id="rows"><tr><td colspan="6">لا توجد نتائج حتى الآن.</td></tr></tbody></table></div></section>
+<section class="panel"><h2>كيف نقرأ النتيجة؟</h2>
+<div class="method"><p><b>Headline CPI:</b> تجميع مساهمات الغذاء والطاقة والسلع الأساسية والسكن والخدمات الأخرى باستخدام أوزان BLS السنوية المتاحة وقت التوقع.</p>
+<p><b>Core CPI:</b> استبعاد الغذاء والطاقة وإعادة موازنة الأوزان؛ لا يجوز تفسير انخفاض البنزين أنه يخفض Core CPI مباشرة.</p>
+<p><b>PPI:</b> زخم المنتجين السابق مع نموذج علاقة تجريبية مع أسعار Brent؛ لم نطبّق أوزان سلة PPI التفصيلية بعد.</p>
+<p><b>PCE وCore PCE:</b> نعتمد بيانات CPI وPPI لنفس الشهر فقط إذا كانت قد نُشرت قبل تاريخ توقع PCE. يتضمن النموذج علاقة تاريخية متدحرجة مع قراءة PCE السابقة.</p>
+<p><b>اختبار تاريخي نظيف:</b> النسخ التاريخية من ALFRED مقيدة بتاريخ توقع كل إصدار. لا تدخل أسعار أو مراكز متاحة بعد ذلك التاريخ.</p></div>
+<p class="hint">المخرجات الفعلية مشتقة من أول نسخ ALFRED للمؤشرات المعدلة موسميًا، وقد تختلف قليلًا عن الأرقام المدورة في بيانات BLS وBEA.</p>
+</section>
+<section class="panel"><h2>حالة الاعتماد البحثي</h2>
+<p>هذا اختبار لعينة محدودة فقط. يجب توسيع الفترة التاريخية، ومطابقة كل شهر مع الإعلان الرسمي الأصلي، وإضافة إجماع السوق التاريخي المؤرخ قبل إعلان الخبر. لا نقول إن ECONINTEL أفضل من السوق حتى يتم هذا الاختبار.</p>
+<p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46163855962" target="_blank" rel="noopener noreferrer">عرض التشغيل الأصلي وسجلات الاختبار على GitHub Actions</a></p>
+</section><footer>ECONINTEL — Research only · نتائج تجريبية قابلة للمراجعة، وليست توصية تداول أو ضمان دقة.</footer>
+</main><script>
+"use strict";
+const $=id=>document.getElementById(id);
+const fmt=(x,n=4)=>typeof x==="number"&&Number.isFinite(x)?x.toFixed(n):"—";
+fetch("data/structural-pit-summary.json?t="+Date.now(),{cache:"no-store"})
+ .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
+ .then(data=>{
+  if(data.schemaVersion!==1||!Array.isArray(data.metrics))throw Error("ملف النتائج غير معروف");
+  $("horizon").textContent=String(data.checkedHorizonDays??"—");
+  $("families").textContent=String(data.metrics.length);
+  $("window").textContent=data.historicalWindow?.replace("/"," → ")||"—";
+  $("notice").textContent="البيانات التاريخية متاحة · نتائج بحثية أولية غير مدققة مقابل جميع بيانات النشر الأصلية. "+data.warning;
+  const body=$("rows");body.replaceChildren();
+  for(const entry of data.metrics){
+   const tr=document.createElement("tr");
+   const gain=entry.baselineMAE>0?100*(entry.baselineMAE-entry.structuralMAE)/entry.baselineMAE:null;
+   const cols=[entry.label,String(entry.cases),fmt(entry.structuralMAE),fmt(entry.baselineMAE),
+               gain===null?"—":(gain>0?"+":"")+fmt(gain,1)+"%",fmt(100*entry.structuralDirection,1)+"%"];
+   for(let i=0;i<cols.length;i++){
+    const td=document.createElement("td");td.textContent=cols[i];
+    if(i===2)td.classList.add("v");
+    if(i===4)td.classList.add(gain>0?"positive":"negative");
+    tr.appendChild(td);
+   }body.appendChild(tr);
+  }
+ }).catch(e=>$("notice").textContent="تعذر جلب نتائج الدراسة: "+e.message);
+</script></body></html>
