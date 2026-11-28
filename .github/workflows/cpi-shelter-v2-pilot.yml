@@ -1,0 +1,47 @@
+name: CPI V2 shelter historical pilot
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/cpi-shelter-v2-pilot.yml"
+      - "research/shelter_v2_pit.py"
+      - "research/data/cpi_shelter_weights_pit.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shelter-pit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run deterministic no-lookahead checks
+        run: |
+          python -m py_compile research/shelter_v2_pit.py
+          python -m unittest discover -s tests -p "test_shelter_v2_pit.py" -v
+      - name: Check FRED credentials
+        run: |
+          test -n "$FRED_API_KEY" || { echo "FRED key missing"; exit 1; }
+      - name: Cache vintage responses for future reruns
+        uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-shelter-v2-alfred-pilot-2023
+      - name: Backtest 16 CPI shelter releases with 2022 and 2023 published weights
+        run: |
+          python research/shelter_v2_pit.py \
+            --start 2023-02-01 --end 2024-06-30 \
+            --horizon 7 --max-events 16 \
+            --output data/shelter-v2-pit.json
+      - name: Save auditable history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-v2-shelter-history
+          path: data/shelter-v2-pit.json
+          if-no-files-found: warn
+          retention-days: 30
