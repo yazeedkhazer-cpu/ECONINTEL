@@ -301,6 +301,7 @@ def backtest(client, start, end, horizon=7, minimum_train=18, max_events=0):
         events = events[:max_events]
     fitted = {name: [] for name in TARGETS}
     cases, skipped = [], []
+    accepted_periods = set()
     for i, released in enumerate(events):
         as_of = (day(released) - timedelta(days=horizon)).isoformat()
         try:
@@ -309,9 +310,20 @@ def backtest(client, start, end, horizon=7, minimum_train=18, max_events=0):
             if expected_period is None:
                 skipped.append({"release": released, "why": "Missing/gapped pre-release CPI data"})
                 continue
+            if expected_period in accepted_periods:
+                skipped.append({"release": released, "why": "Duplicate CPI target month"})
+                continue
             actual, actual_vintage = first_outcome(client, released, expected_period)
             if actual is None:
                 skipped.append({"release": released, "why": "No matched first-release vintage"})
+                continue
+            # The FRED release calendar occasionally includes an earlier date for
+            # the same CPI month (e.g. 2022-02-08 vs BLS CPI on 2022-02-10).
+            # Require the first ALFRED publication to coincide with this date;
+            # otherwise the seven-day cutoff is NOT seven days before CPI.
+            if actual_vintage != released:
+                skipped.append({"release": released,
+                                "why": "Calendar candidate predates ALFRED first CPI vintage " + actual_vintage})
                 continue
             features = {name: build_features(inputs, name, as_of) for name in TARGETS}
             if any(x is None for x in features.values()):
@@ -335,6 +347,7 @@ def backtest(client, start, end, horizon=7, minimum_train=18, max_events=0):
                                   for k, v in features[n].items()} for n in TARGETS},
             }
             cases.append(case)
+            accepted_periods.add(expected_period)
             # The current first-release target becomes trainable AFTER this forecast.
             for name in TARGETS:
                 fitted[name].append((features[name], actual[name]))
@@ -364,6 +377,8 @@ def backtest(client, start, end, horizon=7, minimum_train=18, max_events=0):
             "BLS printed rounded percentage may differ due to index precision.",
             "No expectations consensus or Cleveland Fed external benchmark is included yet.",
             "Gaps and shutdown-related missing CPI months are excluded rather than filled.",
+            "Duplicate CPI months and calendar dates preceding first ALFRED CPI publication are excluded.",
+            "Only same-date ALFRED first-vintage CPI calendar candidates are currently accepted.",
             "Ridge is an experimental 9-feature benchmark, not an implemented "
             "CPI expenditure-weighted component model.",
         ],
