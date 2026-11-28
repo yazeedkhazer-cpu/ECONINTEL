@@ -14,6 +14,14 @@ vm.runInNewContext(source,context);setTimeout(()=>{
  try{
  assert.match(el('coverage').textContent,/4\/4/);
  assert.match(el('stats').innerHTML,/Core PCE/);
+ assert.match(el('stats').innerHTML,/آخر 12 شهر · YoY/);
+ assert.match(el('stats').innerHTML,/شهري · MoM/);
+ assert.match(el('stats').innerHTML,/زخم 3 أشهر · SAAR/);
+ assert.match(el('stats').innerHTML,/زخم 6 أشهر · SAAR/);
+ const expectedYoY=((months.at(-1)[1]/months.at(-13)[1]-1)*100).toFixed(2)+'%';
+ const expected3m=((Math.pow(months.at(-1)[1]/months.at(-4)[1],4)-1)*100).toFixed(2)+'%';
+ assert.ok(el('stats').innerHTML.includes(expectedYoY),'YoY must use exactly 12 months');
+ assert.ok(el('stats').innerHTML.includes(expected3m),'3M SAAR must annualize 3-month growth');
  assert.match(el('forecast').innerHTML,/خط أساس/);
  assert.match(el('indicators').innerHTML,/المؤشر/);
  console.log('Inflation UI smoke test passed');
