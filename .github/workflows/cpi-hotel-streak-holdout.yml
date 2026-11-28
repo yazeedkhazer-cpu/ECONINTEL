@@ -1,5 +1,9 @@
 name: Hotel-streak risk hypothesis: held-out CPI shelter test
 on:
+  push:
+    branches: [feature/cpi-point-in-time-backtest]
+    paths:
+      - ".github/workflows/cpi-hotel-streak-holdout.yml"
   pull_request:
     paths:
       - ".github/workflows/cpi-hotel-streak-holdout.yml"
