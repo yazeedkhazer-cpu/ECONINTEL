@@ -118,6 +118,7 @@ class Fred:
         self.key = api_key
         self.cache = Path(cache)
         self.cache.mkdir(parents=True, exist_ok=True)
+        self.last_request_at = 0.0
 
     def get(self, endpoint, **params):
         # Cache file names and contents never include the API key.
@@ -127,7 +128,13 @@ class Fred:
             return json.loads(path.read_text(encoding="utf-8"))
         query = urllib.parse.urlencode({**params, "api_key": self.key, "file_type": "json"})
         url = API + endpoint + "?" + query
-        for attempt in range(4):
+        for attempt in range(7):
+            # Official FRED v1 limit is 120 requests/min. Stay below 70/min
+            # to leave headroom for other workflows using the same key.
+            gap = time.monotonic() - self.last_request_at
+            if gap < 0.90:
+                time.sleep(0.90 - gap)
+            self.last_request_at = time.monotonic()
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "ECONINTEL-PIT-1.0"})
                 with urllib.request.urlopen(req, timeout=35) as response:
@@ -135,16 +142,28 @@ class Fred:
                 if "error_code" in result:
                     raise RuntimeError("FRED error: " + str(result.get("error_message", "unknown")))
                 path.write_text(json.dumps(result), encoding="utf-8")
-                time.sleep(.12)
                 return result
             except urllib.error.HTTPError as err:
-                if err.code not in (429, 500, 502, 503, 504) or attempt == 3:
-                    raise RuntimeError(f"FRED HTTP {err.code}; check API key or quota") from None
+                if err.code == 429 and attempt < 6:
+                    retry_after = err.headers.get("Retry-After", "")
+                    try:
+                        suggested = float(retry_after)
+                    except (TypeError, ValueError):
+                        suggested = 65.0
+                    delay = max(65.0, min(suggested, 180.0))
+                    print("FRED rate limit hit; waiting before retry (no data substituted).",
+                          file=sys.stderr)
+                    time.sleep(delay)
+                    continue
+                if err.code in (500, 502, 503, 504) and attempt < 6:
+                    time.sleep(min(2**attempt, 60))
+                    continue
+                raise RuntimeError(f"FRED HTTP {err.code}; check API key or quota") from None
             except (urllib.error.URLError, TimeoutError):
-                if attempt == 3:
+                if attempt == 6:
                     raise
-            time.sleep(2**attempt)
-        raise RuntimeError("FRED API failed")
+                time.sleep(min(2**attempt, 60))
+        raise RuntimeError("FRED API unavailable after retries")
 
     def release_days(self, start, end):
         response = self.get("/release/dates", release_id=CPI_RELEASE_ID,
