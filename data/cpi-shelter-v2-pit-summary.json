@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "study": "CPI v2 shelter Rent/OER first vintage pilot",
+  "state": "complete_no_mae_improvement",
+  "timestampUtc": "2026-11-28T16:54:01Z",
+  "originalRun": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46167403971",
+  "forecastLeadCalendarDays": 7,
+  "releaseWindow": "2023-02-01 through 2024-06-30",
+  "candidates": 16,
+  "valid": 14,
+  "rejected": [
+    {
+      "date": "2023-02-10",
+      "reason": "ALFRED initial shelter index not available on this date"
+    },
+    {
+      "date": "2024-02-09",
+      "reason": "ALFRED initial shelter index not available on this date"
+    }
+  ],
+  "targetMonths": "January 2023 through February 2024",
+  "methods": {
+    "baseline": "Simple average of previous 3 CPI shelter MoM readings",
+    "v2": "0.4 latest + 0.6 three-month mean for Rent and OER; remaining shelter reconstructed from parent CPI shelter and event-date available BLS component weights"
+  },
+  "metrics": {
+    "baseline": {
+      "n": 14,
+      "maePp": 0.11381,
+      "rmsePp": 0.14932,
+      "monthlyWins": 10
+    },
+    "v2": {
+      "n": 14,
+      "maePp": 0.11607,
+      "rmsePp": 0.14733,
+      "monthlyWins": 4
+    },
+    "v2MinusBaselineMaePp": 0.00226
+  },
+  "conclusion": "On first 14 valid CPI releases, the detailed shelter submodel does not outperform a simple 3m shelter rate in mean absolute error. The tiny RMSE improvement is not enough to claim predictive superiority.",
+  "limitations": [
+    "Shelter-only—not full CPI or Core CPI v2 backtest",
+    "ALFRED first-available seasonally adjusted index outcomes, not yet transcribed original BLS printed press figures",
+    "Historical BLS annual weights are available as of the forecast date; monthly exact weights and possible post-publication changes not audited",
+    "Short period (2023-2024) not representative of all inflation regimes",
+    "No market consensus baseline yet"
+  ],
+  "samples": [
+    {
+      "month": "2023-01",
+      "v2": 0.762962,
+      "baseline": 0.732564,
+      "actual": 0.739067
+    },
+    {
+      "month": "2023-02",
+      "v2": 0.7105,
+      "baseline": 0.7228,
+      "actual": 0.7563
+    },
+    {
+      "month": "2023-09",
+      "v2": 0.3499,
+      "baseline": 0.3649,
+      "actual": 0.6471
+    }
+  ]
+}

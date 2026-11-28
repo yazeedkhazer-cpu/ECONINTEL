@@ -1,0 +1,49 @@
+name: "CPI Macro-first regime adaptive research 2024-2026"
+on:
+  push:
+    branches: [feature/cpi-point-in-time-backtest]
+    paths:
+      - ".github/workflows/cpi-macro-dynamic.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/cpi-macro-dynamic.yml"
+      - "research/cpi_macro_dynamic.py"
+      - "tests/test_cpi_macro_dynamic.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  macro-first-pit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Confirm market-factor training is strictly before CPI release
+        run: |
+          python -m py_compile research/cpi_macro_dynamic.py
+          python -m unittest discover -s tests -p "test_cpi_macro_dynamic.py" -v
+      - name: Verify ALFRED real-vintage source available
+        run: |
+          test -n "$FRED_API_KEY" || { echo "FRED_API_KEY unavailable; study not run"; exit 1; }
+      - uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-cpi-macro-vintage-market-research-v1
+      - name: Replay independent macro forces before 27 CPI news events
+        run: |
+          python research/cpi_macro_dynamic.py \
+            --events data/shelter-hotel-streak-holdout.json \
+            --output data/cpi-macro-dynamic-replay.json
+      - name: Preserve all original evidence for later audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-macro-first-market-vintage-study
+          path: data/cpi-macro-dynamic-replay.json
+          retention-days: 90
+          if-no-files-found: warn

@@ -12,6 +12,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'data'/'inflation-latest.json'
 KEY=os.getenv('FRED_API_KEY','').strip()
 API='https://api.stlouisfed.org/fred/series/observations'
+BLS_API='https://api.bls.gov/publicAPI/v2/timeseries/data/'
 # Verified and research-candidate FRED IDs; nonexistent/unavailable are explicitly missing, never fabricated.
 # tag: price = price-index level, yoyrate = percent from source, level = raw level, pmi = diffusion, commodity = physical input price.
 RAW=[
@@ -26,6 +27,14 @@ RAW=[
  ('cpifood','CPIUFDSL','CPI الغذاء','الغذاء','price','monthly','BLS/FRED','food'),
  ('cpigoods','CUSR0000SACL1E','CPI السلع باستثناء الغذاء والطاقة','السلع والخدمات','price','monthly','BLS/FRED','goods'),
  ('cpiservices','CUSR0000SASLE','CPI الخدمات باستثناء الطاقة','السلع والخدمات','price','monthly','BLS/FRED','services'),
+ ('cpilodging','CUSR0000SEHB','الإقامة الفندقية CPI','السكن والإيجارات','price','monthly','BLS/FRED','shelter_detail'),
+ ('cpiapparel','CPIAPPSL','الملابس CPI','السلع والخدمات','price','monthly','BLS/FRED','core_goods_detail'),
+ ('cpinewvehicles','CUSR0000SETA01','السيارات الجديدة CPI','السلع والخدمات','price','monthly','BLS/FRED','core_goods_detail'),
+ ('cpiusedcars','CUSR0000SETA02','السيارات المستعملة CPI','السلع والخدمات','price','monthly','BLS/FRED','core_goods_detail'),
+ ('cpimedicalservices','CUSR0000SAM2','الخدمات الطبية CPI','السلع والخدمات','price','monthly','BLS/FRED','core_services_detail'),
+ ('cpitransportservices','CUSR0000SAS4','خدمات النقل CPI','السلع والخدمات','price','monthly','BLS/FRED','core_services_detail'),
+ ('cpiinsurance','CUSR0000SETE','تأمين السيارات CPI','السلع والخدمات','price','monthly','BLS Public API','core_services_detail'),
+ ('cpiairfares','CUSR0000SETG01','أسعار تذاكر الطيران CPI','السلع والخدمات','price','monthly','BLS/FRED','core_services_detail'),
  ('ppi','PPIFIS','PPI الطلب النهائي','أسعار المنتجين','price','monthly','BLS/FRED','ppi'),
  ('ppicomm','PPIACO','PPI السلع الأساسية للمنتجين','أسعار المنتجين','price','monthly','BLS/FRED','ppi'),
  ('import','IR','أسعار الواردات الأمريكية','الاستيراد والتوريد','price','monthly','BLS/FRED','import_nsa'),
@@ -58,7 +67,7 @@ RAW=[
  ('mortgage','MORTGAGE30US','فائدة الرهن العقاري 30 سنة','السكن والإيجارات','level','weekly','Freddie Mac/FRED','housing_supply'),
  ('vacancy','RRVRUSQ156N','معدل شغور المساكن المؤجرة','السكن والإيجارات','level','quarterly','Census/FRED','housing_supply'),
 ]
-SOURCES=[{'id':a,'fredId':b,'label':c,'group':d,'kind':e,'frequency':f,'provider':g,'role':h,'url':'https://fred.stlouisfed.org/series/'+b} for a,b,c,d,e,f,g,h in RAW]
+SOURCES=[{'id':a,'fredId':b,'label':c,'group':d,'kind':e,'frequency':f,'provider':g,'role':h,'url':('https://data.bls.gov/timeseries/'+b if a=='cpiinsurance' else 'https://fred.stlouisfed.org/series/'+b)} for a,b,c,d,e,f,g,h in RAW]
 MANUAL=[
  {'id':'ism_man_prices','label':'ISM Manufacturing Prices Paid','group':'PMI / ضغوط الأسعار','provider':'ISM','status':'not_connected','url':'https://www.ismworld.org/supply-management-news-and-reports/reports/ism-pmi-reports/'},
  {'id':'ism_services_prices','label':'ISM Services Prices Paid','group':'PMI / ضغوط الأسعار','provider':'ISM','status':'not_connected','url':'https://www.ismworld.org/'},
@@ -74,7 +83,52 @@ MANUAL=[
 def roundv(x):
     return round(x,5) if math.isfinite(x) else None
 
+def get_bls_source(spec):
+    """CPI motor vehicle insurance is distributed as BLS CUSR0000SETE.
+
+    Unregistered BLS v2 permits a bounded 2018-present request. This is
+    seasonally-adjusted CPI-U, not FRED vintage; never use for PIT replay
+    until source publication-time history is verified separately.
+    """
+    payload=json.dumps({'seriesid':[spec['fredId']],
+                        'startyear':'2018',
+                        'endyear':datetime.now(timezone.utc).strftime('%Y')}).encode('utf-8')
+    req=urllib.request.Request(BLS_API,data=payload,
+            headers={'User-Agent':'ECONINTEL-Inflation-Research/1.1',
+                     'Content-Type':'application/json'},method='POST')
+    for n in range(3):
+      try:
+        with urllib.request.urlopen(req,timeout=40) as f:
+          response=json.loads(f.read().decode('utf-8'))
+        records=response.get('Results',{}).get('series',[])
+        if response.get('status')!='REQUEST_SUCCEEDED' or not records:
+          raise ValueError('BLS API result unavailable or request rejected')
+        bymonth={}
+        for row in records[0].get('data',[]):
+          period=row.get('period','')
+          if not (len(period)==3 and period.startswith('M') and period[1:].isdigit()
+                  and 1<=int(period[1:])<=12):continue
+          try:
+            value=float(str(row['value']).replace(',',''))
+            if math.isfinite(value) and value>0:
+              bymonth[f"{int(row['year']):04d}-{int(period[1:]):02d}"]=value
+          except (ValueError,TypeError,KeyError):continue
+        history=sorted(bymonth.items())
+        if not history:
+          return spec['id'], {'status':'missing','error':'No valid BLS months'}
+        return spec['id'], {'status':'connected','history':[[m,v] for m,v in history[-120:]],
+          'value':history[-1][1],'period':history[-1][0],
+          'observations':len(history),'partialPeriod':False}
+      except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError,ValueError,json.JSONDecodeError) as ex:
+        error='BLS API HTTP '+str(ex.code) if isinstance(ex,urllib.error.HTTPError) else type(ex).__name__
+        if n==2 or isinstance(ex,urllib.error.HTTPError) and ex.code not in (429,500,502,503,504):
+          return spec['id'], {'status':'missing','error':error}
+        time.sleep(n+1)
+    return spec['id'], {'status':'missing','error':'Unknown BLS source failure'}
+
+
 def get_source(spec):
+    if spec['id']=='cpiinsurance':return get_bls_source(spec)
     if not KEY:return spec['id'], {'status':'missing','error':'FRED_API_KEY not configured'}
     query=urllib.parse.urlencode({'api_key':KEY,'series_id':spec['fredId'],'file_type':'json','observation_start':'2018-01-01','limit':100000})
     req=urllib.request.Request(API+'?'+query,headers={'User-Agent':'ECONINTEL-Inflation-Research/1.0'})

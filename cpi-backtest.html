@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>مختبر اختبار توقع CPI | ECONINTEL</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1222;--card:#111d31;--line:#2e405c;--text:#e9f2ff;--muted:#9bb0cd;--accent:#54b8eb}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.8 system-ui,"Segoe UI",Tahoma,Arial,sans-serif}
+    .wrap{max-width:1160px;margin:auto;padding:28px 20px 70px}a{color:var(--accent);text-decoration:none}
+    header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+    .brand{font-size:22px;font-weight:800;letter-spacing:1px}.brand span{color:var(--accent)}
+    .hero{padding:35px 0 20px}h1{font-size:clamp(28px,4vw,42px);margin:0 0 8px}h2{font-size:21px;margin:0 0 15px}
+    p{margin:0 0 12px;color:var(--muted)}.tag{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px}
+    .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px}
+    .panel{border:1px solid var(--line);background:var(--card);border-radius:15px;padding:20px;margin:20px 0}
+    .panel .value{font-weight:800;font-size:26px;font-variant-numeric:tabular-nums}.mini{font-size:13px;color:var(--muted)}
+    .message{padding:14px 18px;border:1px solid #775f34;background:#30291e;color:#ffdfa0;border-radius:12px;margin:22px 0}
+    .table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse;white-space:nowrap;font-variant-numeric:tabular-nums}
+    th,td{padding:10px 14px;border-bottom:1px solid var(--line);text-align:right}th{font-size:13px;color:var(--muted);font-weight:600}
+    .empty{color:var(--muted);padding:20px 0}.method{max-width:860px}.method strong{color:var(--text)}
+    .muted{color:var(--muted)}.metric-card{border:1px solid var(--line);padding:16px;border-radius:12px}
+    .metric-card b{font-size:23px;display:block}footer{border-top:1px solid var(--line);padding:25px 0;font-size:13px;color:var(--muted);margin-top:30px}
+  </style>
+</head>
+<body><div class="wrap">
+<header><div class="brand">ECON<span>INTEL</span></div><a href="inflation.html">العودة إلى مختبر التضخم ↗</a></header>
+<div class="hero"><div class="tag">ECONINTEL · POINT-IN-TIME STUDY</div><h1>مختبر دقة توقع CPI</h1>
+<p>هل استطاع المحرك تقدير التضخم قبل صدور الإعلان؟ هنا تُعرض النتائج التاريخية الفعلية فقط، ولا نعرض نسب نجاح مفترضة.</p></div>
+<div id="message" class="message" role="status">جاري فحص سجل الدراسة...</div>
+<div class="panels">
+  <section class="panel"><div class="mini">حالة الدراسة</div><div id="state" class="value">—</div></section>
+  <section class="panel"><div class="mini">اختبارات خارج التدريب</div><div id="cases" class="value">—</div></section>
+  <section class="panel"><div class="mini">الأيام قبل النشر</div><div id="horizon" class="value">—</div></section>
+</div>
+<section class="panel"><h2>دقة التوقع — مقارنة عادلة</h2><p>كل من خط الأساس والنموذج الإحصائي يقارن على الأشهر نفسها بعد فترة التدريب الأولية. وحدة MAE: نقطة مئوية في التضخم الشهري.</p>
+<div class="panels" id="metrics"><div class="empty">لم تتوفر نتائج مُختبرة بعد.</div></div></section>
+<section class="panel"><h2>الأرشيف التاريخي</h2><p>يظهر كل توقع بتاريخ تجميد البيانات، ثم النتيجة التي كانت متاحة عند أول نشر. هذه نتائج حسابية من مستويات المؤشر، وليست بالضرورة نفس الرقم العشري المطبوع في البيان.</p>
+<div class="table-wrap"><table><thead><tr><th>صدور CPI</th><th>تاريخ التجميد</th><th>الفترة</th><th>Core الفعلي</th><th>Core الأساس</th><th>Core النموذج</th><th>CPI الفعلي</th><th>CPI الأساس</th><th>CPI النموذج</th></tr></thead>
+<tbody id="rows"><tr><td colspan="9" class="empty">لا توجد نتائج لعرضها.</td></tr></tbody></table></div></section>
+<section class="panel method"><h2>منهجية الدراسة</h2>
+<p><strong>Point-in-Time:</strong> قيمة كل متغير تأتي من نسخة ALFRED المتاحة في تاريخ التوقع فقط، وليس من ملف FRED المعدّل اليوم.</p>
+<p><strong>Walk-Forward:</strong> يعتمد النموذج الإحصائي على الإصدارات السابقة فقط. التوقع الحالي يُحفظ قبل إضافة النتيجة الفعلية إلى بيانات التدريب.</p>
+<p><strong>خط المقارنة:</strong> متوسط التغير الشهري في آخر 3 أشهر. النموذج البديل Ridge بحثي، لا يمثل حتى الآن النموذج النهائي المعتمد على أوزان سلة CPI.</p>
+<p><strong>حالات مستبعدة:</strong> الأشهر المفقودة، والتقارير التي تعذّر تثبيت أول نسخة منشورة لها. تظهر في تقرير النتائج ولا يتم تعويضها بأرقام مختلقة.</p>
+<p class="mini">مصادر: <a href="https://fred.stlouisfed.org/docs/api/fred/realtime_period.html" target="_blank" rel="noopener noreferrer">منهجية ALFRED</a> · <a href="https://www.bls.gov/bls/news-release/cpi.htm" target="_blank" rel="noopener noreferrer">أرشيف تقارير BLS</a>.</p></section>
+<footer>ECONINTEL — صفحة بحثية · لا تُستخدم النتائج لاتخاذ قرار تداول دون تحقق مستقل من المصادر والإصدارات.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+function fmt(value,n){return typeof value==="number"&&Number.isFinite(value)?value.toFixed(n==null?3:n)+"%":"—"}
+function cell(row,text){var td=document.createElement("td");td.textContent=text;row.appendChild(td)}
+function metric(parent,title,report){
+  var box=document.createElement("div");box.className="metric-card";
+  var cap=document.createElement("div");cap.className="mini";cap.textContent=title;box.appendChild(cap);
+  var val=document.createElement("b");val.textContent=report&&typeof report.mae==="number"?report.mae.toFixed(4)+" pp":"—";box.appendChild(val);
+  var detail=document.createElement("div");detail.className="mini";
+  detail.textContent=report&&report.n?"MAE · "+report.n+" فترة | RMSE "+report.rmse+" | الاتجاه "+Math.round(report.direction_accuracy*100)+"%":"لا توجد عينة تقييم";box.appendChild(detail);
+  parent.appendChild(box);
+}
+fetch("data/cpi-backtest-results.json?t="+Date.now(),{cache:"no-store"})
+ .then(function(res){if(!res.ok)throw Error("لم نتمكن من تحميل سجل الدراسة");return res.json()})
+ .then(function(d){
+   if(d.schemaVersion!==1)throw Error("صيغة النتائج غير متوافقة");
+   $("state").textContent=d.status==="complete"?"نتائج متاحة":d.status==="insufficient"?"عينة غير كافية":"لم يُشغّل بعد";
+   $("cases").textContent=String(d.evaluatedCases||0);
+   $("horizon").textContent=d.horizon_days==null?"—":String(d.horizon_days);
+   var success=d.status==="complete"&&d.evaluatedCases>0;
+   $("message").textContent=success?
+      "النتائج تاريخية تجريبية وتحتاج مراجعة على بيانات BLS الأصلية؛ توليد الملف: "+(d.generatedAt||"غير متاح"):
+      "لم تتوفر نتائج مثبتة بعد. يلزم تشغيل الاختبار التاريخي باستخدام مفتاح FRED في GitHub Actions، ثم مراجعة الحالات المستبعدة.";
+   $("metrics").replaceChildren();
+   var names=[["Headline CPI — خط الأساس","headline","baseline"],["Headline CPI — نموذج Ridge","headline","ridge"],
+     ["Core CPI — خط الأساس","core","baseline"],["Core CPI — نموذج Ridge","core","ridge"]];
+   names.forEach(function(m){metric($("metrics"),m[0],d.metrics&&d.metrics[m[1]]&&d.metrics[m[1]][m[2]])});
+   var body=$("rows");body.replaceChildren();
+   var items=(d.results||[]).filter(function(r){return r.predictions&&r.actual}).slice(-50).reverse();
+   if(!items.length){var tr=document.createElement("tr");cell(tr,"لم يتم إنتاج سجل تاريخي بعد");body.appendChild(tr);return}
+   items.forEach(function(r){
+     var tr=document.createElement("tr");cell(tr,r.release_date);cell(tr,r.as_of);cell(tr,r.target_period);
+     cell(tr,fmt(r.actual.core));cell(tr,fmt(r.predictions.core.baseline));cell(tr,fmt(r.predictions.core.ridge));
+     cell(tr,fmt(r.actual.headline));cell(tr,fmt(r.predictions.headline.baseline));cell(tr,fmt(r.predictions.headline.ridge));body.appendChild(tr);
+   });
+ }).catch(function(e){$("message").textContent="تعذّر قراءة النتائج: "+e.message});
+})();
+</script></body></html>

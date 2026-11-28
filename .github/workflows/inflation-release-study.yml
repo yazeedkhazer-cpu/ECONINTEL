@@ -1,0 +1,77 @@
+name: Inflation PIT historical study — CPI PCE PPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      family:
+        description: "Which inflation release family to study?"
+        type: choice
+        options:
+          - cpi
+          - pce
+          - ppi
+        default: pce
+        required: true
+      start:
+        description: "Earliest release date"
+        required: true
+        default: "2022-01-01"
+      end:
+        description: "Latest release date"
+        required: true
+        default: "2026-11-28"
+      horizon:
+        description: "Calendar days before official release"
+        required: true
+        default: "7"
+      min_train:
+        description: "Initial warmup releases for ridge"
+        required: true
+        default: "8"
+      max_events:
+        description: "Pilot 24; set 0 for all releases in selected date range"
+        required: true
+        default: "24"
+
+permissions:
+  contents: read
+
+jobs:
+  historical-inflation-family:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate research scripts offline
+        run: |
+          python -m py_compile research/cpi_backtest.py research/inflation_releases.py
+          python -m unittest discover -s tests -p "test_inflation_releases.py" -v
+      - name: Check ALFRED API credentials
+        run: |
+          if [ -z "$FRED_API_KEY" ]; then
+            echo "Missing FRED_API_KEY secret. No historical study was run."
+            exit 1
+          fi
+      - name: Replay historical inflation announcements with frozen data
+        run: |
+          python research/inflation_releases.py \
+            --family "${{ inputs.family }}" \
+            --start "${{ inputs.start }}" \
+            --end "${{ inputs.end }}" \
+            --horizon "${{ inputs.horizon }}" \
+            --min-train "${{ inputs.min_train }}" \
+            --max-events "${{ inputs.max_events }}" \
+            --output "data/${{ inputs.family }}-pit-evaluation.json"
+      - name: Preserve historical study as inspectable artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inflation-pit-research
+          path: data/*-pit-evaluation.json
+          if-no-files-found: warn
+          retention-days: 30

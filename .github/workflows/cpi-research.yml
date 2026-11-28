@@ -1,0 +1,188 @@
+name: CPI PIT research checks
+
+on:
+  push:
+    branches:
+      - feature/cpi-point-in-time-backtest
+  pull_request:
+    paths:
+      - "research/bls_cpi_accounting.py"
+      - "tests/test_bls_cpi_accounting.py"
+      - "research/cpi_macro_dynamic.py"
+      - "tests/test_cpi_macro_dynamic.py"
+      - "research/data/cpi_official_method_and_leading_drivers.json"
+      - "research/BLS_CPI_OFFICIAL_FORMULA_AND_EARLY_SIGNALS.md"
+      - "research/cpi_backtest.py"
+      - "tests/test_cpi_backtest.py"
+      - ".github/workflows/cpi-research.yml"
+      - "inflation-nowcast.html"
+      - "assets/inflation-nowcast.js"
+      - "tests/test_inflation_nowcast.js"
+      - "assets/inflation-structural.js"
+      - "tests/test_inflation_structural.js"
+      - "assets/cpi-components-v2.js"
+      - "tests/test_cpi_components_v2.js"
+      - "scripts/update_inflation.py"
+      - "tests/test_inflation_bls_components.py"
+      - "research/inflation_releases.py"
+      - "research/inflation_numeric_accuracy.py"
+      - "tests/test_inflation_numeric_accuracy.py"
+      - "research/shelter_hotel_streak_holdout.py"
+      - "tests/test_shelter_hotel_streak_holdout.py"
+      - "research/structural_pit.py"
+      - "research/shelter_v2_pit.py"
+      - "tests/test_shelter_v2_pit.py"
+      - "research/data/cpi_shelter_weights_pit.json"
+      - "tests/test_structural_pit.py"
+      - "research/data/cpi_annual_weights_pit.json"
+      - "tests/test_inflation_releases.py"
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "First release date for historical study"
+        required: true
+        default: "2018-01-01"
+      end:
+        description: "Last release date for historical study"
+        required: true
+        default: "2026-11-28"
+      horizon:
+        description: "Full calendar days before CPI release"
+        required: true
+        default: "7"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify syntax and deterministic vintage tests
+        run: |
+          python -m py_compile research/cpi_backtest.py tests/test_cpi_backtest.py
+          python -m unittest discover -s tests -p "test_cpi_backtest.py" -v
+          python -m py_compile research/bls_cpi_accounting.py tests/test_bls_cpi_accounting.py
+          python -m unittest discover -s tests -p "test_bls_cpi_accounting.py" -v
+          python -m py_compile research/cpi_macro_dynamic.py tests/test_cpi_macro_dynamic.py
+          python -m unittest discover -s tests -p "test_cpi_macro_dynamic.py" -v
+          python -m py_compile research/inflation_releases.py tests/test_inflation_releases.py
+          python -m unittest discover -s tests -p "test_inflation_releases.py" -v
+          python -m py_compile research/structural_pit.py tests/test_structural_pit.py
+          python -m unittest discover -s tests -p "test_structural_pit.py" -v
+          python -m py_compile research/shelter_v2_pit.py tests/test_shelter_v2_pit.py
+          python -m unittest discover -s tests -p "test_shelter_v2_pit.py" -v
+          python -m py_compile research/inflation_numeric_accuracy.py tests/test_inflation_numeric_accuracy.py
+          python -m unittest discover -s tests -p "test_inflation_numeric_accuracy.py" -v
+          python -m py_compile research/shelter_hotel_streak_holdout.py tests/test_shelter_hotel_streak_holdout.py
+          python -m unittest discover -s tests -p "test_shelter_hotel_streak_holdout.py" -v
+      - name: Test inflation-family nowcast calculations
+        run: |
+          node --check assets/inflation-nowcast.js
+          node tests/test_inflation_nowcast.js
+          node --check assets/inflation-structural.js
+          node tests/test_inflation_structural.js
+          node --check assets/cpi-components-v2.js
+          node tests/test_cpi_components_v2.js
+          node --check research/freeze_next_inflation_nowcast.cjs
+          node tests/test_freeze_inflation_nowcast.cjs
+          python -m py_compile scripts/update_inflation.py
+          python -m unittest discover -s tests -p "test_inflation_bls_components.py" -v
+
+  historical-replay:
+    if: github.event_name == 'workflow_dispatch'
+    needs: offline-tests
+    runs-on: ubuntu-latest
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Stop if FRED key is missing
+        run: |
+          if [ -z "$FRED_API_KEY" ]; then
+            echo "FRED_API_KEY secret is missing; historical results were NOT generated."
+            exit 1
+          fi
+      - name: Replay historical CPI releases
+        run: |
+          python research/cpi_backtest.py \
+            --start "${{ inputs.start || '2022-01-01' }}" \
+            --end "${{ inputs.end || '2026-11-28' }}" \
+            --horizon "${{ inputs.horizon || '7' }}" \
+            --min-train "${{ inputs.min_train || '18' }}" \
+            --max-events "${{ inputs.max_events || '0' }}" \
+            --output data/cpi-backtest-results.json
+      - name: Upload results as workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-point-in-time-results
+          path: data/cpi-backtest-results.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  exact-release-audit:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit real historical release accuracy without lookahead
+        run: |
+          python -m unittest discover -s tests -p "test_inflation_numeric_accuracy.py" -v
+          mkdir -p .history
+          gh run download 46163855962 --repo "$GITHUB_REPOSITORY" --dir .history
+          python research/inflation_numeric_accuracy.py \
+            --input-dir .history --output data/inflation-numeric-accuracy-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-one-decimal-accuracy-audit
+          path: data/inflation-numeric-accuracy-audit.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  true-hotel-streak-holdout:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify historical source key is actually connected
+        run: |
+          test -n "$FRED_API_KEY" || { echo "Missing FRED_API_KEY"; exit 1; }
+          python -m unittest discover -s tests -p "test_shelter_hotel_streak_holdout.py" -v
+      - uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-shelter-2024-26-pre-registered-holdout
+      - name: Check previously unseen 2024-2026 releases without changing chosen rule
+        run: |
+          python research/shelter_hotel_streak_holdout.py \
+            --start 2024-04-01 --end 2026-11-28 --horizon 7 \
+            --max-events 0 --output data/shelter-hotel-streak-holdout.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hotel-streak-true-holdout-2024-2026
+          path: data/shelter-hotel-streak-holdout.json
+          retention-days: 30
+          if-no-files-found: warn

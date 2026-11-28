@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "status": "not_run",
+  "generatedAt": null,
+  "source": "ALFRED point-in-time vintages — pending first execution",
+  "calendar_candidates": 0,
+  "evaluatedCases": 0,
+  "warmupCases": 0,
+  "horizon_days": 7,
+  "metrics": {},
+  "results": [],
+  "skipped": [],
+  "caveats": [
+    "No API-backed historical replay has been completed or validated yet."
+  ]
+}

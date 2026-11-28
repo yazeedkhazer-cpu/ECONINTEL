@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "study": "CPI Rent OER Lodging first-vintage category numeric forecasting with training-only expanding-window Ridge and fixed baselines",
+  "run": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46171864900",
+  "period": "2024-03 through 2026-09",
+  "accepted": 26,
+  "excluded": [
+    {
+      "month": "2026-10",
+      "reason": "rent as-of seasonal + 3m history incomplete"
+    }
+  ],
+  "trainBefore2026": 19,
+  "holdout2026": 7,
+  "forecastLeadDays": 7,
+  "unit": "MAE pp of MoM seasonal-adjusted first-release ALFRED indices",
+  "models": {
+    "rent": {
+      "baseline3": 0.12898,
+      "ridge": 0.09934,
+      "priorYear": 0.10229,
+      "changePct": 23
+    },
+    "oer": {
+      "baseline3": 0.11425,
+      "ridge": 0.09277,
+      "priorYear": 0.10355,
+      "changePct": 18.8
+    },
+    "lodging": {
+      "baseline3": 2.3982,
+      "ridge": 1.68993,
+      "priorYear": 1.36452,
+      "changePct": 43.1
+    }
+  },
+  "conclusion": "RESEARCH ONLY: OER and Rent ridge forecasts show lower holdout MAE than a 3-month mean across seven 2026 months, but still make large misses. Lodging prior-year seasonal same-month forecast has lower holdout MAE than three-month mean, while pre-2026 sample shows opposite ranking. No robust statistically established gain.",
+  "releaseUse": "Not promoted into CPI or Core CPI live engine. Components alone cannot substantiate all-items CPI accuracy.",
+  "limitations": [
+    "Seven 2026 holdout cases too few for reliable deployment or near 100% accuracy claims",
+    "Some category regressors re-estimate on earlier release results; no future outcomes entered predictions",
+    "The 26-case sample excludes 2026-10 for pre-release category history gap, not imputed",
+    "CPI rent/OER/lodging are seasonally adjusted index-derived first vintages, not necessarily exact rounded official BLS press numbers",
+    "Need recent inflation regime stability and more independent out-of-sample 2027 releases before claiming predictive skill",
+    "Lodging new prior-year seasonal model was not best in 2024-2025; its 2026 result may not generalize"
+  ]
+}

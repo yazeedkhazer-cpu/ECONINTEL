@@ -1,0 +1,63 @@
+name: CPI component data verification (research branch)
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/cpi-component-data-verify.yml"
+      - "scripts/update_inflation.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fetch-components:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Offline component integrity tests
+        run: |
+          python -m py_compile scripts/update_inflation.py
+          node --check assets/cpi-components-v2.js
+          node tests/test_cpi_components_v2.js
+      - name: Check that the historic FRED key is configured
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          test -n "$FRED_API_KEY" || { echo 'FRED_API_KEY is not configured'; exit 1; }
+      - name: Refresh official FRED component series without committing any production data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python scripts/update_inflation.py
+      - name: Inspect actual component source coverage and candidate model
+        run: |
+          node - <<'NODE'
+          const fs=require('node:fs'),vm=require('node:vm');
+          const d=JSON.parse(fs.readFileSync('data/inflation-latest.json','utf8'));
+          const ids=['cpilodging','cpiapparel','cpinewvehicles','cpiusedcars',
+            'cpimedicalservices','cpitransportservices','cpiinsurance','cpiairfares'];
+          console.log('Real FRED component source coverage:',
+            Object.fromEntries(ids.map(id=>[id,{status:d.series[id]?.status||'missing',
+              period:d.series[id]?.period||null}])));
+          const ctx=vm.createContext({console});
+          vm.runInContext(fs.readFileSync('assets/inflation-structural.js','utf8'),ctx);
+          vm.runInContext(fs.readFileSync('assets/cpi-components-v2.js','utf8'),ctx);
+          const m=ctx.ECON_CPI_COMPONENTS_V2.assess(d);
+          console.log('V2 validation status:',m.status);
+          if(m.status==='experimental_unvalidated'){
+            console.log('Unvalidated V2 real-input preview:',
+              {headlineMoM:m.cpi,coreMoM:m.core,base:m.base,target:m.target,
+              sourceGeneratedAt:d.generatedAt});
+          }else console.log('Missing sources:',m.missing,'Reason:',m.reason);
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cpi-components-actual-fred-snapshot
+          path: data/inflation-latest.json
+          retention-days: 30

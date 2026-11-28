@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "kind": "research-only-CPI-component-nowcast-v2",
+  "asOfUtc": "2026-11-28T16:46:56.369406+00:00",
+  "targetPeriod": "2026-11",
+  "source": "50 official FRED/BLS series refreshed in research branch; BLS Sep 2026 relative-importance weights published November 10, 2026",
+  "sourceUrl": "https://www.bls.gov/news.release/archives/cpi_11102026.htm",
+  "formula": "Research fixed-weight proxy of published seasonally adjusted CPI component indices; not the exact BLS calculation.",
+  "forecast": {
+    "headlineMoM": 0.01430769753856765,
+    "coreMoM": 0.30972849229500404
+  },
+  "components": [
+    {
+      "id": "food",
+      "weightPercent": 13.447,
+      "projectedMoM": 0.21435639995495878,
+      "contributionPp": 0.028824505101943308
+    },
+    {
+      "id": "energy",
+      "weightPercent": 7.649,
+      "projectedMoM": -3.384859868371986,
+      "contributionPp": -0.2589079313317732
+    },
+    {
+      "id": "shelter",
+      "weightPercent": 35.238,
+      "projectedMoM": 0.3292878119872358,
+      "contributionPp": 0.11603443918806214,
+      "breakdown": {
+        "rentMoM": 0.20500498368362763,
+        "oerMoM": 0.29882682584226217,
+        "impliedOtherShelterMoM": 1.369428236624846
+      }
+    },
+    {
+      "id": "goods",
+      "weightPercent": 18.807,
+      "projectedMoM": 0.12764433580876788,
+      "contributionPp": 0.024006070235554976,
+      "breakdown": {
+        "apparelMoM": 0.12097804133379131,
+        "newCarsMoM": 0.19844227803784698,
+        "usedCarsMoM": -0.3533755061210453,
+        "impliedOtherGoodsMoM": 0.23218207734809462
+      }
+    },
+    {
+      "id": "services_ex_shelter",
+      "weightPercent": 24.86,
+      "projectedMoM": 0.41975365012773885,
+      "contributionPp": 0.10435075742175588,
+      "breakdown": {
+        "medicalMoM": 0.1881539478393246,
+        "transportMoM": 0.6963342081078027,
+        "impliedOtherServicesMoM": 0.40682860568432333,
+        "insuranceMoM": 0.28969174025418987,
+        "airfareMoM": 1.1630472091695099
+      }
+    }
+  ],
+  "priorVersion": {
+    "headlineMoM": 0.01,
+    "coreMoM": 0.304
+  },
+  "sourceCoverage": {
+    "connected": 50,
+    "total": 50,
+    "extraVerified": 8
+  },
+  "status": "unvalidated",
+  "knownLimitations": [
+    "Latest November 2026 pump-price average is incomplete and dominates headline CPI projection",
+    "Rent/OER and some components use heuristic 0.4*last+0.6*3m or 0.25*last+0.75*3m momentum, not fitted coefficients",
+    "Implied other-shelter residual is noisy and not an official published standalone index",
+    "Seasonally adjusted components and rounded relative-importance weights are not exactly additive",
+    "Source history is currently revised; prospective forecast has not yet been tested on strict historical first-vintage cutoffs",
+    "No dated market consensus, forecast uncertainty interval, or official NSA YoY provided"
+  ],
+  "relatedRuns": [
+    "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46166958920",
+    "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46166862404"
+  ]
+}

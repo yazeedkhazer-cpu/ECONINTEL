@@ -1,0 +1,61 @@
+name: "Hotel-streak risk hypothesis: held-out CPI shelter test"
+on:
+  push:
+    branches: [feature/cpi-point-in-time-backtest]
+    paths:
+      - ".github/workflows/cpi-hotel-streak-holdout.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/cpi-hotel-streak-holdout.yml"
+      - "research/shelter_hotel_streak_holdout.py"
+      - "tests/test_shelter_hotel_streak_holdout.py"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  shelter-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate frozen rule and no-lookahead on synthetic events
+        run: |
+          python -m py_compile research/shelter_hotel_streak_holdout.py
+          python -m unittest discover -s tests -p "test_shelter_hotel_streak_holdout.py" -v
+      - name: Verify official ALFRED source credentials
+        run: |
+          test -n "$FRED_API_KEY" || { echo "Missing FRED key"; exit 1; }
+      - uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-cpi-hotel-streak-holdout-v1
+      - name: Evaluate rule on untouched April 2024 - November 2026 announcements
+        run: |
+          python research/shelter_hotel_streak_holdout.py \
+            --start 2024-04-01 --end 2026-11-28 \
+            --horizon 7 --max-events 0 \
+            --output data/shelter-hotel-streak-holdout.json
+      - name: Archive untouched holdout results on the research branch only
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "econintel-research-bot"
+          git config user.email "econintel-research-bot@users.noreply.github.com"
+          git add data/shelter-hotel-streak-holdout.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive 2024-2026 CPI shelter hotel-streak independent holdout"
+            git pull --rebase origin feature/cpi-point-in-time-backtest
+            git push origin HEAD:refs/heads/feature/cpi-point-in-time-backtest
+          fi
+      - name: Preserve per-event audit of warning and realized errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-hotel-streak-risk-holdout
+          path: data/shelter-hotel-streak-holdout.json
+          retention-days: 30
+          if-no-files-found: warn

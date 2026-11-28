@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "description": "CPI-U annual relative-importance reference vintages for research replay, NOT precise contemporaneous monthly weights. Using latest BLS December table published on/before forecast cutoff.",
+  "periodSemantics": "January CPI reports may use prior-year annual December relative importance as approximate constant weights; no future weighting allowed.",
+  "weights": [
+    {
+      "referenceMonth": "2021-12",
+      "publishedOn": "2022-01-12",
+      "food": 13.37,
+      "energy": 7.348,
+      "goods": 21.699,
+      "shelter": 32.946,
+      "source": "https://www.bls.gov/news.release/archives/cpi_01122022.htm",
+      "annualTable": "https://www.bls.gov/cpi/tables/relative-importance/2021.htm",
+      "other": 24.637
+    },
+    {
+      "referenceMonth": "2022-12",
+      "publishedOn": "2023-01-12",
+      "food": 13.531,
+      "energy": 6.921,
+      "goods": 21.361,
+      "shelter": 34.413,
+      "source": "https://www.bls.gov/news.release/archives/cpi_01122023.htm",
+      "annualTable": "https://www.bls.gov/cpi/tables/relative-importance/2022.htm",
+      "other": 23.774
+    },
+    {
+      "referenceMonth": "2023-12",
+      "publishedOn": "2024-01-11",
+      "food": 13.555,
+      "energy": 6.655,
+      "goods": 18.891,
+      "shelter": 36.191,
+      "source": "https://www.bls.gov/news.release/archives/cpi_01112024.htm",
+      "annualTable": "https://www.bls.gov/cpi/tables/relative-importance/2023.htm",
+      "other": 24.708
+    },
+    {
+      "referenceMonth": "2024-12",
+      "publishedOn": "2025-01-15",
+      "food": 13.691,
+      "energy": 6.216,
+      "goods": 19.388,
+      "shelter": 35.483,
+      "source": "https://www.bls.gov/news.release/archives/cpi_01152025.htm",
+      "annualTable": "https://www.bls.gov/cpi/tables/relative-importance/2024.htm",
+      "other": 25.222
+    },
+    {
+      "referenceMonth": "2025-12",
+      "publishedOn": "2026-01-13",
+      "food": 13.698,
+      "energy": 6.383,
+      "goods": 19.176,
+      "shelter": 35.625,
+      "source": "https://www.bls.gov/news.release/archives/cpi_01132026.htm",
+      "annualTable": "https://www.bls.gov/cpi/tables/relative-importance/2025.htm",
+      "other": 25.118
+    }
+  ]
+}

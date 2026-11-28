@@ -1,0 +1,45 @@
+name: Publish V2 CPI inputs to research branch only
+on:
+  push:
+    branches: [feature/cpi-point-in-time-backtest]
+    paths:
+      - ".github/workflows/publish-cpi-research-snapshot.yml"
+permissions:
+  contents: write
+concurrency:
+  group: econintel-v2-snapshot-research-only
+  cancel-in-progress: false
+jobs:
+  refresh-research-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/cpi-point-in-time-backtest
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch official CPI FRED and BLS data on isolated feature branch
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          test -n "$FRED_API_KEY" || exit 1
+          python scripts/update_inflation.py
+      - name: Only commit snapshot to the feature branch, never main
+        run: |
+          git config user.name "econintel-cpi-research-bot"
+          git config user.email "econintel-cpi-research-bot@users.noreply.github.com"
+          git add data/inflation-latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Refresh 50 CPI and inflation input series on research branch"
+            git pull --rebase origin feature/cpi-point-in-time-backtest
+            git push origin HEAD:refs/heads/feature/cpi-point-in-time-backtest
+          fi
+      - name: Preserve the exact research input snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-research-branch-50series
+          path: data/inflation-latest.json
+          retention-days: 30
