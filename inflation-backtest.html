@@ -67,6 +67,11 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
   <p id="riskReason" class="hint">جاري تحميل حكم الاختبار المستقل…</p>
   <p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46169865199" target="_blank" rel="noopener noreferrer">سجل الاختبار والـ27 شهرًا على GitHub</a></p>
 </section>
+<section class="panel"><h2>اختبار جديد: التوقع المنفصل للإيجارات وOER والفنادق</h2>
+<p>اختبرنا 26 إصدارًا تاريخيًا باستخدام أول نسخ ALFRED. الجدول أدناه يعرض <b>7 أشهر فقط من 2026</b> خارج عينة 2024–2025، من دون استخدامها لتدريب توقع الشهر نفسه. انخفاض الخطأ في هذه العينة لا يثبت دقة مستقبلية.</p>
+<div class="table-wrap"><table><thead><tr><th>المكوّن</th><th>MAE متوسط آخر 3 أشهر</th><th>MAE النموذج التجريبي</th><th>تغير متوسط الخطأ</th></tr></thead><tbody id="componentWalkforwardRows"><tr><td colspan="4">جاري تحميل النتائج…</td></tr></tbody></table></div>
+<p id="componentWalkforwardCaveat" class="hint">أرقام مكوّنات السكن بالـ MoM وبوحدة نقطة مئوية للخطأ، وليست دقة CPI العام أو Core CPI.</p>
+<p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46171864900" target="_blank" rel="noopener noreferrer">نتائج جميع الإصدارات وتفاصيل توقع كل شهر</a></p></section>
 <section class="panel"><h2>كيف نقرأ النتيجة؟</h2>
 <div class="method"><p><b>Headline CPI:</b> تجميع مساهمات الغذاء والطاقة والسلع الأساسية والسكن والخدمات الأخرى باستخدام أوزان BLS السنوية المتاحة وقت التوقع.</p>
 <p><b>Core CPI:</b> استبعاد الغذاء والطاقة وإعادة موازنة الأوزان؛ لا يجوز تفسير انخفاض البنزين أنه يخفض Core CPI مباشرة.</p>
@@ -82,6 +87,24 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 </main><script>
 "use strict";
 const $=id=>document.getElementById(id);
+fetch("data/cpi-category-walkforward-summary.json?t="+Date.now(),{cache:"no-store"})
+ .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()})
+ .then(d=>{
+    if(d.schemaVersion!==1||d.holdout2026!==7||!d.models?.oer)throw Error("Unexpected category study");
+    const body=$("componentWalkforwardRows");body.replaceChildren();
+    for(const [id,label] of [["rent","Rent"],["oer","OER"],["lodging","الفنادق"]]){
+       const x=d.models[id],tr=document.createElement("tr");
+       const candidate=id==="lodging"?x.priorYear:x.ridge;
+       const decrease=100*(x.baseline3-candidate)/x.baseline3;
+       for(const value of [label,x.baseline3.toFixed(4)+" pp",candidate.toFixed(4)+" pp",
+            (decrease>=0?"−":"+")+Math.abs(decrease).toFixed(1)+"%"]){
+           const td=document.createElement("td");td.textContent=value;tr.appendChild(td);
+       }
+       body.appendChild(tr);
+    }
+    $("componentWalkforwardCaveat").textContent="في هذه العينة فقط: Rent وOER استخدما Ridge مدربًا على إصدارات سابقة؛ الفنادق نموذج نفس الشهر من السنة الماضية. 7 أشهر لا تكفي لاعتماد المعادلات، ولا يوجد إثبات أنها تحسن توقع CPI الكامل.";
+ }).catch(err=>$("componentWalkforwardCaveat").textContent="تعذر قراءة نتائج اختبار المكونات: "+err.message);
+
 fetch("data/shelter-hotel-streak-decision.json?t="+Date.now(),{cache:"no-store"})
  .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
  .then(d=>{
