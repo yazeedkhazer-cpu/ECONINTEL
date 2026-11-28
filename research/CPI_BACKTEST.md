@@ -10,7 +10,8 @@ This study replays historical CPI announcements and asks what was knowable befor
 * Baseline: average of last three consecutive CPI monthly changes.
 * Experimental model: 9-feature ridge regression trained with expanding windows. Every test case is predicted before its outcome enters model training. Features use only vintage data available at cutoff.
 * Evaluation: MAE, RMSE in percentage points; one-decimal approximation hit rate; acceleration direction accuracy. Models compared on the identical post-warmup set.
-* Missing months and invalid vintages are skipped, documented and never interpolated. The BLS has explicitly confirmed absence of October 2025 headline and core CPI observations after the government shutdown.
+* Missing months and invalid vintages are skipped, documented and never interpolated.
+* The FRED release calendar can contain an earlier date for the same CPI month. Only a candidate date equal to the first ALFRED vintage is accepted; all duplicate target months are explicitly excluded. This strict policy may omit valid BLS releases when ALFRED is late, pending primary BLS calendar reconciliation. The BLS has explicitly confirmed absence of October 2025 headline and core CPI observations after the government shutdown.
 
 ## Status and limitations
 This is a working *test harness*, not a proof of CPI forecasting skill. The initial results JSON intentionally says not_run. No verified backtest performance is available until a historical API replay completes.
