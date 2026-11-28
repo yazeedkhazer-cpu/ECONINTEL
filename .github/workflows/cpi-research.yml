@@ -1,0 +1,74 @@
+name: CPI PIT research checks
+
+on:
+  push:
+    branches:
+      - feature/cpi-point-in-time-backtest
+  pull_request:
+    paths:
+      - "research/cpi_backtest.py"
+      - "tests/test_cpi_backtest.py"
+      - ".github/workflows/cpi-research.yml"
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "First release date for historical study"
+        required: true
+        default: "2018-01-01"
+      end:
+        description: "Last release date for historical study"
+        required: true
+        default: "2026-11-28"
+      horizon:
+        description: "Full calendar days before CPI release"
+        required: true
+        default: "7"
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify syntax and deterministic vintage tests
+        run: |
+          python -m py_compile research/cpi_backtest.py tests/test_cpi_backtest.py
+          python -m unittest discover -s tests -p "test_cpi_backtest.py" -v
+
+  historical-replay:
+    if: github.event_name == 'workflow_dispatch'
+    needs: offline-tests
+    runs-on: ubuntu-latest
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Stop if FRED key is missing
+        run: |
+          if [ -z "$FRED_API_KEY" ]; then
+            echo "FRED_API_KEY secret is missing; historical results were NOT generated."
+            exit 1
+          fi
+      - name: Replay historical CPI releases
+        run: |
+          python research/cpi_backtest.py \
+            --start "${{ inputs.start }}" \
+            --end "${{ inputs.end }}" \
+            --horizon "${{ inputs.horizon }}" \
+            --output data/cpi-backtest-results.json
+      - name: Upload results as workflow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpi-point-in-time-results
+          path: data/cpi-backtest-results.json
+          if-no-files-found: warn
+          retention-days: 30
