@@ -1,12 +1,6 @@
 name: Structural inflation point-in-time pilot
 
 on:
-  pull_request:
-    paths:
-      - "research/structural_pit.py"
-      - "research/data/cpi_annual_weights_pit.json"
-      - "tests/test_structural_pit.py"
-      - ".github/workflows/structural-inflation-pit.yml"
   workflow_dispatch:
     inputs:
       start:
@@ -25,11 +19,12 @@ permissions:
   contents: read
 jobs:
   structural-pilot:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.pull_request.number == 1)
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         family: [cpi, pce, ppi]
     env:
