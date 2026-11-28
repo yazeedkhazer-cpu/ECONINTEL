@@ -97,31 +97,54 @@ function mount(){
  const stats=document.getElementById('stats');if(!stats)return;
  const box=document.createElement('section');box.className='panel';box.id='forward-inflation-outlook';
  box.style.margin='20px 0';box.style.padding='20px';
- const before=document.getElementById('inflation-intelligence-seven');
- if(before)before.insertAdjacentElement('beforebegin',box);else stats.insertAdjacentElement('afterend',box);
+ const hero=document.querySelector('.hero');
+ if(hero)hero.insertAdjacentElement('beforebegin',box);
+ else stats.insertAdjacentElement('afterend',box);
  box.textContent='جاري حساب مؤشرات اتجاه التضخم...';
  const label={down:'تخفيف الضغوط',up:'زيادة الضغوط',mixed:'إشارات متباينة',missing:'غير متاح'};
  const fill=d=>{
-  const r=evaluate(d);const h=r.headline,c=r.core;
-  box.innerHTML='<div style="font-size:12px;color:#95b7d7">FORWARD PRESSURE RADAR · PROVISIONAL</div>'+
-   '<h2>إلى أين تتجه ضغوط التضخم؟</h2>'+
-   '<p>قراءة استشرافية أولية للفترات القادمة، منفصلة عن معدل التضخم الذي تحقق. ليست تنبؤًا مُثبتًا أو تسعيرًا لاحتمالات الفيدرالي.</p>'+
+  const r=evaluate(d),h=r.headline,c=r.core;
+  const readableDate=r.asOf?new Intl.DateTimeFormat('ar-JO',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Amman'}).format(new Date(r.asOf)):'غير متاح';
+  const headlineLabel=h.state==='easing'?'ضغوط تميل للانحسار':h.label;
+  const coreLabel=c.state==='easing'?'إشارات هدوء مع مخاطر مستمرة':c.label;
+  const energy=r.groups.find(x=>x.id==='energy');
+  const production=r.groups.find(x=>x.id==='producers');
+  const underlying=r.groups.find(x=>x.id==='underlying');
+  const find=(group,id)=>group?.indicators.find(x=>x.id===id);
+  const brent=find(energy,'brent'),gasoline=find(energy,'gasoline'),ppi=find(production,'ppi'),sticky=find(underlying,'sticky');
+  const causes=[];
+  const periodMonth=d?.series?.brent?.period||'';
+  const monthText=/^\d{4}-\d{2}$/.test(periodMonth)?
+    new Intl.DateTimeFormat('ar-JO',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(periodMonth+'-01T00:00:00Z')):'الفترة الأخيرة';
+  if(brent?.available && Math.abs(brent.value)>=2)
+    causes.push('متوسط Brent في '+monthText+(brent.value<0?' أقل':' أعلى')+' بنحو '+Math.abs(brent.value).toFixed(1)+'% من الشهر السابق');
+  if(gasoline?.available && Math.abs(gasoline.value)>=2)
+    causes.push('البنزين '+(gasoline.value<0?'أقل':'أعلى')+' بنحو '+Math.abs(gasoline.value).toFixed(1)+'%');
+  if(ppi?.available && Math.abs(ppi.value)>=0.15)
+    causes.push('زخم PPI '+(ppi.value<0?'انخفض':'ارتفع')+' عن الشهر السابق');
+  if(sticky?.available && sticky.signal>0)
+    causes.push('بعض مؤشرات التضخم المستمر ارتفعت');
+  if(!causes.length)causes.push('الإشارات القيادية متباينة أو لا تتوافر بيانات كافية لتحديد السبب');
+  const label={down:'تخفيف الضغوط',up:'زيادة الضغوط',mixed:'إشارات متباينة',missing:'غير متاح'};
+  box.innerHTML='<div style="font-size:12px;color:#9ab9d8;font-weight:600">الملخص التنفيذي · قراءة استشرافية أولية — '+esc(readableDate)+'</div>'+
+   '<h2 style="margin:10px 0 8px">إلى أين يتجه التضخم الأمريكي؟</h2>'+
    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0">'+
-   [['التضخم العام · ضغط الشهر إلى الشهرين المقبلين',h],['التضخم الأساسي · ضغط 3 إلى 6 أشهر',c]].map(([title,o])=>
-   '<div style="border:1px solid #38516b;border-radius:12px;padding:16px"><small>'+esc(title)+'</small>'+
-   '<h3>'+esc(o.label)+'</h3>'+
-   '<div style="font-size:12px;color:#a1b3c4">محاور بانحسار: '+o.down+' · بزيادة: '+o.up+' · مختلطة: '+o.mixed+
-   ' · التغطية: '+o.active+'/'+o.required+' حد أدنى</div>'+
-   (o.partial?'<div style="font-size:12px;color:#e0bc7b;margin-top:8px">تشمل أسعار شهر جزئي غير مكتمل</div>':'')+
-   '</div>').join('')+'</div>'+
-   '<h3>الدليل المؤيد والمعارض</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:12px">'+
-   r.groups.map(g=>'<details style="border:1px solid #2c4159;border-radius:10px;padding:12px"><summary style="cursor:pointer"><b>'+
-    esc(g.label)+'</b> · '+esc(label[g.dir])+'</summary>'+
-    '<p style="font-size:12px">'+esc(g.note)+'</p>'+
+   [['التضخم العام','الأشهر القريبة',headlineLabel],['التضخم الأساسي','الأشهر القادمة',coreLabel]].map(([title,horizon,reading])=>
+    '<div style="border:1px solid #38516b;border-radius:12px;padding:16px"><small>'+esc(title)+'</small>'+
+    '<h3 style="margin:8px 0 4px">'+esc(reading)+'</h3><small style="color:#a2b6ce">'+esc(horizon)+'</small></div>').join('')+
+   '</div><p><strong>ليش؟</strong> '+esc(causes.join('، '))+'. '+(c.state==='easing'?'لكن التضخم الأساسي ما زال يحتاج تأكيدًا قبل اعتبار الهدوء مستدامًا.':'اتجاه التضخم الأساسي لم يُحسم بعد.')+'</p>'+
+   '<p style="font-size:12px;color:#c3af80;margin-top:9px">'+
+    (h.partial||c.partial?'بعض المقارنات تعتمد على شهر أسعار جزئي وغير مكتمل. ':'')+
+    'هذه فرضيات اتجاهية أولية وليست توقعات مثبتة الدقة. تاريخ العرض هو تاريخ تحديث البيانات وليس موعد صدور CPI/PCE.</p>'+
+   '<details style="margin-top:14px;border-top:1px solid #38516b;padding-top:12px"><summary style="cursor:pointer;font-weight:600">عرض الأدلة المؤيدة والمعارضة بالتفصيل</summary>'+
+   '<p style="font-size:12px;color:#b7c6d7">محاور التضخم العام: '+h.down+' تهدأ · '+h.up+' ترتفع · '+h.mixed+' مختلطة. المحاور الأساسية: '+c.down+' تهدأ · '+c.up+' ترتفع · '+c.mixed+' مختلطة.</p>'+
+   '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">'+
+    r.groups.map(g=>'<details style="border:1px solid #2c4159;border-radius:10px;padding:12px"><summary style="cursor:pointer"><b>'+
+    esc(g.label)+'</b> · '+esc(label[g.dir])+'</summary><p style="font-size:12px">'+esc(g.note)+'</p>'+
     g.indicators.map(i=>'<div style="font-size:13px;margin:6px 0">'+esc(i.label)+': '+(i.available?fmt(i.value,i.unit):'غير متاح')+
        (i.partial?' (شهر جزئي)':'')+'</div>').join('')+'</details>').join('')+'</div>'+
-   '<p style="font-size:12px;color:#acb8ca;margin-top:14px">مفقود من إشارات القيادة: '+esc(r.waiting.join(' · ')||'غير محدد')+
-   ' · الفترة الأساسية '+esc(r.referencePeriod||'—')+'<br>'+esc(r.limitations)+'</p>';
+   '<p style="font-size:12px;color:#a8b8cd;margin-top:14px">مصادر لم تُربط بعد: '+esc(r.waiting.join(' · ')||'لا يوجد')+
+   '<br>'+esc(r.limitations)+'</p></details>';
  };
  fetch('data/inflation-latest.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(fill)
  .catch(e=>box.textContent='تعذّر قراءة بيانات التوقع الاتجاهي: '+e.message);
