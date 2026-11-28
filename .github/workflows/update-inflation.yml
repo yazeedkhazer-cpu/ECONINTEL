@@ -29,6 +29,8 @@ jobs:
           node --check assets/inflation.js
           node tests/test_inflation_ui.cjs
           node tests/test_inflation_intelligence.cjs
+          node --check assets/inflation-forward.js
+          node tests/test_inflation_forward.cjs
       - name: Load FRED official inflation and leading series
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
