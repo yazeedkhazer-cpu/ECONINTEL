@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-11-28",
+  "status": "first-vintage-index-derived-accuracy-not-official-release-text",
+  "auditRun": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46169865207",
+  "historicalStudy": "https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46163855962",
+  "metric": "Matching first ALFRED vintage MoM change rounded to one decimal percentage point, nearest decimal ROUND_HALF_UP",
+  "target": "Monthly CPI Core CPI PCE Core PCE PPI numeric published-like MoM figures",
+  "tests": [
+    {
+      "id": "cpi",
+      "name": "Headline CPI",
+      "n": 14,
+      "structuralExact": 3,
+      "baselineExact": 2,
+      "maeStructuralPp": 0.14515
+    },
+    {
+      "id": "corecpi",
+      "name": "Core CPI",
+      "n": 14,
+      "structuralExact": 8,
+      "baselineExact": 7,
+      "maeStructuralPp": 0.07925
+    },
+    {
+      "id": "pce",
+      "name": "Headline PCE",
+      "n": 16,
+      "structuralExact": 6,
+      "baselineExact": 4,
+      "maeStructuralPp": 0.0606
+    },
+    {
+      "id": "corepce",
+      "name": "Core PCE",
+      "n": 16,
+      "structuralExact": 8,
+      "baselineExact": 6,
+      "maeStructuralPp": 0.0821
+    },
+    {
+      "id": "ppi",
+      "name": "Headline PPI",
+      "n": 14,
+      "structuralExact": 2,
+      "baselineExact": 0,
+      "maeStructuralPp": 0.3622
+    }
+  ],
+  "onlineExperiment": {
+    "method": "Select convex mixing weights from earlier first-release-index results only; 6 warmup releases; 0/.25/.50/.75/1",
+    "cpiHeadlineN": 8,
+    "cpiHeadlineOnlineExact": 0,
+    "cpiHeadlineV1Exact": 1,
+    "cpiHeadlineOnlineMAE": 0.14482,
+    "cpiHeadlineV1MAE": 0.1314,
+    "status": "DO_NOT_PROMOTE__no_general_accuracy_improvement"
+  },
+  "limitations": [
+    "Metric is NOT validated against literal BLS/BEA original news release printed rounded values",
+    "Only 14-16 distinct months; inadequate statistical power for reliable superiority claim",
+    "Online blending selected using earlier labels only but not validated across new independent multi-year holdout",
+    "Does not compare with contemporaneous professional consensus",
+    "Does not assess error interval calibration or trading response"
+  ]
+}
