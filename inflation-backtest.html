@@ -39,6 +39,16 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 <div class="table-wrap"><table><thead><tr>
 <th>المؤشر</th><th>الأشهر الصالحة</th><th>MAE محرك ECONINTEL</th><th>MAE متوسط 3 أشهر</th><th>التحسن النسبي</th><th>دقة اتجاه التسارع</th>
 </tr></thead><tbody id="rows"><tr><td colspan="6">لا توجد نتائج حتى الآن.</td></tr></tbody></table></div></section>
+<section class="panel"><h2>اختبار محرك السكن V2 — Rent + OER</h2>
+<p>هذا اختبار <b>لتوقع السكن فقط</b> وليس اختبارًا كاملًا لنسخة CPI وCore CPI V2. استخدمنا أوزان BLS المتاحة قبل كل إعلان وبيانات ALFRED المجمدة قبل الخبر بسبعة أيام.</p>
+<div class="grid">
+<div class="card"><small>MAE نموذج السكن V2</small><strong id="v2ShelterMae">—</strong><small>نقطة مئوية</small></div>
+<div class="card"><small>MAE متوسط السكن البسيط</small><strong id="v2ShelterBaseline">—</strong><small>نقطة مئوية</small></div>
+<div class="card"><small>أشهر تفوّق V2</small><strong id="v2ShelterWins">—</strong><small>من الأشهر المؤهلة</small></div>
+</div>
+<p id="v2ShelterInterpretation" class="hint">يتم تحميل نتائج اختبار السكن…</p>
+<p><a href="https://github.com/yazeedkhazer-cpu/ECONINTEL/actions/runs/46167403971" target="_blank" rel="noopener noreferrer">سجل الاختبار التاريخي للسكن V2</a></p>
+</section>
 <section class="panel"><h2>كيف نقرأ النتيجة؟</h2>
 <div class="method"><p><b>Headline CPI:</b> تجميع مساهمات الغذاء والطاقة والسلع الأساسية والسكن والخدمات الأخرى باستخدام أوزان BLS السنوية المتاحة وقت التوقع.</p>
 <p><b>Core CPI:</b> استبعاد الغذاء والطاقة وإعادة موازنة الأوزان؛ لا يجوز تفسير انخفاض البنزين أنه يخفض Core CPI مباشرة.</p>
@@ -55,6 +65,18 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 "use strict";
 const $=id=>document.getElementById(id);
 const fmt=(x,n=4)=>typeof x==="number"&&Number.isFinite(x)?x.toFixed(n):"—";
+fetch("data/cpi-shelter-v2-pit-summary.json?t="+Date.now(),{cache:"no-store"})
+ .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
+ .then(d=>{
+   if(d.schemaVersion!==1||!d.metrics?.v2||!d.metrics?.baseline)throw Error("Unrecognized shelter report");
+   $("v2ShelterMae").textContent=fmt(d.metrics.v2.maePp,5);
+   $("v2ShelterBaseline").textContent=fmt(d.metrics.baseline.maePp,5);
+   $("v2ShelterWins").textContent=d.metrics.v2.monthlyWins+" / "+d.valid;
+   $("v2ShelterInterpretation").textContent=d.metrics.v2.maePp>=d.metrics.baseline.maePp?
+    "V2 لم يتفوق على المتوسط البسيط في متوسط الخطأ. لا يجوز تقديم هذا النموذج على أنه أفضل لمجرد احتوائه على تفاصيل أكثر.":
+    "V2 تحسّن في هذه العينة المحدودة فقط. يلزم اختبار مستقل قبل اعتماده.";
+ }).catch(e=>$("v2ShelterInterpretation").textContent="تعذر تحميل نتائج السكن: "+e.message);
+
 fetch("data/structural-pit-summary.json?t="+Date.now(),{cache:"no-store"})
  .then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json();})
  .then(data=>{
