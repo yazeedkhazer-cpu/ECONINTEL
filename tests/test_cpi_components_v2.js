@@ -6,6 +6,8 @@ vm.runInContext(fs.readFileSync("assets/inflation-structural.js","utf8"),ctx);
 vm.runInContext(fs.readFileSync("assets/cpi-components-v2.js","utf8"),ctx);
 const model=ctx.ECON_CPI_COMPONENTS_V2;
 const real=JSON.parse(fs.readFileSync("data/inflation-latest.json","utf8"));
+// Independent deterministic fixture: remove optional new sources even if live data is fully connected.
+for(const id of ["cpilodging","cpiapparel","cpinewvehicles","cpiusedcars","cpimedicalservices","cpitransportservices","cpiinsurance","cpiairfares"])delete real.series[id];
 const preliminary=model.assess(real);
 assert.equal(preliminary.status,"awaiting_component_data");
 assert(preliminary.missing.includes("cpiinsurance"));
