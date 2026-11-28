@@ -19,6 +19,10 @@ on:
       - "scripts/update_inflation.py"
       - "tests/test_inflation_bls_components.py"
       - "research/inflation_releases.py"
+      - "research/inflation_numeric_accuracy.py"
+      - "tests/test_inflation_numeric_accuracy.py"
+      - "research/shelter_hotel_streak_holdout.py"
+      - "tests/test_shelter_hotel_streak_holdout.py"
       - "research/structural_pit.py"
       - "research/shelter_v2_pit.py"
       - "tests/test_shelter_v2_pit.py"
@@ -43,6 +47,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   offline-tests:
@@ -62,6 +67,10 @@ jobs:
           python -m unittest discover -s tests -p "test_structural_pit.py" -v
           python -m py_compile research/shelter_v2_pit.py tests/test_shelter_v2_pit.py
           python -m unittest discover -s tests -p "test_shelter_v2_pit.py" -v
+          python -m py_compile research/inflation_numeric_accuracy.py tests/test_inflation_numeric_accuracy.py
+          python -m unittest discover -s tests -p "test_inflation_numeric_accuracy.py" -v
+          python -m py_compile research/shelter_hotel_streak_holdout.py tests/test_shelter_hotel_streak_holdout.py
+          python -m unittest discover -s tests -p "test_shelter_hotel_streak_holdout.py" -v
       - name: Test inflation-family nowcast calculations
         run: |
           node --check assets/inflation-nowcast.js
@@ -107,3 +116,61 @@ jobs:
           path: data/cpi-backtest-results.json
           if-no-files-found: warn
           retention-days: 30
+
+  exact-release-audit:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Audit real historical release accuracy without lookahead
+        run: |
+          python -m unittest discover -s tests -p "test_inflation_numeric_accuracy.py" -v
+          mkdir -p .history
+          gh run download 46163855962 --repo "$GITHUB_REPOSITORY" --dir .history
+          python research/inflation_numeric_accuracy.py \
+            --input-dir .history --output data/inflation-numeric-accuracy-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-one-decimal-accuracy-audit
+          path: data/inflation-numeric-accuracy-audit.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  true-hotel-streak-holdout:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify historical source key is actually connected
+        run: |
+          test -n "$FRED_API_KEY" || { echo "Missing FRED_API_KEY"; exit 1; }
+          python -m unittest discover -s tests -p "test_shelter_hotel_streak_holdout.py" -v
+      - uses: actions/cache@v4
+        with:
+          path: .cache/econintel-alfred
+          key: ${{ runner.os }}-shelter-2024-26-pre-registered-holdout
+      - name: Check previously unseen 2024-2026 releases without changing chosen rule
+        run: |
+          python research/shelter_hotel_streak_holdout.py \
+            --start 2024-04-01 --end 2026-11-28 --horizon 7 \
+            --max-events 0 --output data/shelter-hotel-streak-holdout.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hotel-streak-true-holdout-2024-2026
+          path: data/shelter-hotel-streak-holdout.json
+          retention-days: 30
+          if-no-files-found: warn
