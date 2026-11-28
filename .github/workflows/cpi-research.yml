@@ -15,6 +15,9 @@ on:
       - "assets/inflation-structural.js"
       - "tests/test_inflation_structural.js"
       - "research/inflation_releases.py"
+      - "research/structural_pit.py"
+      - "tests/test_structural_pit.py"
+      - "research/data/cpi_annual_weights_pit.json"
       - "tests/test_inflation_releases.py"
   workflow_dispatch:
     inputs:
@@ -48,6 +51,8 @@ jobs:
           python -m unittest discover -s tests -p "test_cpi_backtest.py" -v
           python -m py_compile research/inflation_releases.py tests/test_inflation_releases.py
           python -m unittest discover -s tests -p "test_inflation_releases.py" -v
+          python -m py_compile research/structural_pit.py tests/test_structural_pit.py
+          python -m unittest discover -s tests -p "test_structural_pit.py" -v
       - name: Test inflation-family nowcast calculations
         run: |
           node --check assets/inflation-nowcast.js
