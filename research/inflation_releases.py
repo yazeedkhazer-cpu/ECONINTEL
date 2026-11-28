@@ -143,6 +143,8 @@ def initial_vintage(client, released, period, targets):
 def replay(client, family, start, end, horizon=7, min_train=18, max_events=0):
     spec = SPECS[family]
     targets = spec["targets"]
+    source_keys = {name: next(k for k, code in PREDICTORS.items() if code == value)
+                   for name, value in targets.items()}
     dates = release_calendar(client, spec["release_id"], start, end)
     if max_events:
         dates = dates[:max_events]
@@ -152,7 +154,7 @@ def replay(client, family, start, end, horizon=7, min_train=18, max_events=0):
     for released in dates:
         asof = (day(released)-timedelta(days=horizon)).isoformat()
         snap = series_asof(client, asof)
-        period = target_month(snap, targets.values())
+        period = target_month(snap, source_keys.values())
         if not period:
             rejected.append({"date": released, "reason": "no aligned consecutive target history"})
             continue
@@ -166,8 +168,8 @@ def replay(client, family, start, end, horizon=7, min_train=18, max_events=0):
         if vintage != released:
             rejected.append({"date": released, "reason": "calendar precedes initial ALFRED publication"})
             continue
-        feats = {name: x_features(snap, series_id, period)
-                 for name, series_id in targets.items()}
+        feats = {name: x_features(snap, key, period)
+                 for name, key in source_keys.items()}
         if any(x is None for x in feats.values()):
             rejected.append({"date": released, "reason": "feature history incomplete"})
             continue
@@ -179,8 +181,8 @@ def replay(client, family, start, end, horizon=7, min_train=18, max_events=0):
         rec = {"release_date": released, "forecast_date": asof,
                "target_period": period[:7], "outcome_vintage": vintage,
                "predictions": preds,
-               "previous": {name: round(month_growth(snap, series_id), 5)
-                            for name, series_id in targets.items()},
+               "previous": {name: round(month_growth(snap, key), 5)
+                            for name, key in source_keys.items()},
                "actual": {name: round(value, 5) for name, value in actual.items()},
                "features": feats}
         records.append(rec)
