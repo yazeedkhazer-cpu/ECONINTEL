@@ -6,6 +6,12 @@ on:
       - feature/cpi-point-in-time-backtest
   pull_request:
     paths:
+      - "research/bls_cpi_accounting.py"
+      - "tests/test_bls_cpi_accounting.py"
+      - "research/cpi_macro_dynamic.py"
+      - "tests/test_cpi_macro_dynamic.py"
+      - "research/data/cpi_official_method_and_leading_drivers.json"
+      - "research/BLS_CPI_OFFICIAL_FORMULA_AND_EARLY_SIGNALS.md"
       - "research/cpi_backtest.py"
       - "tests/test_cpi_backtest.py"
       - ".github/workflows/cpi-research.yml"
@@ -61,6 +67,10 @@ jobs:
         run: |
           python -m py_compile research/cpi_backtest.py tests/test_cpi_backtest.py
           python -m unittest discover -s tests -p "test_cpi_backtest.py" -v
+          python -m py_compile research/bls_cpi_accounting.py tests/test_bls_cpi_accounting.py
+          python -m unittest discover -s tests -p "test_bls_cpi_accounting.py" -v
+          python -m py_compile research/cpi_macro_dynamic.py tests/test_cpi_macro_dynamic.py
+          python -m unittest discover -s tests -p "test_cpi_macro_dynamic.py" -v
           python -m py_compile research/inflation_releases.py tests/test_inflation_releases.py
           python -m unittest discover -s tests -p "test_inflation_releases.py" -v
           python -m py_compile research/structural_pit.py tests/test_structural_pit.py
