@@ -21,14 +21,14 @@ function utcTime(s){
 function snapshot(data,calendar,modelSources,now=Date.now()){
  assert(data?.schemaVersion===1&&Array.isArray(data.catalog),"Inflation snapshot not recognized");
  assert(calendar?.schemaVersion===1&&calendar.entries&&calendar.targetPeriod,"Release calendar missing");
- const dataAt=utcTime(data.generatedAt);
  const nowMs=typeof now==="number"?now:utcTime(now);
- assert(nowMs>=dataAt,"Cannot freeze using a future-dated data snapshot");
- assert(nowMs-dataAt<=72*60*MINUTES,"Inflation data >72h stale; refresh before freezing");
  const calendarIds=["cpi","corecpi","ppi","pce","corepce"];
  assert(calendarIds.every(id=>calendar.entries[id]),"Missing official release schedule for one target");
  assert(calendarIds.every(id=>utcTime(calendar.entries[id].releaseAtUtc)>nowMs),
         "Do not freeze after any scheduled November 2026 release has occurred");
+ const dataAt=utcTime(data.generatedAt);
+ assert(nowMs>=dataAt,"Cannot freeze using a future-dated data snapshot");
+ assert(nowMs-dataAt<=72*60*MINUTES,"Inflation data >72h stale; refresh before freezing");
  const ctx=vm.createContext({console});
  for(const s of modelSources)vm.runInContext(s,ctx);
  const results=ctx.ECON_INFLATION_NOWCAST.evaluate(data);
