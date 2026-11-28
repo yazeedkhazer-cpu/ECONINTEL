@@ -70,7 +70,31 @@ function indicators(){const cat=DATA?.catalog||[];const groups=['الكل',...ne
  $('indicators').innerHTML=items.length?items.map(card).join(''):'<div class="muted">لا توجد مؤشرات مطابقة.</div>';
  document.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{GROUP=b.dataset.group;indicators()});}
 function unconnected(){$('unconnected').innerHTML=(DATA?.unconnected||[]).map(x=>`<article class="indicator"><h3>${esc(x.label)}</h3><div class="muted">◌ غير متصل · ${esc(x.provider)}</div><div class="source"><span>خارج التقييم حتى توثيق الإصدار</span><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">المصدر ↗</a></div></article>`).join('');}
-function snapshot(){const ids=[['cpi','CPI العام','m3'],['corecpi','Core CPI','m3'],['pce','PCE العام','m3'],['corepce','Core PCE','m3']];$('stats').innerHTML=ids.map(([id,label,k])=>{const s=byid(id),x=metrics(s);return `<div class="stat"><label>${label}</label><strong>${pct(x[k],2)}</strong><small>3 أشهر سنويًا (SAAR) · ${esc(s?.period||'—')}</small></div>`}).join('');
+function snapshotRate(s,n,annualized=false){
+ if(!valid(s)||s.frequency!=='monthly'||s.kind!=='price'||!periodContinuity(s,n))return null;
+ const h=s.history,x=h.at(-1),y=h.at(-(n+1));
+ if(s.period!==x[0]||!Number.isFinite(x[1])||!Number.isFinite(y[1])||x[1]<=0||y[1]<=0)return null;
+ const ratio=x[1]/y[1];
+ return (annualized?Math.pow(ratio,12/n)-1:ratio-1)*100;
+}
+function snapshot(){
+ const ids=[['cpi','CPI العام'],['corecpi','Core CPI'],['pce','PCE العام'],['corepce','Core PCE']];
+ $('stats').innerHTML=ids.map(([id,label])=>{
+  const s=byid(id);
+  const yoy=snapshotRate(s,12),mom=snapshotRate(s,1),saar3=snapshotRate(s,3,true),saar6=snapshotRate(s,6,true);
+  return `<article class="stat inflation-stat">
+    <div class="inflation-stat-name">${esc(label)}</div>
+    <div class="inflation-yoy"><span class="inflation-yoy-title">آخر 12 شهر · YoY</span>
+       <strong dir="ltr">${pct(yoy)}</strong></div>
+    <div class="inflation-measures">
+       <div><span>شهري · MoM</span><b dir="ltr">${pct(mom)}</b></div>
+       <div><span>زخم 3 أشهر · SAAR</span><b dir="ltr">${pct(saar3)}</b></div>
+       <div><span>زخم 6 أشهر · SAAR</span><b dir="ltr">${pct(saar6)}</b></div>
+    </div>
+    <div class="inflation-period">الفترة: ${esc(s?.period||'—')}${s?.status==='stale'?' · بيانات قديمة':''}</div>
+  </article>`;
+ }).join('');
+
  const connected=Object.values(DATA.series||{}).filter(x=>x.status==='connected').length;const total=DATA.catalog.length;
  $('coverage').textContent=`متصل حاليًا: ${connected}/${total} سلسلة · ${DATA.unconnected.length} مصادر إضافية قيد الربط`;
  $('synced').textContent='آخر محاولة تحديث: '+(DATA.generatedAt?new Date(DATA.generatedAt).toLocaleString('ar-JO',{timeZone:'Asia/Amman'}):'لم يتم التشغيل');
