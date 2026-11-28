@@ -21,7 +21,7 @@ class MockFred:
     def observations(self,code,asof,begin):
         self.calls.append((code,asof))
         z=h({"CUSR0000SAH1":.25,"CUSR0000SEHA":.2,
-             "CUSR0000SEHC":.27}[code],count=22)
+             "CUSR0000SEHC":.27}[code],count=23)
         if asof<"2023-12-12":return {k:v for k,v in z.items() if k<="2023-10-01"}
         return {k:v for k,v in z.items() if k<="2023-11-01"}
 
