@@ -1,10 +1,9 @@
 name: CPI component data verification (research branch)
 on:
-  push:
-    branches:
-      - feature/cpi-point-in-time-backtest
+  pull_request:
     paths:
       - ".github/workflows/cpi-component-data-verify.yml"
+      - "scripts/update_inflation.py"
   workflow_dispatch:
 permissions:
   contents: read
