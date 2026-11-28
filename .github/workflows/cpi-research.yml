@@ -17,6 +17,7 @@ on:
       - "assets/cpi-components-v2.js"
       - "tests/test_cpi_components_v2.js"
       - "scripts/update_inflation.py"
+      - "tests/test_inflation_bls_components.py"
       - "research/inflation_releases.py"
       - "research/structural_pit.py"
       - "tests/test_structural_pit.py"
@@ -65,6 +66,7 @@ jobs:
           node --check assets/cpi-components-v2.js
           node tests/test_cpi_components_v2.js
           python -m py_compile scripts/update_inflation.py
+          python -m unittest discover -s tests -p "test_inflation_bls_components.py" -v
 
   historical-replay:
     if: github.event_name == 'workflow_dispatch'
