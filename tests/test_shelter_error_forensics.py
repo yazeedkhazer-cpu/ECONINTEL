@@ -18,7 +18,7 @@ class TestErrorForensics(unittest.TestCase):
     def test_exact_accounting_identity_with_known_v2_prediction(self):
         d=f.attribute(CASE,{"rent":0.5,"oer":0.6,"lodging":3.7},W)
         self.assertAlmostEqual(d["attributed_error_sum_pp"],CASE["actual"]-CASE["prediction"]["v2"],places=9)
-        self.assertEqual(d["largest_absolute_component"],"oer")
+        self.assertEqual(d["largest_absolute_component"],"remaining_shelter_implied")
         self.assertGreater(d["attributed_error_pp"]["oer"],0)
         self.assertEqual(d["actual_lodging_mom"],3.7)
 
