@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "method": "BLS CPI-U published December relative importance, latest cutoff-safe year; monthly weighting approximated",
+  "rows": [
+    {
+      "reference": "2022-12",
+      "publishedOn": "2023-01-12",
+      "shelter": 34.413,
+      "rent": 7.528,
+      "oer": 25.424,
+      "source": "https://www.bls.gov/cpi/tables/relative-importance/2022.htm",
+      "residual": 1.461
+    },
+    {
+      "reference": "2023-12",
+      "publishedOn": "2024-01-11",
+      "shelter": 36.191,
+      "rent": 7.671,
+      "oer": 26.769,
+      "source": "https://www.bls.gov/cpi/tables/relative-importance/2023.htm",
+      "residual": 1.751
+    },
+    {
+      "reference": "2025-12",
+      "publishedOn": "2026-01-13",
+      "shelter": 35.625,
+      "rent": 7.84,
+      "oer": 26.204,
+      "source": "https://www.bls.gov/cpi/tables/relative-importance/2025.htm",
+      "residual": 1.581
+    },
+    {
+      "reference": "2026-09",
+      "publishedOn": "2026-11-10",
+      "shelter": 35.238,
+      "rent": 7.707,
+      "oer": 25.853,
+      "source": "https://www.bls.gov/news.release/archives/cpi_11102026.htm",
+      "residual": 1.678
+    }
+  ]
+}
