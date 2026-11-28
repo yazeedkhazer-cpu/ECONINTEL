@@ -15,7 +15,7 @@ function assert(cond,why){if(!cond)throw Error(why)}
 function hash(s){return crypto.createHash("sha256").update(s).digest("hex")}
 function utcTime(s){
  const ms=Date.parse(s);
- assert(Number.isFinite(ms)&&/[zZ]$/.test(s),"Invalid timezone-qualified timestamp");
+ assert(Number.isFinite(ms)&&/([zZ]|[+-]\d{2}:\d{2})$/.test(s),"Invalid timezone-qualified timestamp");
  return ms;
 }
 function snapshot(data,calendar,modelSources,now=Date.now()){
